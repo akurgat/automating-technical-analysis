@@ -2,8 +2,6 @@ from app.technical_indicators import Technical_Calculations
 from app.indicator_analysis import Indications, Price_Action
 from app.exchange_api import *
 from app.exchange_preprocessing import *
-from app.scaling import Scaling
-import pandas_datareader.data as web
 import datetime as dt
 import streamlit as st
 import pandas as pd
