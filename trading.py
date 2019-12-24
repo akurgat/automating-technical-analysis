@@ -89,7 +89,7 @@ def main():
 
 
     st.sidebar.subheader('Exchange:')
-    exchange = st.sidebar.selectbox('', ('Binance', 'Bitfinex', 'Bittrex', 'Yahoo Finance'))
+    exchange = st.sidebar.selectbox('', ('Yahoo Finance', 'Binance', 'Bitfinex', 'Bittrex'))
 
     markets = stock_crypto_markets(exchange)
 
