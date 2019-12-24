@@ -1,6 +1,9 @@
 from app.technical_indicators import Technical_Calculations
 from app.indicator_analysis import Indications, Price_Action
 from app.exchange_api import *
+from app.exchange_preprocessing import *
+from app.scaling import Scaling
+import pandas_datareader.data as web
 import datetime as dt
 import streamlit as st
 import pandas as pd
@@ -9,72 +12,13 @@ from _plotly_future_ import v4_subplots
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from pandas.plotting import register_matplotlib_converters
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+from plotly.offline import download_plotlyjs,init_notebook_mode,plot,iplot
 import cufflinks as cf
 
 register_matplotlib_converters()
 init_notebook_mode(connected = True)
 cf.go_offline()
 
-
-def yahoo_preprocess(Stock, Interval):
-
-    if Interval == '1 Minute':
-        period = '7d'
-    elif Interval == '5 Minute' or Interval == '15 Minute' or Interval == '30 Minute':
-        period = '1mo'
-    elif Interval == '1 Hour':
-        period = '2y'
-    else:
-        period = 'max'
-
-    stocks = {'Apple': 'AAPL', 'Airbus': 'AIR.BE', 'AMD': 'AMD', 'Boeing': 'BA', 'BMW': 'BMW.BE', 'Facebook': 'FB', 
-                'Google': 'GOOG', 'IBM': 'IBM', 'Intel': 'INTC', 'Jumia': 'JMIA', 'Microsoft': 'MSFT', 'Nvidia': 'NVDA', 
-                'Samsung': '005930.KS', 'Tesla': 'TSLA', 'Twitter': 'TWTR', 'Uber': 'UBER','Volkswagen': 'VOW.DE'}
-
-    intervals = {'1 Minute':'1m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
-                '1 Hour':'60m', '1 Day':'1d', '1 Week':'1wk', '1 Month':'1mo'}
-
-    for stock, ticker in stocks.items():
-        if Stock == stock:
-            stock_ticker = ticker
-
-    for interval, inter in intervals.items():
-        if Interval == interval:
-            stock_interval = inter
-
-    return stock_ticker, period, stock_interval
-
-def crypto_preprocess(Stock, Market, Interval):
-
-    cryptocurrency = {'Bitcoin': 'BTC', 'Bitcoin Cash': 'BCH', 'Cardano': 'ADA', 'Ethereum': 'ETH', 
-    'EOS': 'EOS', 'Groestlcoin': 'GRS', 'Litecoin': 'LTC', 'Stellar': 'XLM', 'Ripple': 'XRP'}
-
-    markets = {'Bitcoin': 'BTC', 'Ethereum': 'ETH', 'Tether' : 'USDT', 'US Dollar' : 'USD'}
-
-    intervals = {'1 Minute':'1m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
-    '1 Hour':'1h', '1 Day':'1d', '1 Week':'1w', '1 Month':'1M'}
-
-    bittrex_intervals = {'1 Minute':'oneMin', '5 Minute':'fiveMin', '30 Minute':'thirtyMin', 
-    '1 Hour':'hour', '1 Day':'day'}
-
-    for crypto, tick in cryptocurrency.items():
-        if Stock == crypto:
-            crypto_ticker = tick
-
-    for market, markt in markets.items():
-        if Market == market:
-            crypto_market = markt
-
-    for interval, inter in intervals.items():
-        if Interval == interval:
-            crypto_interval = inter
-
-    for bit_interval, bit_inter in bittrex_intervals.items():
-        if Interval == bit_interval:
-            bittrex_interval = bit_inter
-
-    return crypto_ticker,  crypto_market, crypto_interval, bittrex_interval
 
 def prediction_action(prediction):
 
@@ -91,16 +35,19 @@ def prediction_action(prediction):
 def load_data(stock, market, interval, exchange):
 
     if exchange == 'Yahoo Finance':
-        stock_ticker, period, stock_interval = yahoo_preprocess(stock, interval) 
+        stock_ticker = stock_to_ticker(stock) 
+        period, stock_interval = yahoo_interval(interval) 
     else:
-        cypto_ticker, market, interval, bittrex_interval = crypto_preprocess(stock, market, interval)
+        cypto_ticker = crypto_to_ticker(stock)
+        market_ticker = crypto_markets_to_ticker(market)
+        interval = crypto_interval(exchange, interval)
 
     if exchange == 'Binance':
-        df = binance_market_data(cypto_ticker, market, interval)
+        df = binance_market_data(cypto_ticker, market_ticker, interval)
     elif exchange == 'Bitfinex':
-        df = bitfinex_market_data(cypto_ticker, market, interval)
+        df = bitfinex_market_data(cypto_ticker, market_ticker, interval)
     elif exchange == 'Bittrex':
-        df = bittrex_market_data(cypto_ticker, market, bittrex_interval)
+        df = bittrex_market_data(cypto_ticker, market_ticker, interval)
     else:
         df = yahoo_market_data(stock_ticker, period, stock_interval)
 
@@ -114,7 +61,7 @@ def analyse(df):
 
     Technical_Calculations(df, df['Adj Close'], df['High'], df['Low'])
     df.dropna(inplace = True)
-    analysis = analysis = df.loc[:, 'MACD':]
+    analysis = analysis = df.iloc[:, 5:13]
 
     return analysis, df
 
@@ -123,7 +70,7 @@ def indications(df):
     Indications(df, df['Adj Close'], df['Open'])
     Price_Action(df)
     df.dropna(inplace = True)
-    indicators = df.loc[:, 'Engulfing_Indication':'SR_Indication']
+    indicators = df.iloc[:, 13:-1]
 
     return indicators
 
@@ -141,14 +88,16 @@ def graph(Stock, ticker, df):
     return fig
 
 def main():
-    
+
+
     st.sidebar.subheader('Exchange:')
     exchange = st.sidebar.selectbox('', ('Binance', 'Bitfinex', 'Bittrex', 'Yahoo Finance'))
 
+    markets = stock_crypto_markets(exchange)
+
     if exchange == 'Yahoo Finance':
         st.sidebar.subheader('Stock:')
-        stock = st.sidebar.selectbox('', ('Apple', 'Airbus', 'AMD', 'Boeing', 'BMW', 'Facebook', 'Google', 'IBM', 
-                                        'Intel', 'Jumia', 'Microsoft', 'Nvidia', 'Samsung', 'Tesla', 'Twitter', 'Uber', 'Volkswagen'))
+        stock = st.sidebar.selectbox('', markets)
 
         if stock == 'Airbus' or stock == 'BMW' or stock == 'Volkswagen':
             market = 'Euros'
@@ -161,14 +110,21 @@ def main():
         label = 'Stock'
 
     else:
-        st.sidebar.subheader('Crypto:')
-        stock = st.sidebar.selectbox('', ('Bitcoin', 'Bitcoin Cash', 'Cardano', 'Ethereum', 'EOS', 'Groestlcoin', 'Litecoin', 'Ripple', 'Stellar'))
 
         st.sidebar.subheader('Market:')
-        market = st.sidebar.selectbox('', ('Bitcoin', 'Ethereum', 'Tether', 'US Dollar'))
+        market = st.sidebar.selectbox('', markets)
+
+        coins = exchange_to_coins_loading (exchange, market)
+        
+        st.sidebar.subheader('Crypto:')
+        stock = st.sidebar.selectbox('', coins)
 
         st.sidebar.subheader('Interval:')
-        interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week', '1 Month'))
+        
+        if exchange == 'Bitfinex':
+            interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour'))
+        else:
+            interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
 
         label = 'Crytpocurrency'
 
@@ -199,9 +155,10 @@ def main():
 
     fig = graph(stock, market, data)
 
+    #if st.sidebar.checkbox ('The Price to Trade Action'):
     st.success('Graphing...')
     st.plotly_chart(fig)
-
+    #st.balloons()
 
     if exchange != 'Yahoo Finance':
         if market == 'Bitcoin':

@@ -2,13 +2,27 @@ import pandas as pd
 
 def Technical_Calculations(df, close, high, low):
     
+    #Fibonacci(df, high, low)
     MACD(df, close)
     Moving_Averages(df, close)
     RSI(df, close)
     Slow_Stochastic(df, close, high, low)
 
-def MACD(df, close):
+def Fibonacci(df, high, low):
+    price_low = df['Low'].rolling(30).min()
+    price_high = df['High'].rolling(30).max()
 
+    price_change = price_high - price_low
+
+    df['Fibonacci_0'] = price_high
+    df['Fibonacci_23.6'] = price_high - (price_change * 0.236)
+    df['Fibonacci_38.2'] = price_high - (price_change * 0.382)
+    df['Fibonacci_50'] = price_high - (price_change * 0.5)
+    df['Fibonacci_61.8'] = price_high - (price_change * 0.618)
+    df['Fibonacci_78.6'] = price_high - (price_change * 0.786)
+    df['Fibonacci_100'] = price_low
+    
+def MACD(df, close):
     fast_length = 12
     slow_length = 26
     signal_smoothing = 9
@@ -24,7 +38,6 @@ def MACD(df, close):
     df['MACDH'] = macd_histogram
 
 def RSI(df, close):
-
     rsi_period = 14
 
     change = close.diff(1)
@@ -40,7 +53,6 @@ def RSI(df, close):
     df['RSI'] = rsi
 
 def Slow_Stochastic(df, close, high, low):
-
     n = 14
     
     low_14 = low.rolling(window = n).min()
