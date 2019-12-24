@@ -87,7 +87,7 @@ def Price_Action(df):
     df['Indication'] =  df.loc[:, 'Engulfing_Indication':].mean(axis = 1).round(3)
 
     df.loc[((df['Indication'] < 0.5 )), 'Action'] = 'Sell'
-    df.loc[((df['Indication'] > 0.55 )), 'Action'] = 'Buy' 
+    df.loc[((df['Indication'] > 0.5 )), 'Action'] = 'Buy' 
     df['Action'].fillna('Hold', inplace = True)
 
     df.drop('Indication', inplace = True, axis =1)
