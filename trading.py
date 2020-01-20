@@ -59,24 +59,37 @@ def analyse(df):
 
     Technical_Calculations(df, df['Adj Close'], df['High'], df['Low'])
     df.dropna(inplace = True)
-    analysis = analysis = df.iloc[:, 5:13]
+    analysis = analysis = df.loc[:, 'MACD':'SR_D']
 
     return analysis, df
 
-def indications(df):
+def indications(df, indication):
 
     Indications(df, df['Adj Close'], df['Open'])
     Price_Action(df)
     df.dropna(inplace = True)
-    indicators = df.iloc[:, 13:-1]
 
-    return indicators
+    if indication == 'General':
+
+        action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na=False, dtype='int32')
+        df = pd.concat([df, action], axis = 1)
+    else:
+        df.loc[((df['Action'] == 'Buy') & (df['Action'].shift(-3) == 'Sell')), 'Action_Buy'] = 1
+        df.loc[((df['Action'] == 'Sell') & (df['Action'].shift(-3) == 'Buy')), 'Action_Sell'] = 1
+        df['Action_Buy'].fillna(0, inplace = True)
+        df['Action_Sell'].fillna(0, inplace = True)
+
+    indicators = df.loc[:, 'Engulfing_Indication':'SR_Indication']
+
+    return indicators, df
 
 def graph(Stock, ticker, df):
 
     fig = make_subplots(specs = [[{"secondary_y": True}]])
-    fig.add_trace(go.Bar(x = df.index, y = df['Action'], name = "Price Action"), secondary_y = False)
-    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = True)
+    
+    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = False)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = True)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = True)
     
     fig.layout.update(title_text = Stock + " to " + ticker)
     fig.update_xaxes(title_text = "Date")
@@ -126,6 +139,9 @@ def main():
 
         label = 'Crytpocurrency'
 
+    st.sidebar.subheader('Indication:')
+    indication = st.sidebar.selectbox('', ('Distinct', 'General'))
+
     st.title(f'Simple {label} Trading.')
     st.subheader(f'Stock Data Sourced from {exchange} in {interval} Intervals.')
 
@@ -137,14 +153,14 @@ def main():
         st.write(data.tail(10))
         st.text ('Done!')
     
-    analysis, df = analyse(data) 
+    analysis, data = analyse(data) 
 
     if st.sidebar.checkbox('Technical Analysis Performed'):
             st.success ('Analyzing...')
             st.write(analysis.tail(10))
             st.text("Done!!!")
 
-    indicators = indications(df)
+    indicators, data = indications(data, indication)
 
     if st.sidebar.checkbox('Trading Indications Identified'):
             st.success('Thinking Like a Trader...')

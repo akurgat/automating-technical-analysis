@@ -88,7 +88,7 @@ def Price_Action(df):
 
     df.loc[((df['Indication'] < 0.5 )), 'Action'] = 'Sell'
     df.loc[((df['Indication'] > 0.5 )), 'Action'] = 'Buy' 
-    df['Action'].fillna('Hold', inplace = True)
+    df.loc[((df['Indication'] == 0.5 )), 'Action'] = 'Hold' 
 
     df.drop('Indication', inplace = True, axis =1)
  
