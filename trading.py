@@ -87,14 +87,14 @@ def graph(Stock, ticker, df):
 
     fig = make_subplots(specs = [[{"secondary_y": True}]])
     
-    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = False)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = True)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = True)
+    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = True)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = False)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = False)
     
     fig.layout.update(title_text = Stock + " to " + ticker)
     fig.update_xaxes(title_text = "Date")
-    fig.update_yaxes(title_text = "Close Price", secondary_y = False)
-    fig.update_yaxes(title_text = "Price Action", secondary_y = True)
+    fig.update_yaxes(title_text = "Close Price", secondary_y = True)
+    fig.update_yaxes(title_text = "Price Action", secondary_y = False)
 
     return fig
 
