@@ -93,8 +93,8 @@ def graph(Stock, ticker, df):
     
     fig.layout.update(title_text = Stock + " to " + ticker)
     fig.update_xaxes(title_text = "Date")
-    fig.update_yaxes(title_text = "Close Price", secondary_y = True)
-    fig.update_yaxes(title_text = "Price Action", secondary_y = False)
+    fig.update_yaxes(title_text = "Close Price", secondary_y = False)
+    fig.update_yaxes(title_text = "Price Action", secondary_y = True)
 
     return fig
 
