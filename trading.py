@@ -2,6 +2,7 @@ from app.technical_indicators import Technical_Calculations
 from app.indicator_analysis import Indications, Price_Action
 from app.exchange_api import *
 from app.exchange_preprocessing import *
+from app.model import ML
 import datetime as dt
 import streamlit as st
 import pandas as pd
@@ -10,25 +11,13 @@ from _plotly_future_ import v4_subplots
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from pandas.plotting import register_matplotlib_converters
-from plotly.offline import download_plotlyjs,init_notebook_mode,plot,iplot
+from plotly.offline import download_plotlyjs,init_notebook_mode, plot, iplot
 import cufflinks as cf
 
 register_matplotlib_converters()
 init_notebook_mode(connected = True)
 cf.go_offline()
 
-
-def prediction_action(prediction):
-
-    action = ''
-    if (prediction == 0.5):
-        action = 'Hold'
-    elif (prediction >= 0) and (prediction < 0.5):
-        action = 'Sell' 
-    elif (prediction <= 1) and (prediction > 0.5):
-        action = 'Buy' 
-
-    return action
 
 def load_data(stock, market, interval, exchange):
 
@@ -90,8 +79,9 @@ def graph(Stock, ticker, df):
     fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = True)
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = False)
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = False)
-    
-    fig.layout.update(title_text = Stock + " to " + ticker)
+
+    fig.update_layout(autosize = True, width = 1200, height = 600)
+    fig.layout.update(title_text = f"{Stock} to {ticker}")
     fig.update_xaxes(title_text = "Date")
     fig.update_yaxes(title_text = "Close Price", secondary_y = True)
     fig.update_yaxes(title_text = "Price Action", secondary_y = False)
@@ -167,13 +157,6 @@ def main():
             st.write(indicators.tail(10))
             st.text('Finished.')
 
-    fig = graph(stock, market, data)
-
-    #if st.sidebar.checkbox ('The Price to Trade Action'):
-    st.success('Graphing...')
-    st.plotly_chart(fig)
-    #st.balloons()
-
     if exchange != 'Yahoo Finance':
         if market == 'Bitcoin':
             currency = 'BTC '
@@ -189,7 +172,18 @@ def main():
         currency = 'KRW '
     else:
         currency = 'USD '
-    
 
+    requested_prediction, score = ML(data)
+    st.info(f'Predicting...')
+    st.text(f'Date Predicted: {requested_date}')
+    st.text(f'Current Price: {currency} {current_price}')
+    st.text(f'Prediction: You should {requested_prediction}')
+    st.text(f'Confidence: {score}%')
+
+    fig = graph(stock, market, data)
+
+    st.success(f'Back Testing {label} Data...')
+    st.plotly_chart(fig)
+    
 if __name__ == '__main__':
     main()
