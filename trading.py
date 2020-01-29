@@ -19,7 +19,7 @@ init_notebook_mode(connected = True)
 cf.go_offline()
 
 
-def load_data(stock, market, interval, exchange):
+def load_data(stock, market, interval, exchange, label):
 
     if exchange == 'Yahoo Finance':
         stock_ticker = stock_to_ticker(stock) 
@@ -40,7 +40,12 @@ def load_data(stock, market, interval, exchange):
 
     df = df.iloc[-500:]
     requested_date = df.index[-1]
-    current_price = df.iloc[-1,-1].round(2)
+    current_price = df.iloc[-1,-1]
+
+    if label == 'Stock':
+        current_price = current_price.round(2)
+    else:
+        current_price = current_price.round(8)
 
     return df, str(requested_date), str(current_price)
 
@@ -80,7 +85,7 @@ def graph(Stock, ticker, df):
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = False)
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = False)
 
-    fig.update_layout(autosize = True, width = 1200, height = 600)
+    fig.update_layout(autosize = False, width = 950, height = 600)
     fig.layout.update(title_text = f"{Stock} to {ticker}")
     fig.update_xaxes(title_text = "Date")
     fig.update_yaxes(title_text = "Close Price", secondary_y = True)
@@ -89,8 +94,7 @@ def graph(Stock, ticker, df):
     return fig
 
 def main():
-
-
+    
     st.sidebar.subheader('Exchange:')
     exchange = st.sidebar.selectbox('', ('Yahoo Finance', 'Binance', 'Bitfinex', 'Bittrex'))
 
@@ -135,7 +139,7 @@ def main():
     st.title(f'Simple {label} Trading.')
     st.subheader(f'Stock Data Sourced from {exchange} in {interval} Intervals.')
 
-    data, requested_date, current_price = load_data(stock, market, interval, exchange)
+    data, requested_date, current_price = load_data(stock, market, interval, exchange, label)
 
     st.sidebar.info('Advanced Options:')
     if st.sidebar.checkbox('The Sourced Data'):
