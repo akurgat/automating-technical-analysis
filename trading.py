@@ -111,7 +111,7 @@ def main():
         else:
             market = 'US Dollar'
 
-        interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week', '1 Month'))        
+        interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week', '1 Month'))        
         label = 'Stock'
 
     else:
