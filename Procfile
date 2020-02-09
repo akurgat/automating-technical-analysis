@@ -1,1 +1,1 @@
-web: streamlit run --server.enableCORS false --server.port $PORT trading.py
+web: streamlit run --server.enableCORS false --server.port $PORT Trade.py

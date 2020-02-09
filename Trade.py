@@ -57,27 +57,40 @@ def analyse(df):
 
     return analysis, df
 
-def indications(df, indication):
+def indications(df):
 
     Indications(df, df['Adj Close'], df['Open'])
     Price_Action(df)
     df.dropna(inplace = True)
 
+    indicators = df.loc[:, 'Engulfing_Indication':'SR_Indication']
+
+    return df
+
+def graph(Stock, ticker, df, model_prediction, indication):
+
+    prediction_length = model_prediction.shape[0]
+    df = df.iloc[-prediction_length:]
+    df['Model Predictions'] = model_prediction
+
     if indication == 'General':
 
         action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na=False, dtype='int32')
         df = pd.concat([df, action], axis = 1)
-    else:
+        
+    elif indication == 'Distinct':
+
         df.loc[((df['Action'] == 'Buy') & (df['Action'].shift(-3) == 'Sell')), 'Action_Buy'] = 1
         df.loc[((df['Action'] == 'Sell') & (df['Action'].shift(-3) == 'Buy')), 'Action_Sell'] = 1
         df['Action_Buy'].fillna(0, inplace = True)
         df['Action_Sell'].fillna(0, inplace = True)
 
-    indicators = df.loc[:, 'Engulfing_Indication':'SR_Indication']
+    elif indication == 'Prediction Model':
 
-    return indicators, df
-
-def graph(Stock, ticker, df):
+        df.loc[((df['Model Predictions'] == 'Buy')), 'Action_Buy'] = 1
+        df.loc[((df['Model Predictions'] == 'Sell')), 'Action_Sell'] = 1
+        df['Action_Buy'].fillna(0, inplace = True)
+        df['Action_Sell'].fillna(0, inplace = True)
 
     fig = make_subplots(specs = [[{"secondary_y": True}]])
     
@@ -96,7 +109,7 @@ def graph(Stock, ticker, df):
 def main():
     
     st.sidebar.subheader('Exchange:')
-    exchange = st.sidebar.selectbox('', ('Yahoo Finance', 'Binance', 'Bitfinex', 'Bittrex'))
+    exchange = st.sidebar.selectbox('', ('Yahoo Finance', 'Binance', 'Bittrex'))
 
     markets = stock_crypto_markets(exchange)
 
@@ -154,12 +167,7 @@ def main():
             st.write(analysis.tail(10))
             st.text("Done!!!")
 
-    indicators, data = indications(data, indication)
-
-    if st.sidebar.checkbox('Trading Indications Identified'):
-            st.success('Thinking Like a Trader...')
-            st.write(indicators.tail(10))
-            st.text('Finished.')
+    data = indications(data)
 
     if exchange != 'Yahoo Finance':
         if market == 'Bitcoin':
@@ -177,14 +185,14 @@ def main():
     else:
         currency = 'USD '
 
-    requested_prediction, score = ML(data)
+    requested_prediction, model_prediction, score = ML(data)
     st.info(f'Predicting...')
     st.text(f'Date Predicted: {requested_date}')
     st.text(f'Current Price: {currency} {current_price}')
     st.text(f'Prediction: You should {requested_prediction}')
     st.text(f'Confidence: {score}%')
 
-    fig = graph(stock, market, data)
+    fig = graph(stock, market, data, model_prediction, indication)
 
     st.success(f'Back Testing {label} Data...')
     st.plotly_chart(fig)

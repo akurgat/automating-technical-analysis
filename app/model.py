@@ -19,11 +19,11 @@ def ML(df, model = model):
     labels = to_categorical(labels)
 
     model_prediction = model.predict(features)
-    model_prediction = le.inverse_transform(np.argmax(model_prediction.round(1), axis=1))
+    model_prediction = le.inverse_transform(np.argmax(model_prediction.round(1), axis = 1))
     requested_prediction = model_prediction[-1]
 
     score = model.evaluate(features, labels, verbose = 0)
     score = score[1] * 100
     score = score.round(2)
 
-    return str(requested_prediction), str(score)
+    return str(requested_prediction), model_prediction, str(score)
