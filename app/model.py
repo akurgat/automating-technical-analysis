@@ -14,8 +14,9 @@ def ML(df, model = model):
 
     features, labels = Scaling(df, 60)
 
-    le = LabelEncoder() 
-    labels = le.fit_transform(labels)
+    le = LabelEncoder()
+    le = le.fit(['Buy', 'Hold', 'Sell']) 
+    labels = le.transform(labels)
     labels = to_categorical(labels)
 
     model_prediction = model.predict(features)

@@ -38,7 +38,7 @@ def load_data(stock, market, interval, exchange, label):
     else:
         df = yahoo_market_data(stock_ticker, period, stock_interval)
 
-    df = df.iloc[-500:]
+    #df = df.iloc[-650:]
     requested_date = df.index[-1]
     current_price = df.iloc[-1,-1]
 
@@ -124,7 +124,7 @@ def main():
         else:
             market = 'US Dollar'
 
-        interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week', '1 Month'))        
+        interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week'))        
         label = 'Stock'
 
     else:
