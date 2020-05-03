@@ -11,7 +11,7 @@ from _plotly_future_ import v4_subplots
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from pandas.plotting import register_matplotlib_converters
-from plotly.offline import download_plotlyjs,init_notebook_mode, plot, iplot
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import cufflinks as cf
 
 register_matplotlib_converters()
