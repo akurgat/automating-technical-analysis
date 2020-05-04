@@ -40,10 +40,10 @@ def RSI(df, close):
 def Slow_Stochastic(df, close, high, low):
     n = 14
     
-    low_14 = low.rolling(window = n).min()
-    high_14 = high.rolling(window = n).max()
+    low_stochastic = low.rolling(window = n).min()
+    high_stochastic = high.rolling(window = n).max()
 
-    fast_k = 100 * ((close - low_14) / (high_14 - low_14) )
+    fast_k = 100 * ((close - low_stochastic) / (high_stochastic - low_stochastic) )
     fast_d = fast_k.rolling(window = 3).mean()
     slow_d = fast_d.rolling(window = 3).mean()
     df['SR_K'] = fast_d

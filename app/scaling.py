@@ -5,7 +5,7 @@ import pandas as pd
 import random
 
 def Scaling(df, training_window):
-           
+                 
     training_sequence = []
     previous_days = deque(maxlen = training_window)
 
@@ -13,15 +13,13 @@ def Scaling(df, training_window):
         previous_days.append([x for x in i[:-1]])
 
         if len(previous_days) == training_window:
-            training_sequence.append([np.array(previous_days), i[-1]])
-
-    random.shuffle(training_sequence)
+            training_sequence.append([np.array(previous_days), i[-1:]])
 
     X = []
     y = []
 
-    for feature, action in training_sequence:
-        X.append(feature)
+    for features, action in training_sequence:
+        X.append(features)
         y.append(action)
     
     X = np.array(X)
@@ -32,6 +30,7 @@ def Scaling(df, training_window):
     X = X.reshape(X.shape[0], -1)
     X = scale(X)
     X = scaler.fit_transform(X)
+    
     X = X.reshape(X.shape[0], training_window, int(X.shape[1]/training_window))
 
     return X, y

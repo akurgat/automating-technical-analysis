@@ -38,7 +38,7 @@ def load_data(stock, market, interval, exchange, label):
     else:
         df = yahoo_market_data(stock_ticker, period, stock_interval)
 
-    #df = df.iloc[-650:]
+    df = df.iloc[-650:]
     requested_date = df.index[-1]
     current_price = df.iloc[-1,-1]
 
@@ -63,32 +63,34 @@ def indications(df):
     Price_Action(df)
     df.dropna(inplace = True)
 
-    indicators = df.loc[:, 'Engulfing_Indication':'SR_Indication']
-
     return df
 
-def graph(Stock, ticker, df, model_prediction, indication):
+def graph(Stock, ticker, data, model_prediction, indication):
 
     prediction_length = model_prediction.shape[0]
-    df = df.iloc[-prediction_length:]
-    df['Model Predictions'] = model_prediction
+    df = data.iloc[-prediction_length:]
+    df['Model_Predictions'] = model_prediction
+    df = df[['Adj Close', 'General_Action', 'Distinct_Action', 'Model_Predictions']]
+    df = df.iloc[-100:]
 
     if indication == 'General':
 
-        action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na=False, dtype='int32')
+        df['Action'] = df['General_Action']
+
+        action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na = False, dtype='int32')
         df = pd.concat([df, action], axis = 1)
         
     elif indication == 'Distinct':
 
-        df.loc[((df['Action'] == 'Buy') & (df['Action'].shift(-3) == 'Sell')), 'Action_Buy'] = 1
-        df.loc[((df['Action'] == 'Sell') & (df['Action'].shift(-3) == 'Buy')), 'Action_Sell'] = 1
-        df['Action_Buy'].fillna(0, inplace = True)
-        df['Action_Sell'].fillna(0, inplace = True)
+        df['Action'] = df['Distinct_Action']
 
-    elif indication == 'Prediction Model':
+        action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na = False, dtype='int32')
+        df = pd.concat([df, action], axis = 1)
 
-        df.loc[((df['Model Predictions'] == 'Buy')), 'Action_Buy'] = 1
-        df.loc[((df['Model Predictions'] == 'Sell')), 'Action_Sell'] = 1
+    elif indication == 'Model Prediction':
+
+        df.loc[((df['Model_Predictions'] == 'Buy')), 'Action_Buy'] = 1
+        df.loc[((df['Model_Predictions'] == 'Sell')), 'Action_Sell'] = 1
         df['Action_Buy'].fillna(0, inplace = True)
         df['Action_Sell'].fillna(0, inplace = True)
 
@@ -104,7 +106,7 @@ def graph(Stock, ticker, df, model_prediction, indication):
     fig.update_yaxes(title_text = "Close Price", secondary_y = True)
     fig.update_yaxes(title_text = "Price Action", secondary_y = False)
 
-    return fig
+    return fig, df
 
 def main():
     
@@ -144,13 +146,14 @@ def main():
         else:
             interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
 
-        label = 'Crytpocurrency'
+        label = 'Cryptocurrency'
 
     st.sidebar.subheader('Indication:')
-    indication = st.sidebar.selectbox('', ('Distinct', 'General'))
+    indication = st.sidebar.selectbox('', ('Model Prediction', 'Distinct', 'General'))
 
-    st.title(f'Simple {label} Trading.')
-    st.subheader(f'Stock Data Sourced from {exchange} in {interval} Intervals.')
+    st.title(f'Simple Technical Analysis {label} Trading.')
+    st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
+    st.info(f'Predicting...')
 
     data, requested_date, current_price = load_data(stock, market, interval, exchange, label)
 
@@ -185,16 +188,30 @@ def main():
     else:
         currency = 'USD '
 
-    requested_prediction, model_prediction, score = ML(data)
-    st.info(f'Predicting...')
-    st.text(f'Date Predicted: {requested_date}')
-    st.text(f'Current Price: {currency} {current_price}')
-    st.text(f'Prediction: You should {requested_prediction}')
-    st.text(f'Confidence: {score}%')
+    st.cache()
+    requested_prediction_now, requested_prediction_future, model_prediction_now, score_now, score_future = ML(data)
 
-    fig = graph(stock, market, data, model_prediction, indication)
+    if requested_prediction_now == 'Hold':
+        present_statement = 'off from preforming any action with'
+    else:
+        present_statement = ''
 
-    st.success(f'Back Testing {label} Data...')
+    if requested_prediction_future == 'Hold':
+        future_statement = 'off from preforming any action with'
+    else:
+        future_statement = ''
+
+    st.markdown(f'**Date Predicted:** {requested_date}')
+    st.markdown(f'**Current Price:** {currency} {current_price}')
+    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement} this {label.lower()}.')
+    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next {int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s.')
+    st.markdown(f'**Current Trading Prediction Confidence:** {score_now}%')
+    st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
+
+    st.cache()
+    fig, df = graph(stock, market, data, model_prediction_now, indication)
+
+    st.success(f'Backtesting {label} Data...')
     st.plotly_chart(fig)
     
 if __name__ == '__main__':
