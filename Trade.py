@@ -71,21 +71,21 @@ def graph(Stock, ticker, data, model_prediction, indication):
     df = data.iloc[-prediction_length:]
     df['Model_Predictions'] = model_prediction
     df = df[['Adj Close', 'General_Action', 'Distinct_Action', 'Model_Predictions']]
-    df = df.iloc[-100:]
+    df = df.iloc[-250:]
 
-    if indication == 'General':
+    if indication == 'General Analysis':
 
-        df['Action'] = df['General_Action']
-
-        action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na = False, dtype='int32')
-        df = pd.concat([df, action], axis = 1)
+        df.loc[((df['General_Action'] == 'Buy')), 'Action_Buy'] = 1
+        df.loc[((df['General_Action'] == 'Sell')), 'Action_Sell'] = 1
+        df['Action_Buy'].fillna(0, inplace = True)
+        df['Action_Sell'].fillna(0, inplace = True)
         
-    elif indication == 'Distinct':
+    elif indication == 'Distinct Analysis':
 
-        df['Action'] = df['Distinct_Action']
-
-        action = pd.get_dummies(df['Action'], prefix='Action', prefix_sep='_', dummy_na = False, dtype='int32')
-        df = pd.concat([df, action], axis = 1)
+        df.loc[((df['Distinct_Action'] == 'Buy')), 'Action_Buy'] = 1
+        df.loc[((df['Distinct_Action'] == 'Sell')), 'Action_Sell'] = 1
+        df['Action_Buy'].fillna(0, inplace = True)
+        df['Action_Sell'].fillna(0, inplace = True)
 
     elif indication == 'Model Prediction':
 
@@ -100,8 +100,7 @@ def graph(Stock, ticker, data, model_prediction, indication):
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = False)
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = False)
 
-    fig.update_layout(autosize = False, width = 950, height = 600)
-    fig.layout.update(title_text = f"{Stock} to {ticker}")
+    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = 'pan')
     fig.update_xaxes(title_text = "Date")
     fig.update_yaxes(title_text = "Close Price", secondary_y = True)
     fig.update_yaxes(title_text = "Price Action", secondary_y = False)
@@ -203,7 +202,7 @@ def main():
 
     st.markdown(f'**Date Predicted:** {requested_date}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
-    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement} this {label.lower()}.')
+    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement} this {label.lower()} at this time.')
     st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next {int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s.')
     st.markdown(f'**Current Trading Prediction Confidence:** {score_now}%')
     st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
@@ -212,7 +211,7 @@ def main():
     fig, df = graph(stock, market, data, model_prediction_now, indication)
 
     st.success(f'Backtesting {label} Data...')
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width = True)
     
 if __name__ == '__main__':
     main()
