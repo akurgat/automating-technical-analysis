@@ -149,7 +149,7 @@ def main():
         label = 'Cryptocurrency'
 
     st.sidebar.subheader('Indication:')
-    indication = st.sidebar.selectbox('', ('Model Prediction', 'Distinct', 'General'))
+    indication = st.sidebar.selectbox('', ('Model Prediction', 'Distinct Analysis', 'General Analysis'))
 
     st.title(f'Simple Technical Analysis for {label} Trading.')
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
