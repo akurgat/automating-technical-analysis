@@ -142,16 +142,16 @@ def main():
         st.sidebar.subheader('Interval:')
         
         if exchange == 'Bitfinex':
-            interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour'))
+            interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour'))
         else:
-            interval = st.sidebar.selectbox('', ('1 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
+            interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
 
         label = 'Cryptocurrency'
 
     st.sidebar.subheader('Indication:')
     indication = st.sidebar.selectbox('', ('Model Prediction', 'Distinct Analysis', 'General Analysis'))
 
-    st.title(f'Simple Technical Analysis for {label} Trading.')
+    st.title(f'Automated Technical Analysis for {label} Trading.')
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
     st.info(f'Predicting...')
 
