@@ -6,6 +6,6 @@ plotly
 requests
 scikit-learn
 streamlit
-tensorflow==2.0.0
+tensorflow==2.0.0b1
 yfinance
 
