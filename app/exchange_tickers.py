@@ -76,7 +76,7 @@ def stock_crypto_markets(Exchange):
 
     bitfinex_markets_not_working = ('EOS','Euro','Ishares China Index ETF','Stable USD','Stellar','Tether','Ultra Salescloud')
 
-    yahoo_stocks = ('Apple', 'Airbus', 'AMD', 'Boeing', 'BMW', 'Facebook', 'Google', 'IBM', 'Intel', 'Jumia', 'Microsoft', 'Nvidia', 'Samsung', 
+    yahoo_stocks = ('AMD', 'Airbus', 'Apple', 'BMW', 'Boeing', 'Facebook', 'Google', 'IBM', 'Intel', 'Jumia', 'Microsoft', 'Nvidia', 'Samsung', 
                     'Tesla', 'Twitter', 'Uber', 'Volkswagen')
 
     if Exchange == 'Bittrex':

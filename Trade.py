@@ -100,7 +100,7 @@ def graph(Stock, ticker, data, model_prediction, indication):
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell", opacity = 1), secondary_y = False)
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy", opacity = 1), secondary_y = False)
     
-    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = False, plot_bgcolor = 'white')
+    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = False, plot_bgcolor = 'white', hovermode = 'x unified')
     fig.update_xaxes(title_text = "Date")
     fig.update_yaxes(title_text = "Close Price", secondary_y = True)
     fig.update_yaxes(title_text = "Price Action", secondary_y = False, range = [0, 1])
