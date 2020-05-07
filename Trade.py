@@ -96,14 +96,14 @@ def graph(Stock, ticker, data, model_prediction, indication):
 
     fig = make_subplots(specs = [[{"secondary_y": True}]])
     
-    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = True)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell"), secondary_y = False)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy"), secondary_y = False)
-
-    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = 'pan')
+    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price", opacity = 1), secondary_y = True)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell", opacity = 1), secondary_y = False)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy", opacity = 1), secondary_y = False)
+    
+    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = False, plot_bgcolor = 'white')
     fig.update_xaxes(title_text = "Date")
     fig.update_yaxes(title_text = "Close Price", secondary_y = True)
-    fig.update_yaxes(title_text = "Price Action", secondary_y = False)
+    fig.update_yaxes(title_text = "Price Action", secondary_y = False, range = [0, 1])
 
     return fig, df
 
@@ -129,7 +129,6 @@ def main():
         label = 'Stock'
 
     else:
-
         st.sidebar.subheader('Market:')
         market = st.sidebar.selectbox('', markets)
 
@@ -154,21 +153,13 @@ def main():
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
     st.info(f'Predicting...')
 
+    st.cache(max_entries = 5)
     data, requested_date, current_price = load_data(stock, market, interval, exchange, label)
 
-    st.sidebar.info('Advanced Options:')
-    if st.sidebar.checkbox('The Sourced Data'):
-        st.success ('Sourcing...')
-        st.write(data.tail(10))
-        st.text ('Done!')
-    
+    st.cache(max_entries = 5)    
     analysis, data = analyse(data) 
 
-    if st.sidebar.checkbox('Technical Analysis Performed'):
-            st.success ('Analyzing...')
-            st.write(analysis.tail(10))
-            st.text("Done!!!")
-
+    st.cache(max_entries = 5)
     data = indications(data)
 
     if exchange != 'Yahoo Finance':
@@ -187,13 +178,15 @@ def main():
     else:
         currency = 'USD '
 
-    st.cache()
+    st.cache(max_entries = 5)
     requested_prediction_now, requested_prediction_future, model_prediction_now, score_now, score_future = ML(data)
 
     if requested_prediction_now == 'Hold':
-        present_statement = 'off from preforming any action with'
+        present_statement_prefix = 'off from preforming any action with'
+        present_statement_suffix = ' at this time'
     else:
-        present_statement = ''
+        present_statement_prefix = ''
+        present_statement_suffix = ''
 
     if requested_prediction_future == 'Hold':
         future_statement = 'off from preforming any action with'
@@ -202,16 +195,35 @@ def main():
 
     st.markdown(f'**Date Predicted:** {requested_date}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
-    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement} this {label.lower()} at this time.')
+    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement_prefix} this {label.lower()}{present_statement_suffix}.')
     st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next {int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s.')
     st.markdown(f'**Current Trading Prediction Confidence:** {score_now}%')
     st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
 
-    st.cache()
+    st.cache(max_entries = 5)
     fig, df = graph(stock, market, data, model_prediction_now, indication)
 
-    st.success(f'Backtesting {label} Data...')
+    if indication == 'Model Prediction':
+        testing_prefix = 'Predicted'
+
+    else:
+        testing_prefix = 'Analysed'
+
+    st.success(f'Backtesting {testing_prefix} {label} Data...')
     st.plotly_chart(fig, use_container_width = True)
+
+    st.sidebar.info('Advanced Options:')
+    if st.sidebar.checkbox('The Sourced Data'):
+        st.success ('Sourcing...')
+        st.markdown(f'Sourced {label} Data.')
+        st.write(data[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10))
+        st.text ('Done!')
+    
+    if st.sidebar.checkbox('Technical Analysis Performed'):
+            st.success ('Analyzing...')
+            st.markdown(f'Technical analysis results from the {label} Data.')
+            st.write(analysis[['MACD', 'MACDS', 'MACDH', 'RSI', 'SR_K', 'SR_D', 'SMA', 'LMA']].tail(10))
+            st.text("Done!!!")
     
 if __name__ == '__main__':
     main()
