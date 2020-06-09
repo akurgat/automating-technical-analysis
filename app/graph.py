@@ -34,15 +34,15 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
 
     fig = make_subplots(specs = [[{"secondary_y": True}]])
     
-    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price", opacity = 1), secondary_y = True)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy", opacity = 1,  marker = {'color': '#0BF029'}), secondary_y = False)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell", opacity = 1, marker = {'color': '#DB2A07'}), secondary_y = False)
+    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price"), secondary_y = False)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy", opacity = 1,  marker = {'color': '#32AB60', 'opacity' : 0.4}), secondary_y = True)
+    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell", opacity = 1, marker = {'color': '#DB4052', 'opacity' : 0.4}), secondary_y = True)
     
     
-    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = False, plot_bgcolor = 'white', hovermode = 'x unified')
-    fig.update_xaxes(title_text = "Date")
-    fig.update_yaxes(title_text = "Close Price", secondary_y = True)
-    fig.update_yaxes(title_text = "Price Action", secondary_y = False, range = [0, 1])
+    fig.update_layout(autosize = False, height = 750, title_text = f"{Stock} to {ticker}", dragmode = False, hovermode = 'x unified')
+    fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = 'black', rangeslider_visible = True)
+    fig.update_yaxes(title_text = "Close Price", secondary_y = False, showline = True, linewidth = 2, linecolor = 'black')
+    fig.update_yaxes(title_text = "Price Action", secondary_y = True, range = [0, 1], showline = True, linewidth = 2, linecolor = 'black')
 
     return fig, df
 
@@ -50,18 +50,23 @@ def technical_analysis_graph(df):
 
     fig = make_subplots(rows = 3, cols = 1)
 
-    fig.append_trace(go.Scatter(x = df.index, y = df['MACD'], name = "MACD (12, 26)", marker = {'color': '#0BF029'}), row = 1, col = 1)
-    fig.append_trace(go.Scatter(x = df.index, y = df['MACDS'], name = "MACD Smoothing (9)", marker = {'color': '#DB2A07'}), row = 1, col = 1)
-    fig.append_trace(go.Bar(x = df.index, y = df['MACDH'], name = "MACDH", marker = {'color': 'black', 'opacity': 0.6}), row = 1, col = 1)
+    fig.append_trace(go.Scatter(x = df.index, y = df['MACD'], name = "MACD (12, 26)", marker = {'color': '#32AB60'}), row = 1, col = 1)
+    fig.append_trace(go.Scatter(x = df.index, y = df['MACDS'], name = "MACD Smoothing (9)", marker = {'color': '#DB4052'}), row = 1, col = 1)
+    fig.append_trace(go.Bar(x = df.index, y = df['MACDH'], name = "MACDH", marker = {'color': 'black'}), row = 1, col = 1)
 
-    fig.append_trace(go.Scatter(x = df.index, y = df['RSI'], name = "RSI (14)"), row = 2, col = 1)
+    fig.append_trace(go.Scatter(x = df.index, y = df['RSI'], name = "RSI (14)", marker = {'color': '#800080'}), row = 2, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 30, y1 = 30, line = dict(color = 'black', width = 1), row = 2, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 70, y1 = 70, line = dict(color = 'black', width = 1), row = 2, col = 1)
 
-    fig.append_trace(go.Scatter(x = df.index, y = df['SR_K'], name = "Stochastic K (14, 3)"), row = 3, col = 1)
-    fig.append_trace(go.Scatter(x = df.index, y = df['SR_D'], name = "Stochastic_D (3)", marker = {'color': 'skyblue'}), row = 3, col = 1)
+    fig.append_trace(go.Scatter(x = df.index, y = df['SR_K'], name = "Stochastic K (14, 3)", marker = {'color': '#FF9933'}), row = 3, col = 1)
+    fig.append_trace(go.Scatter(x = df.index, y = df['SR_D'], name = "Stochastic D (3)", marker = {'color': '#3780BF'}), row = 3, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 20, y1 = 20, line = dict(color = 'black', width = 1), row = 3, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 80, y1 = 80, line = dict(color = 'black', width = 1), row = 3, col = 1)
 
-    fig.update_layout(title_text = "Technical Analysis", autosize = False, height = 750, dragmode = False, plot_bgcolor = 'white', hovermode = 'closest')
+    fig.update_layout(title_text = "Technical Analysis", autosize = False, height = 750, dragmode = False, hovermode = 'closest')
 
-    fig.update_xaxes(title_text = "Date")
+    fig.update_xaxes(title_text = "Date", showgrid = True, zeroline = True, showline = True, linewidth = 2, linecolor = 'black')
+    fig.update_yaxes(showgrid = True, zeroline = True, showline = True, linewidth = 2, linecolor = 'black')
     fig.update_yaxes(title_text = "MACD", row = 1, col = 1)
     fig.update_yaxes(title_text = "RSI", range = [0, 100], row = 2, col = 1)
     fig.update_yaxes(title_text = "%K & %D", range = [0, 100], row = 3, col = 1)

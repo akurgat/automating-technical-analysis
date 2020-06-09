@@ -21,7 +21,7 @@ def binance_market_data(ticker, market, interval):
 
         return df
 
-    except (ValueError, KeyError, ConnectionError,AttributeError) as e:
+    except (ValueError, KeyError, ConnectionError, AttributeError) as e:
             print ("Whoops!! Something seems to have gone wrong. Please try again..")
             pass
 
