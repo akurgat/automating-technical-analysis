@@ -3,20 +3,11 @@ from app.indicator_analysis import Indications, Price_Action
 from app.exchange_api import *
 from app.exchange_preprocessing import *
 from app.model import ML
+from app.graph import *
 import datetime as dt
 import streamlit as st
 import pandas as pd
 import numpy as np
-from _plotly_future_ import v4_subplots
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
-from pandas.plotting import register_matplotlib_converters
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-import cufflinks as cf
-
-register_matplotlib_converters()
-init_notebook_mode(connected = True)
-cf.go_offline()
 
 
 def load_data(stock, market, interval, exchange, label):
@@ -64,48 +55,6 @@ def indications(df):
     df.dropna(inplace = True)
 
     return df
-
-def graph(Stock, ticker, data, model_prediction, indication):
-
-    prediction_length = model_prediction.shape[0]
-    df = data.iloc[-prediction_length:]
-    df['Model_Predictions'] = model_prediction
-    df = df[['Adj Close', 'General_Action', 'Distinct_Action', 'Model_Predictions']]
-    df = df.iloc[-250:]
-
-    if indication == 'General Analysis':
-
-        df.loc[((df['General_Action'] == 'Buy')), 'Action_Buy'] = 1
-        df.loc[((df['General_Action'] == 'Sell')), 'Action_Sell'] = 1
-        df['Action_Buy'].fillna(0, inplace = True)
-        df['Action_Sell'].fillna(0, inplace = True)
-        
-    elif indication == 'Distinct Analysis':
-
-        df.loc[((df['Distinct_Action'] == 'Buy')), 'Action_Buy'] = 1
-        df.loc[((df['Distinct_Action'] == 'Sell')), 'Action_Sell'] = 1
-        df['Action_Buy'].fillna(0, inplace = True)
-        df['Action_Sell'].fillna(0, inplace = True)
-
-    elif indication == 'Model Prediction':
-
-        df.loc[((df['Model_Predictions'] == 'Buy')), 'Action_Buy'] = 1
-        df.loc[((df['Model_Predictions'] == 'Sell')), 'Action_Sell'] = 1
-        df['Action_Buy'].fillna(0, inplace = True)
-        df['Action_Sell'].fillna(0, inplace = True)
-
-    fig = make_subplots(specs = [[{"secondary_y": True}]])
-    
-    fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price", opacity = 1), secondary_y = True)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell", opacity = 1), secondary_y = False)
-    fig.add_trace(go.Bar(x = df.index, y = df['Action_Buy'], name = "Buy", opacity = 1), secondary_y = False)
-    
-    fig.update_layout(autosize = False, height = 600, title_text = f"{Stock} to {ticker}", dragmode = False, plot_bgcolor = 'white', hovermode = 'x unified')
-    fig.update_xaxes(title_text = "Date")
-    fig.update_yaxes(title_text = "Close Price", secondary_y = True)
-    fig.update_yaxes(title_text = "Price Action", secondary_y = False, range = [0, 1])
-
-    return fig, df
 
 def main():
     
@@ -201,7 +150,7 @@ def main():
     st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
 
     st.cache(max_entries = 5)
-    fig, df = graph(stock, market, data, model_prediction_now, indication)
+    prediction_fig, df = prediction_graph(stock, market, data, model_prediction_now, indication)
 
     if indication == 'Model Prediction':
         testing_prefix = 'Predicted'
@@ -210,20 +159,21 @@ def main():
         testing_prefix = 'Analysed'
 
     st.success(f'Backtesting {testing_prefix} {label} Data...')
-    st.plotly_chart(fig, use_container_width = True)
+    st.plotly_chart(prediction_fig, use_container_width = True)
 
     st.sidebar.info('Advanced Options:')
+
+    if st.sidebar.checkbox('Technical Analysis Performed'):
+            technical_analysis_fig, df = technical_analysis_graph(analysis)
+            st.success (f'Technical analysis results from the {label} Data...')
+            st.plotly_chart(technical_analysis_fig, use_container_width = True)
+
     if st.sidebar.checkbox('The Sourced Data'):
         st.success ('Sourcing...')
         st.markdown(f'Sourced {label} Data.')
         st.write(data[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10))
         st.text ('Done!')
     
-    if st.sidebar.checkbox('Technical Analysis Performed'):
-            st.success ('Analyzing...')
-            st.markdown(f'Technical analysis results from the {label} Data.')
-            st.write(analysis[['MACD', 'MACDS', 'MACDH', 'RSI', 'SR_K', 'SR_D', 'SMA', 'LMA']].tail(10))
-            st.text("Done!!!")
-    
+
 if __name__ == '__main__':
     main()
