@@ -39,7 +39,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     fig.add_trace(go.Bar(x = df.index, y = df['Action_Sell'], name = "Sell", marker = dict(color = '#DB4052', opacity = 0.6)), secondary_y = True)
     
     fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x unified', 
-    title = dict(text = "Technical Analysis.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)))
+    title = dict(text = f"{Stock} to {ticker}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)))
 
     fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True)
     fig.update_yaxes(title_text = "Close Price", secondary_y = False, showline = True, linewidth = 2, linecolor = '#000000')
@@ -56,17 +56,18 @@ def technical_analysis_graph(df):
     fig.append_trace(go.Bar(x = df.index, y = df['MACDH'], name = "MACDH", marker = dict(color = '#000000')), row = 1, col = 1)
 
     fig.append_trace(go.Scatter(x = df.index, y = df['RSI'], name = "RSI", marker = dict(color = '#800080')), row = 2, col = 1)
-    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 30, y1 = 30, line = dict(color = 'black', width = 1), row = 2, col = 1)
-    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 70, y1 = 70, line = dict(color = 'black', width = 1), row = 2, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 30, y1 = 30, line = dict(color = '#008000', width = 1), row = 2, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 70, y1 = 70, line = dict(color = '#FF0000', width = 1), row = 2, col = 1)
 
     fig.append_trace(go.Scatter(x = df.index, y = df['SR_K'], name = "Stochastic K", marker = dict(color = '#FF9933')), row = 3, col = 1)
     fig.append_trace(go.Scatter(x = df.index, y = df['SR_D'], name = "Stochastic D", marker = dict(color = '#3780BF')), row = 3, col = 1)
-    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 20, y1 = 20, line = dict(color = '#000000', width = 1), row = 3, col = 1)
-    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 80, y1 = 80, line = dict(color = '#000000', width = 1), row = 3, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 20, y1 = 20, line = dict(color = '#008000', width = 1), row = 3, col = 1)
+    fig.add_shape(type = 'line', x0 = df.index.min(), x1 = df.index.max(), y0 = 80, y1 = 80, line = dict(color = '#FF0000', width = 1), row = 3, col = 1)
 
     fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'closest', 
     title = dict(text = "Technical Analysis.", y = 0.95, x = 0.5, xanchor = 'center', yanchor = 'top', font = dict(size = 20)))
 
+    fig.update_shapes(dict(opacity = 0.7))
     fig.update_xaxes(showgrid = True, zeroline = True, showline = True, linewidth = 2, linecolor = '#000000')
     fig.update_xaxes(title_text = "Date", row = 3, col = 1)
     fig.update_yaxes(zeroline = True, showline = True, linewidth = 2, linecolor = '#000000')
