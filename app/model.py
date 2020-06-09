@@ -35,6 +35,6 @@ def ML(df, present_model = present_model, future_model = future_model):
     score_future = future_model.evaluate(features_future, labels_future, verbose = 0)
 
     score_now, score_future = score_now[1] * 100, score_future[1] * 100
-    score_now, score_future = score_now.round(2), score_future.round(2)
+    score_now, score_future = round(score_now, 2), round(score_future, 2)
 
     return str(requested_prediction_now), str(requested_prediction_future), model_prediction_now, str(score_now), str(score_future)
