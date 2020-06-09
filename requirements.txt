@@ -1,7 +1,7 @@
 Keras==2.3.1
 numpy==1.18.4
 pandas==1.0.4
-plotly==4.7.1
+plotly==4.8.1
 requests==2.23.0
 scikit-learn==0.23.1
 streamlit==0.61.0
