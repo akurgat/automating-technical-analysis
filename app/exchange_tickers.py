@@ -372,7 +372,7 @@ def crypto_interval(Exchange, Interval):
     intervals = {'1 Minute':'1m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
     '1 Hour':'1h', '1 Day':'1d', '1 Week':'1w', '1 Month':'1M'}
 
-    bittrex_intervals = {'1 Minute':'oneMin', '5 Minute':'fiveMin', '30 Minute':'thirtyMin', 
+    bittrex_intervals = {'1 Minute':'oneMin', '5 Minute':'fiveMin', '15 Minute':'fifteenMin', '30 Minute':'thirtyMin', 
     '1 Hour':'hour', '1 Day':'day'}
 
     if Exchange == 'Bittrex':

@@ -5,6 +5,12 @@ import datetime as dt
 import yfinance as yf
 import time
 
+def date_utc(date_):
+
+    date_ = pd.to_datetime(date_, utc = True)
+    date_ = date_.dt.tz_localize(None)
+    return date_
+
 def binance_market_data(ticker, market, interval):
 
     try:
@@ -14,6 +20,7 @@ def binance_market_data(ticker, market, interval):
         df.columns = ['open_time', 'Open', 'High', 'Low', 'Adj Close', 'Volume', 'close_time', 
                         'quoted average volume', 'num_trades', 'taker_base_vol', 'taker_quote_vol', 'ignore']
         df['Date'] = [dt.date.fromtimestamp(x/1000.0) for x in df.close_time]
+        df['Date'] = date_utc(df['Date'])
         df.drop(['open_time', 'close_time', 'quoted average volume', 'taker_base_vol', 
                 'ignore', 'num_trades', 'taker_quote_vol'], axis = 1, inplace = True)
         df.set_index('Date', inplace = True)
@@ -33,6 +40,7 @@ def bitfinex_market_data(ticker, market, interval):
         df = pd.DataFrame(data)
         df.columns = ['MTS', 'Open', 'Adj Close', 'High', 'Low', 'Volume']
         df['Date'] = [dt.datetime.fromtimestamp(x/1000.0) for x in df.MTS]
+        df['Date'] = date_utc(df['Date'])
         df.set_index('Date', inplace = True)
         df = df[['High', 'Low', 'Open', 'Volume', 'Adj Close']]
 
@@ -51,7 +59,7 @@ def bittrex_market_data(ticker, market, interval):
         df.rename(columns = {'O':'Open', 'H':'High', 'L':'Low', 'C':'Adj Close', 'V':'Volume', 
                              'BV':'Base Volume', 'T':'Date'}, inplace = True)
         df['Date'] = df['Date'].apply(lambda x: x.replace('T', ' '))
-        df['Date']= pd.to_datetime(df['Date']) 
+        df['Date'] = date_utc(df['Date'])
         df.set_index('Date', inplace = True)
         df = df[['High', 'Low', 'Open', 'Volume', 'Adj Close']]
         
@@ -66,7 +74,10 @@ def yahoo_market_data(ticker, period, interval):
     try:
         df = yf.download(tickers = ticker, period = period, interval = interval, auto_adjust = True,
                 prepost = True, threads = True, proxy = None)
-        df.rename(columns = {'Close': 'Adj Close'}, inplace = True)
+        df = df.reset_index()
+        df.rename(columns = {'Datetime':'Date', 'Close': 'Adj Close'}, inplace = True)
+        df['Date'] = date_utc(df['Date'])
+        df.set_index('Date', inplace = True)
         df = df[['High', 'Low', 'Open', 'Volume', 'Adj Close']]
 
         return df

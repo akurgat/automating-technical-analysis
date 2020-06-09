@@ -91,7 +91,7 @@ def main():
         if exchange == 'Bitfinex':
             interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour'))
         else:
-            interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
+            interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'))
 
         label = 'Cryptocurrency'
 
@@ -142,7 +142,7 @@ def main():
     else:
         future_statement = ''
 
-    st.markdown(f'**Date Predicted:** {requested_date}')
+    st.markdown(f'**Date Predicted (UTC):** {requested_date}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
     st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement_prefix} this {label.lower()}{present_statement_suffix}.')
     st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next {int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s.')
@@ -150,7 +150,7 @@ def main():
     st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
 
     st.cache(max_entries = 5)
-    prediction_fig, df = prediction_graph(stock, market, data, model_prediction_now, indication)
+    prediction_fig = prediction_graph(stock, market, data, model_prediction_now, indication)
 
     if indication == 'Model Prediction':
         testing_prefix = 'Predicted'
