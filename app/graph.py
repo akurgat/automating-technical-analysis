@@ -9,7 +9,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     df = data.iloc[-prediction_length:]
     df['Model_Predictions'] = model_prediction
     df = df[['Adj Close', 'General_Action', 'Distinct_Action', 'Model_Predictions']]
-    df = df.iloc[-250:]
+    df = df.iloc[-365:]
 
     if indication == 'General Analysis':
 
@@ -49,7 +49,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
 
 def technical_analysis_graph(df):
 
-    df = df.iloc[-250:]
+    df = df.iloc[-365:]
 
     fig = make_subplots(rows = 3, cols = 1)
 
