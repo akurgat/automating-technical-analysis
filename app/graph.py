@@ -49,6 +49,8 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
 
 def technical_analysis_graph(df):
 
+    df = df.iloc[-250:]
+
     fig = make_subplots(rows = 3, cols = 1)
 
     fig.append_trace(go.Scatter(x = df.index, y = df['MACD'], name = "MACD", marker = dict(color = '#32AB60')), row = 1, col = 1)
