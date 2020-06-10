@@ -161,17 +161,18 @@ def main():
     st.success(f'Backtesting {testing_prefix} {label} Data...')
     st.plotly_chart(prediction_fig, use_container_width = True)
 
+    technical_analysis_fig = technical_analysis_graph(analysis)
+
+    st.success (f'Technical analysis results from the {label} Data...')
+    st.plotly_chart(technical_analysis_fig, use_container_width = True)
+
+    st.markdown('**Parameters Used:**')
+    st.markdown('* Moving Average Convergence Divergence: 12, 26, 9.')
+    st.markdown('* Relative Strength Index: 14 Days.')
+    st.markdown('* Slow Stochastic: 14, 3, 3.')
+
     st.sidebar.info('Advanced Options:')
-
-    if st.sidebar.checkbox('Technical Analysis Performed'):
-            technical_analysis_fig = technical_analysis_graph(analysis)
-            st.success (f'Technical analysis results from the {label} Data...')
-            st.plotly_chart(technical_analysis_fig, use_container_width = True)
-            st.markdown('**Parameters Used:**')
-            st.markdown('* Moving Average Convergence Divergence: 12, 26, 9.')
-            st.markdown('* Relative Strength Index: 14 Days.')
-            st.markdown('* Slow Stochastic: 14, 3, 3.')
-
+    
     if st.sidebar.checkbox('The Sourced Data'):
         st.success ('Sourcing...')
         st.markdown(f'Sourced {label} Data.')
