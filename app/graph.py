@@ -25,13 +25,13 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     
     fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price", connectgaps = False,  marker = dict(color = '#000000')), 
     secondary_y = False)
-    fig.add_trace(go.Scatter(x = df.index, y = df['Price_Buy'], mode = 'markers', name = "Buy",  marker = dict(color = '#32AB60', opacity = 0.8, size = 8)), 
+    fig.add_trace(go.Scatter(x = df.index, y = df['Price_Buy'], mode = 'markers', name = "Buy",  marker = dict(color = '#32AB60', opacity = 0.8, size = 7.5)), 
     secondary_y = False)
-    fig.add_trace(go.Scatter(x = df.index, y = df['Price_Sell'], mode = 'markers', name = "Sell", marker = dict(color = '#DB4052', opacity = 0.8, size = 8, )), 
+    fig.add_trace(go.Scatter(x = df.index, y = df['Price_Sell'], mode = 'markers', name = "Sell", marker = dict(color = '#DB4052', opacity = 0.8, size = 7.5)), 
     secondary_y = False)
     fig.add_trace(go.Bar(x = df.index, y = df['Volume'], name = "Volume", marker = dict(color = '#5DADE2', opacity = 0.45)), secondary_y = True)
     
-    fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = '#ECF0F1',
+    fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x unified', plot_bgcolor = '#ECF0F1',
     title = dict(text = f"{Stock} to {ticker}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)))
 
     fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True, range = [df.index.min(), df.index.max()])
