@@ -31,7 +31,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     secondary_y = False)
     fig.add_trace(go.Bar(x = df.index, y = df['Volume'], name = "Volume", marker = dict(color = '#5DADE2', opacity = 0.45)), secondary_y = True)
     
-    fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x unified', plot_bgcolor = '#ECF0F1',
+    fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = '#ECF0F1',
     title = dict(text = f"{Stock} to {ticker}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)))
 
     fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True, range = [df.index.min(), df.index.max()])
@@ -68,6 +68,6 @@ def technical_analysis_graph(df):
     fig.update_yaxes(zeroline = True, showline = True, linewidth = 2, linecolor = '#000000')
     fig.update_yaxes(title_text = "MACD", row = 1, col = 1)
     fig.update_yaxes(title_text = "RSI", range = [0, 100], tickvals = [0, 30, 70, 100], row = 2, col = 1)
-    fig.update_yaxes(title_text = "%K & %D", range = [0, 100], tickvals = [0, 20, 80, 100], row = 3, col = 1)
+    fig.update_yaxes(title_text = "%K & %D", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 3, col = 1)
 
     return fig
