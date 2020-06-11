@@ -36,7 +36,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
 
     fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True, range = [df.index.min(), df.index.max()])
     fig.update_yaxes(title_text = "Close Price & Action", secondary_y = False, showline = True, linewidth = 2, linecolor = '#000000')
-    fig.update_yaxes(title_text = "Volume", secondary_y = True, showline = False, linewidth = 2, linecolor = '#000000')
+    fig.update_yaxes(title_text = "Volume", secondary_y = True, showline = True, linewidth = 2, linecolor = '#000000')
 
     return fig
 
