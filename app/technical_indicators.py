@@ -1,12 +1,14 @@
 import pandas as pd
 
-def Technical_Calculations(df, close, high, low):
+def Technical_Calculations(df, close, high, low, volume):
     
+    Pivot_Point(df, close, high, low)
+    #On_Balance_Volume(df, volume)
     MACD(df, close)
     Moving_Averages(df, close)
     RSI(df, close)
     Slow_Stochastic(df, close, high, low)
-    
+ 
 def MACD(df, close):
     fast_length = 12
     slow_length = 26
@@ -59,3 +61,34 @@ def Moving_Averages(df, close):
     
     lma = close.rolling(long_run).mean()
     df['LMA'] = lma
+
+def Pivot_Point(df, close, high, low): 
+    
+    P = (close + high + low) / 3
+    R1 = (P * 2) - low
+    R2 = P + (high - low)
+    R3 = high + 2 * (P - low)
+    S1 = (P * 2) - high
+    S2 = P - (high - low)
+    S3 = low - 2 * (high - P)
+    
+    df['P'] = P
+    df['R1'] = R1
+    df['R2'] = R2
+    df['R3'] = R3
+    df['S1'] = S1
+    df['S2'] = S2
+    df['S3'] = S3
+
+def On_Balance_Volume(df, volume):
+
+    previous_volume = volume.shift(-1)
+
+    df['OBV'] = 0
+
+    df.loc[((df[volume].shift(-1)) < (df[volume])), 'OBV'] = df['OBV'] + df[volume].shift(-1)
+    df.loc[((df[volume].shift(-1)) > (df[volume])), 'OBV'] = df['OBV'] - df[volume].shift(-1)
+    df.loc[((df[volume].shift(-1)) == (df[volume])), 'OBV'] = df['OBV'] + 0
+
+    df['OBV'].fillna(0, inplace = True)
+

@@ -1,4 +1,4 @@
-from app.technical_indicators import Technical_Calculations
+from app.technical_indicators import Technical_Calculations, Pivot_Point
 from app.indicator_analysis import Indications, Price_Action
 from app.exchange_api import *
 from app.exchange_preprocessing import *
@@ -176,7 +176,7 @@ def main():
     if st.sidebar.checkbox('The Sourced Data'):
         st.success ('Sourcing...')
         st.markdown(f'Sourced {label} Data.')
-        st.write(data[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10))    
+        st.write(data[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10)) 
 
 if __name__ == '__main__':
     main()

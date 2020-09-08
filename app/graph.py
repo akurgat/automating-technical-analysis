@@ -11,7 +11,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     prediction_length = model_prediction.shape[0]
     df = data.iloc[-prediction_length:]
     df['Model_Predictions'] = model_prediction
-    df = df[['Adj Close', 'Volume', 'General_Action', 'Distinct_Action', 'Model_Predictions']]
+    df = df[['Adj Close', 'Volume', 'General_Action', 'Distinct_Action', 'Model_Predictions', 'P', 'R1', 'R2', 'R3', 'S1', 'S2', 'S3']]
     df = df.iloc[-366:]
 
     for indicator, column_name in indicators.items():
