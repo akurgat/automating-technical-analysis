@@ -42,7 +42,7 @@ def load_data(stock, market, interval, exchange, label):
 
 def analyse(df):
 
-    Technical_Calculations(df, df['Adj Close'], df['High'], df['Low'])
+    Technical_Calculations(df, df['Adj Close'], df['High'], df['Low'], df['Volume'])
     df.dropna(inplace = True)
     analysis = analysis = df.loc[:, 'MACD':'SR_D']
 
