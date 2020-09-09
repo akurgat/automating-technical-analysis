@@ -91,7 +91,7 @@ def main():
         if exchange == 'Bitfinex':
             interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour'))
         elif exchange == 'Binance':#####
-            interval = st.sidebar.selectbox('', '1 Day')#####
+            interval = st.sidebar.selectbox('1 Day', '1 Day')#####
         else:
             interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'))
 
