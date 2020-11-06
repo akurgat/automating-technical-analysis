@@ -1,13 +1,14 @@
 import pandas as pd
 
-def Technical_Calculations(df, close, high, low, volume):
+def Technical_Calculations(df, close, open, high, low, volume, future_price = 30):
     
     Pivot_Point(df, close, high, low)
-    #On_Balance_Volume(df, volume)
+    On_Balance_Volume(df, volume)
     MACD(df, close)
     Moving_Averages(df, close)
     RSI(df, close)
     Slow_Stochastic(df, close, high, low)
+    Price_Analysis(df, close, open, high, low, future_price = 30)
  
 def MACD(df, close):
     fast_length = 12
@@ -86,9 +87,17 @@ def On_Balance_Volume(df, volume):
 
     df['OBV'] = 0
 
-    df.loc[((df[volume].shift(-1)) < (df[volume])), 'OBV'] = df['OBV'] + df[volume].shift(-1)
-    df.loc[((df[volume].shift(-1)) > (df[volume])), 'OBV'] = df['OBV'] - df[volume].shift(-1)
-    df.loc[((df[volume].shift(-1)) == (df[volume])), 'OBV'] = df['OBV'] + 0
+    df.loc[((volume.shift(-1)) < (volume)), 'OBV'] = df['OBV'] + volume.shift(-1)
+    df.loc[((volume.shift(-1)) > (volume)), 'OBV'] = df['OBV'] - volume.shift(-1)
+    df.loc[((volume.shift(-1)) == (volume)), 'OBV'] = df['OBV'] + 0
 
     df['OBV'].fillna(0, inplace = True)
+
+
+def Price_Analysis(df, close, open, high, low, future_price = 30):
+
+    df['HL_PCT'] = (high - low) / close * 100.0
+    df['PCT_CHG'] = (close - open) / open * 100.0
+    df['Future_Adj_Close'] = close.shift(-future_price)
+    df['Future_Adj_Close'].fillna(0, inplace = True)
 

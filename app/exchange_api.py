@@ -19,7 +19,7 @@ def binance_market_data(ticker, market, interval):
         df = pd.DataFrame(data)
         df.columns = ['open_time', 'Open', 'High', 'Low', 'Adj Close', 'Volume', 'close_time', 
                         'quoted average volume', 'num_trades', 'taker_base_vol', 'taker_quote_vol', 'ignore']
-        df['Date'] = [dt.date.fromtimestamp(x/1000.0) for x in df.close_time]
+        df['Date'] = [dt.datetime.fromtimestamp(x/1000.0).replace(microsecond = 0) for x in df.close_time]
         df['Date'] = date_utc(df['Date'])
         df.drop(['open_time', 'close_time', 'quoted average volume', 'taker_base_vol', 
                 'ignore', 'num_trades', 'taker_quote_vol'], axis = 1, inplace = True)

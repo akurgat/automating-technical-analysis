@@ -1,18 +1,38 @@
 from _plotly_future_ import v4_subplots
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+import datetime as dt
+import pandas as pd
 
-def prediction_graph(Stock, ticker, data, model_prediction, indication):
+def prediction_graph(Stock, ticker, data, action_model_prediction, price_model_prediction, indication, start_date, interval):
 
     indicators = {'General Analysis':'General_Action', 
                     'Distinct Analysis':'Distinct_Action', 
                     'Model Prediction':'Model_Predictions'}
 
-    prediction_length = model_prediction.shape[0]
+    prediction_length = action_model_prediction.shape[0]
     df = data.iloc[-prediction_length:]
-    df['Model_Predictions'] = model_prediction
-    df = df[['Adj Close', 'Volume', 'General_Action', 'Distinct_Action', 'Model_Predictions', 'P', 'R1', 'R2', 'R3', 'S1', 'S2', 'S3']]
+    df['Model_Predictions'] = action_model_prediction
+    df = df[['Adj Close', 'Volume', 'General_Action', 'Distinct_Action', 'Model_Predictions', 'Future_Adj_Close']]
     df = df.iloc[-366:]
+
+    interval_value = int(interval.split()[0])
+    interval_time = str(interval.split()[1]).lower()
+
+    future_date = []
+    for value in range(1, 34):
+        if interval_time == 'minute':
+            future_date.append(start_date + dt.timedelta(minutes = value * interval_value))
+        elif interval_time == 'hour':
+            future_date.append(start_date + dt.timedelta(hours = value * interval_value))
+        elif interval_time == 'day':
+            future_date.append(start_date + dt.timedelta(days = value * interval_value))
+        elif interval_time == 'week':
+            future_date.append(start_date + dt.timedelta(weeks = value * interval_value))
+
+    df_future_price = pd.DataFrame(future_date, columns = ['Date'])
+    df_future_price['Future Price'] = price_model_prediction[-33:].reshape(-1)
+    df_future_price.set_index('Date', inplace = True)  
 
     for indicator, column_name in indicators.items():
          if indication == indicator:
@@ -25,6 +45,8 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     
     fig.add_trace(go.Scatter(x = df.index, y = df['Adj Close'], name = "Close Price", connectgaps = False,  marker = dict(color = '#000000')), 
     secondary_y = False)
+    fig.add_trace(go.Scatter(x = df_future_price.index, y = df_future_price['Future Price'], name = "Furture Price", connectgaps = False,
+    marker = dict(color = '#A9A9A9', size = 6)), secondary_y = False)
     fig.add_trace(go.Scatter(x = df.index, y = df['Price_Buy'], mode = 'markers', name = "Buy",  marker = dict(color = '#32AB60', opacity = 0.8, size = 7.5)), 
     secondary_y = False)
     fig.add_trace(go.Scatter(x = df.index, y = df['Price_Sell'], mode = 'markers', name = "Sell", marker = dict(color = '#DB4052', opacity = 0.8, size = 7.5)), 
@@ -34,7 +56,7 @@ def prediction_graph(Stock, ticker, data, model_prediction, indication):
     fig.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = '#ECF0F1',
     title = dict(text = f"{Stock} to {ticker}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)))
 
-    fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True, range = [df.index.min(), df.index.max()])
+    fig.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True, range = [df.index.min(), df_future_price.index.max()])
     fig.update_yaxes(title_text = "Close Price & Action", secondary_y = False, showline = True, linewidth = 2, linecolor = '#000000')
     fig.update_yaxes(title_text = "Volume", secondary_y = True, showline = True, linewidth = 2, linecolor = '#000000')
 

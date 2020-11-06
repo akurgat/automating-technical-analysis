@@ -9,7 +9,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-
 def load_data(stock, market, interval, exchange, label):
 
     if exchange == 'Yahoo Finance':
@@ -31,6 +30,7 @@ def load_data(stock, market, interval, exchange, label):
 
     df = df.iloc[-650:]
     requested_date = df.index[-1]
+    start_date = df.index[-3]
     current_price = df.iloc[-1,-1]
 
     if label == 'Stock':
@@ -38,18 +38,17 @@ def load_data(stock, market, interval, exchange, label):
     else:
         current_price = current_price.round(8)
 
-    return df, str(requested_date), str(current_price)
+    return df, requested_date, start_date, str(current_price)
 
-def analyse(df):
+def analyse(df, future_price):
 
-    Technical_Calculations(df, df['Adj Close'], df['High'], df['Low'], df['Volume'])
+    Technical_Calculations(df, df['Adj Close'], df['Open'], df['High'], df['Low'], df['Volume'], future_price = future_price)
     df.dropna(inplace = True)
-    analysis = analysis = df.loc[:, 'MACD':'SR_D']
+    analysis = analysis = df.loc[:, 'P':'SR_D']
 
     return analysis, df
 
 def indications(df):
-
     Indications(df, df['Adj Close'], df['Open'])
     Price_Action(df)
     df.dropna(inplace = True)
@@ -91,7 +90,7 @@ def main():
         if exchange == 'Bitfinex':
             interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour'))
         elif exchange == 'Binance':#####
-            interval = st.sidebar.selectbox('1 Day', '1 Day')#####
+            interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
         else:
             interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'))
 
@@ -105,10 +104,11 @@ def main():
     st.info(f'Predicting...')
 
     st.cache(max_entries = 5)
-    data, requested_date, current_price = load_data(stock, market, interval, exchange, label)
+    data, requested_date, start_date, current_price = load_data(stock, market, interval, exchange, label)
 
     st.cache(max_entries = 5)    
-    analysis, data = analyse(data) 
+    future_price = 30
+    analysis, data = analyse(data, future_price = future_price) 
 
     st.cache(max_entries = 5)
     data = indications(data)
@@ -130,7 +130,7 @@ def main():
         currency = 'USD '
 
     st.cache(max_entries = 5)
-    requested_prediction_now, requested_prediction_future, model_prediction_now, score_now, score_future = ML(data)
+    requested_prediction_now, requested_prediction_future, requested_prediction_future_price, model_prediction_now, model_prediction_future, score_now, score_future, score_future_price = ML(data)
 
     if requested_prediction_now == 'Hold':
         present_statement_prefix = 'off from preforming any action with'
@@ -144,15 +144,22 @@ def main():
     else:
         future_statement = ''
 
-    st.markdown(f'**Date Predicted (UTC):** {requested_date}')
+    if label != 'Cryptocurrency':
+        requested_prediction_future_price = str(round(float(requested_prediction_future_price), 2))
+
+    st.markdown(f'**Date Predicted (UTC):** {str(requested_date)}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
     st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement_prefix} this {label.lower()}{present_statement_suffix}.')
-    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next {int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s.')
+    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**.')
+    st.markdown(f'**Future Price Prediction:** The {label.lower()} price for  **{stock}** should be **{currency} {requested_prediction_future_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**.')
     st.markdown(f'**Current Trading Prediction Confidence:** {score_now}%')
     st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
 
+    if float(score_future_price) > 50.:
+        st.markdown(f'**Future Price Prediction Confidence:** {score_future_price}%')
+
     st.cache(max_entries = 5)
-    prediction_fig = prediction_graph(stock, market, data, model_prediction_now, indication)
+    prediction_fig = prediction_graph(stock, market, data, model_prediction_now, model_prediction_future, indication, start_date = start_date, interval = interval)
 
     if indication == 'Model Prediction':
         testing_prefix = 'Predicted'
