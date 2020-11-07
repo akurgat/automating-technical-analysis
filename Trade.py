@@ -89,7 +89,7 @@ def main():
         
         if exchange == 'Bitfinex':
             interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour'))
-        elif exchange == 'Binance':#####
+        elif exchange == 'Binance':
             interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
         else:
             interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'))
@@ -147,7 +147,7 @@ def main():
     if label != 'Cryptocurrency':
         requested_prediction_future_price = str(round(float(requested_prediction_future_price), 2))
 
-    accuracy_threshold = {score_now: 70, score_future: 45, score_future_price: 50}
+    accuracy_threshold = {score_now: 70., score_future: 50., score_future_price: 50.}
     confidence = dict()
     for score, threshold in accuracy_threshold.items():
         if float(score) >= threshold:
