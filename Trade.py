@@ -147,16 +147,19 @@ def main():
     if label != 'Cryptocurrency':
         requested_prediction_future_price = str(round(float(requested_prediction_future_price), 2))
 
+    accuracy_threshold = {score_now: 70, score_future: 45, score_future_price: 50}
+    confidence = dict()
+    for score, threshold in accuracy_threshold.items():
+        if float(score) >= threshold:
+            confidence[score] = f'*(With {score}% confidence.)*'
+        else:
+            confidence[score] = ''
+
     st.markdown(f'**Date Predicted (UTC):** {str(requested_date)}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
-    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now}** {present_statement_prefix} this {label.lower()}{present_statement_suffix}.')
-    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future}ing** {future_statement} this {label.lower()} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**.')
-    st.markdown(f'**Future Price Prediction:** The {label.lower()} price for  **{stock}** should be **{currency} {requested_prediction_future_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**.')
-    st.markdown(f'**Current Trading Prediction Confidence:** {score_now}%')
-    st.markdown(f'**Future Trading Prediction Confidence:** {score_future}%')
-
-    if float(score_future_price) > 50.:
-        st.markdown(f'**Future Price Prediction Confidence:** {score_future_price}%')
+    st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now.lower()}** {present_statement_prefix} this {label.lower()}{present_statement_suffix}. {str(confidence[score_now])}')
+    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future.lower()}ing** {future_statement} this {label.lower()} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future])}')
+    st.markdown(f'**Future Price Prediction:** The {label.lower()[:6]} price for  **{stock}** should be **{currency} {requested_prediction_future_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future_price])}')
 
     st.cache(max_entries = 5)
     prediction_fig = prediction_graph(stock, market, data, model_prediction_now, model_prediction_future, indication, start_date = start_date, interval = interval)
@@ -167,12 +170,12 @@ def main():
     else:
         testing_prefix = 'Analysed'
 
-    st.success(f'Backtesting {testing_prefix} {label} Data...')
+    st.success(f'{testing_prefix} Historical {label[:6]} Price Action...')
     st.plotly_chart(prediction_fig, use_container_width = True)
 
     technical_analysis_fig = technical_analysis_graph(analysis)
 
-    st.success (f'Technical analysis results from the {label} Data...')
+    st.success (f'Technical Analysis results from the {label[:6]} Data...')
     st.plotly_chart(technical_analysis_fig, use_container_width = True)
 
     st.markdown('**Parameters Used:**')

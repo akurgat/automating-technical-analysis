@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from statistics import mode
 from app.scaling import Scaling
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder, MultiLabelBinarizer, OrdinalEncoder
@@ -42,7 +43,7 @@ def ML(df, present_model = present_model, future_model = future_model, future_pr
     model_prediction_future_price = np.array(scaler_future_price.inverse_transform(model_prediction_future_price))
 
     requested_prediction_now = str(model_prediction_now[-1][-1])
-    requested_prediction_future = str(model_prediction_future[-1][-1])
+    requested_prediction_future = str(mode(model_prediction_future.reshape(-1)[-7:]))
     requested_prediction_future_price = round(float(model_prediction_future_price[-1][-1]), 8)
 
     score_now = present_model.evaluate(features_now, labels_now, verbose = 0) 
