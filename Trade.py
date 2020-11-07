@@ -151,7 +151,7 @@ def main():
     confidence = dict()
     for score, threshold in accuracy_threshold.items():
         if float(score) >= threshold:
-            confidence[score] = f'*(With {score}% confidence.)*'
+            confidence[score] = f'*({score}% confident.)*'
         else:
             confidence[score] = ''
 
