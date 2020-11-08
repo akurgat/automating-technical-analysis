@@ -9,8 +9,7 @@ def Scaling(df, training_window, price = False):
     predictors = df.iloc[:, :-1].columns
     scaler = StandardScaler()
 
-    if not price:
-        df[predictors] = scale(df[predictors])
+    df[predictors] = scale(df[predictors])
     df[predictors] = scaler.fit_transform(df[predictors])
     if price:
         df.iloc[:-30, -1:] = scaler.fit_transform(df.iloc[:-30, -1:])

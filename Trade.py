@@ -158,7 +158,7 @@ def main():
     st.markdown(f'**Date Predicted (UTC):** {str(requested_date)}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
     st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[score_now])}')
-    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future.lower()}ing** {future_statement} this {label.lower()} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future])}')
+    st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future.lower()}ing** {future_statement} this {label.lower()[:6]} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future])}')
     st.markdown(f'**Future Price Prediction:** The {label.lower()[:6]} price for  **{stock}** should be **{currency} {requested_prediction_future_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future_price])}')
 
     st.cache(max_entries = 5)
@@ -170,7 +170,7 @@ def main():
     else:
         testing_prefix = 'Analysed'
 
-    st.success(f'Historical {label[:6]} Price Action...({testing_prefix})')
+    st.success(f'Historical {label[:6]} Price Action...({testing_prefix}.)')
     st.plotly_chart(prediction_fig, use_container_width = True)
 
     technical_analysis_fig = technical_analysis_graph(analysis)
