@@ -155,7 +155,7 @@ def main():
         else:
             confidence[score] = ''
 
-    st.markdown(f'**Date Predicted (UTC):** {str(requested_date)}')
+    st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
     st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[score_now])}')
     st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future.lower()}ing** {future_statement} this {label.lower()[:6]} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future])}')
