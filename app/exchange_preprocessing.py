@@ -85,7 +85,7 @@ def stock_crypto_markets(Exchange):
          market = binance_markets
     elif Exchange == 'Bitfinex':
         market = bitfinex_markets
-    elif Exchange == 'Yahoo Finance':
+    elif Exchange == 'Yahoo! Finance':
         market = yahoo_stocks
 
     return market

@@ -11,7 +11,7 @@ import numpy as np
 
 def load_data(stock, market, interval, exchange, label):
 
-    if exchange == 'Yahoo Finance':
+    if exchange == 'Yahoo! Finance':
         stock_ticker = stock_to_ticker(stock) 
         period, stock_interval = yahoo_interval(interval) 
     else:
@@ -58,11 +58,11 @@ def indications(df):
 def main():
     
     st.sidebar.subheader('Exchange:')
-    exchange = st.sidebar.selectbox('', ('Yahoo Finance', 'Binance', 'Bittrex'))
+    exchange = st.sidebar.selectbox('', ('Yahoo! Finance', 'Binance', 'Bittrex'))
 
     markets = stock_crypto_markets(exchange)
 
-    if exchange == 'Yahoo Finance':
+    if exchange == 'Yahoo! Finance':
         st.sidebar.subheader('Stock:')
         stock = st.sidebar.selectbox('', markets)
 
@@ -113,7 +113,7 @@ def main():
     st.cache(max_entries = 5)
     data = indications(data)
 
-    if exchange != 'Yahoo Finance':
+    if exchange != 'Yahoo! Finance':
         if market == 'Bitcoin':
             currency = 'BTC '
         elif market == 'Ethereum':
@@ -170,7 +170,7 @@ def main():
     else:
         testing_prefix = 'Analysed'
 
-    st.success(f'{testing_prefix} Historical {label[:6]} Price Action...')
+    st.success(f'Historical {label[:6]} Price Action...({testing_prefix})')
     st.plotly_chart(prediction_fig, use_container_width = True)
 
     technical_analysis_fig = technical_analysis_graph(analysis)
