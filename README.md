@@ -1,6 +1,9 @@
 # Simple stock trading with data analytics and technical analysis.
 
-https://share.streamlit.io/akurgat/automating-technical-analysis/Trade.py
+## Link:
+
+* https://share.streamlit.io/akurgat/automating-technical-analysis/Trade.py
+* https://automated-technical-analysis.herokuapp.com/
 
 ## Project goal:
 
