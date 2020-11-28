@@ -1,4 +1,4 @@
-# Simple stock trading with data analytics and technical analysis.
+# Simple stock trading with data analytics and technical analysis. [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/akurgat/automating-technical-analysis/Trade.py)
 
 ## Link:
 
