@@ -156,10 +156,10 @@ def main():
             confidence[score] = ''
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}')
-    st.markdown(f'**Current Price:** {currency} {current_price}')
+    st.markdown(f'**Current Price:** {currency} {float(current_price):,.8f}')
     st.markdown(f'**Current Trading Prediction:** You should **{requested_prediction_now.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[score_now])}')
     st.markdown(f'**Future Trading Prediction:** You should consider **{requested_prediction_future.lower()}ing** {future_statement} this {label.lower()[:6]} in the next **{int(interval.split()[0]) * 10} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future])}')
-    st.markdown(f'**Future Price Prediction:** The {label.lower()[:6]} price for  **{stock}** is estimated to be **{currency} {requested_prediction_future_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future_price])}')
+    st.markdown(f'**Future Price Prediction:** The {label.lower()[:6]} price for  **{stock}** is estimated to be **{currency} {float(requested_prediction_future_price):,.8f}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[score_future_price])}')
 
     st.cache(max_entries = 5)
     prediction_fig = prediction_graph(stock, market, data, model_prediction_now, model_prediction_future, indication, start_date = start_date, interval = interval)
