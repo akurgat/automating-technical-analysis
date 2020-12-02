@@ -1,5 +1,10 @@
 # Simple stock trading with data analytics and technical analysis.
 
+## Link:
+
+* https://share.streamlit.io/akurgat/automating-technical-analysis/Trade.py
+* https://automated-technical-analysis.herokuapp.com/
+
 ## Project goal:
 
 Profitable stock and crypto trading involve a lot of knowledge and experience in Technical Analysis. However, the fundamentals of behind technical analysis techniques, tools, resources and effective strategies can be complex to grasp, understand and even expensive to access.

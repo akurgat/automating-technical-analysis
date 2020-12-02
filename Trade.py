@@ -183,7 +183,7 @@ def main():
     st.markdown('* Relative Strength Index: 14 Days.')
     st.markdown('* Slow Stochastic: 14, 3, 3.')
 
-    st.sidebar.info('Advanced Options:')
+    st.sidebar.info('Other Options:')
     
     if st.sidebar.checkbox('The Sourced Data'):
         st.success ('Sourcing...')
