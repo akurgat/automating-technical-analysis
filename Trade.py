@@ -57,6 +57,8 @@ def indications(df):
 
 def main():
     
+    st.set_page_config(layout = "wide")
+    
     st.sidebar.subheader('Exchange:')
     exchange = st.sidebar.selectbox('', ('Yahoo! Finance', 'Binance', 'Bittrex'))
 
