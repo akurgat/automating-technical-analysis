@@ -74,7 +74,8 @@ def main():
             market = 'Korean Won'
         else:
             market = 'US Dollar'
-
+            
+        st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week'))        
         label = 'Stock'
 
