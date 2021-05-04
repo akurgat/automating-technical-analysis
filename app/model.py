@@ -22,7 +22,7 @@ class Prediction(Preprocessing):
         self.df_price = self.df.copy()[features + ['Future_Adj_Close']]
 
         self.mn_scaler = MinMaxScaler()
-        self.df_price.loc[:, 'Future_Adj_Close_Scaled'] = self.mn_scaler.fit_transform(self.df_price.iloc[:, -1:])
+        self.df_price['Future_Adj_Close_Scaled'] = self.mn_scaler.fit_transform(self.df_price[['Future_Adj_Close']].values).reshape(-1)
         self.action_features, self.action_labels = super(Prediction, self).scaling(self.df_action)
         self.price_features, self.price_labels = super(Prediction, self).scaling(self.df_price[features + ['Future_Adj_Close_Scaled']])
         self.mlb = MultiLabelBinarizer(classes = ['Buy', 'Hold', 'Sell'])
