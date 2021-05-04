@@ -10,6 +10,7 @@ def main():
     
     st.sidebar.subheader('Exchange:')
     exchange = st.sidebar.selectbox('', ('Bittrex', 'Binance', 'Yahoo! Finance'))
+    st.cache(max_entries = 5)
     app_data = Data_Sourcing(exchange)
 
     if exchange == 'Yahoo! Finance':
