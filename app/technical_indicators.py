@@ -1,103 +1,68 @@
-import pandas as pd
+from app.data_sourcing import Data_Sourcing
 
-def Technical_Calculations(df, close, open, high, low, volume, future_price = 30):
+class Technical_Calculations(Data_Sourcing):
     
-    Pivot_Point(df, close, high, low)
-    On_Balance_Volume(df, volume)
-    MACD(df, close)
-    Moving_Averages(df, close)
-    RSI(df, close)
-    Slow_Stochastic(df, close, high, low)
-    Price_Analysis(df, close, open, high, low, future_price = 30)
- 
-def MACD(df, close):
-    fast_length = 12
-    slow_length = 26
-    signal_smoothing = 9
+    def __init__(self, exchange, interval, asset, market = None):  
+        self.future_price = 30
+        self.fast_length = 12
+        self.slow_length = 26
+        self.signal_smoothing = 9
+        self.short_run = 20
+        self.long_run = 50
+        self.rsi_period = 14
+        
+        super().__init__(exchange)
+        super(Technical_Calculations, self).intervals(interval)
+        super(Technical_Calculations, self).apis(asset, market)
 
-    ema1 = close.ewm(span = fast_length, adjust = False).mean()
-    ema2 = close.ewm(span = slow_length, adjust = False).mean()
-    macd = ema1 - ema2
-    df['MACD'] = macd
+    def Moving_Average_Convergence_Divergence(self):
+        ema1 = self.df['Adj Close'].ewm(span = self.fast_length, adjust = False).mean()
+        ema2 = self.df['Adj Close'].ewm(span = self.slow_length, adjust = False).mean()
 
-    ema3 = df['MACD'].ewm(span = signal_smoothing, adjust = False).mean()
-    macd_histogram = macd - ema3
-    df['MACDS'] = ema3
-    df['MACDH'] = macd_histogram
+        self.df['MACD'] = ema1 - ema2
+        self.df['MACDS'] = self.df['MACD'].ewm(span = self.signal_smoothing, adjust = False).mean()
+        self.df['MACDH'] = self.df['MACD'] - self.df['MACDS']
 
-def RSI(df, close):
-    rsi_period = 14
+    def Relative_Strength_Index(self):
+        change = self.df['Adj Close'].diff(1)
+        gain = change.mask(change < 0, 0)
+        loss = change.mask(change > 0, 0)
+        average_gain = gain.ewm(com = self.rsi_period - 1, min_periods = self.rsi_period).mean()
+        average_loss = loss.ewm(com = self.rsi_period - 1, min_periods = self.rsi_period).mean()
+        rs = abs(average_gain / average_loss)
 
-    change = close.diff(1)
+        self.df['RSI'] = 100 - (100 / (1 + rs))
 
-    gain = change.mask(change < 0, 0)
-    loss = change.mask(change > 0, 0)
+    def Slow_Stochastic(self):
+        low_stochastic = self.df['Low'].rolling(window = self.rsi_period).min()
+        high_stochastic = self.df['High'].rolling(window = self.rsi_period).max()
 
-    average_gain = gain.ewm(com = rsi_period - 1, min_periods = rsi_period).mean()
-    average_loss = loss.ewm(com = rsi_period - 1, min_periods = rsi_period).mean()
+        fast_k = 100 * ((self.df['Adj Close'] - low_stochastic) / (high_stochastic - low_stochastic) )
+        self.df['SR_K'] = fast_k.rolling(window = 3).mean()
+        self.df['SR_D'] = self.df['SR_K'].rolling(window = 3).mean()
 
-    rs = abs(average_gain / average_loss)
-    rsi = 100 - (100 / (1 + rs))
-    df['RSI'] = rsi
+    def Moving_Averages(self):
+        self.df['SMA'] = self.df['Adj Close'].rolling(self.short_run).mean()
+        self.df['LMA'] = self.df['Adj Close'].rolling(self.long_run).mean()
 
-def Slow_Stochastic(df, close, high, low):
-    n = 14
-    
-    low_stochastic = low.rolling(window = n).min()
-    high_stochastic = high.rolling(window = n).max()
+    def Pivot_Point(self): 
+        self.df['P'] = (self.df['Adj Close'] + self.df['High'] + self.df['Low']) / 3
+        self.df['R1'] = (self.df['P'] * 2) - self.df['Low']
+        self.df['R2'] = self.df['P'] + (self.df['High'] - self.df['Low'])
+        self.df['R3'] = self.df['High'] + 2 * (self.df['P'] - self.df['Low'])
+        self.df['S1'] = (self.df['P'] * 2) - self.df['High']
+        self.df['S2'] =self.df['P'] - (self.df['High'] - self.df['Low'])
+        self.df['S3'] = self.df['Low'] - 2 * (self.df['High'] - self.df['P'])
 
-    fast_k = 100 * ((close - low_stochastic) / (high_stochastic - low_stochastic) )
-    fast_d = fast_k.rolling(window = 3).mean()
-    slow_d = fast_d.rolling(window = 3).mean()
-    df['SR_K'] = fast_d
-    df['SR_D'] = slow_d
+    def On_Balance_Volume(self):
+        self.df['OBV'] = 0
+        self.df.loc[((self.df['Volume'].shift(-1)) < (self.df['Volume'])), 'OBV'] = self.df['OBV'] + self.df['Volume'].shift(-1)
+        self.df.loc[((self.df['Volume'].shift(-1)) > (self.df['Volume'])), 'OBV'] = self.df['OBV'] - self.df['Volume'].shift(-1)
+        self.df.loc[((self.df['Volume'].shift(-1)) == (self.df['Volume'])), 'OBV'] = self.df['OBV'] + 0
+        self.df['OBV'].fillna(0, inplace = True)
 
-def Moving_Averages(df, close):
-
-    short_run = 20
-    long_run = 50
-    
-    sma = close.rolling(short_run).mean()
-    df['SMA'] = sma
-    
-    lma = close.rolling(long_run).mean()
-    df['LMA'] = lma
-
-def Pivot_Point(df, close, high, low): 
-    
-    P = (close + high + low) / 3
-    R1 = (P * 2) - low
-    R2 = P + (high - low)
-    R3 = high + 2 * (P - low)
-    S1 = (P * 2) - high
-    S2 = P - (high - low)
-    S3 = low - 2 * (high - P)
-    
-    df['P'] = P
-    df['R1'] = R1
-    df['R2'] = R2
-    df['R3'] = R3
-    df['S1'] = S1
-    df['S2'] = S2
-    df['S3'] = S3
-
-def On_Balance_Volume(df, volume):
-
-    previous_volume = volume.shift(-1)
-
-    df['OBV'] = 0
-
-    df.loc[((volume.shift(-1)) < (volume)), 'OBV'] = df['OBV'] + volume.shift(-1)
-    df.loc[((volume.shift(-1)) > (volume)), 'OBV'] = df['OBV'] - volume.shift(-1)
-    df.loc[((volume.shift(-1)) == (volume)), 'OBV'] = df['OBV'] + 0
-
-    df['OBV'].fillna(0, inplace = True)
-
-
-def Price_Analysis(df, close, open, high, low, future_price = 30):
-
-    df['HL_PCT'] = (high - low) / close * 100.0
-    df['PCT_CHG'] = (close - open) / open * 100.0
-    df['Future_Adj_Close'] = close.shift(-future_price)
-    df['Future_Adj_Close'].fillna(0, inplace = True)
-
+    def Price_Analysis(self):
+        self.df['HL_PCT'] = (self.df['High'] - self.df['Low']) / self.df['Adj Close'] * 100.0
+        self.df['PCT_CHG'] = (self.df['Adj Close'] - self.df['Open']) / self.df['Open'] * 100.0
+        self.df['Future_Adj_Close'] = self.df['Adj Close'].shift(-self.future_price)
+        self.df['Future_Adj_Close'].fillna(0, inplace = True)
