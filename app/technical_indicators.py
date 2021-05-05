@@ -11,9 +11,11 @@ class Technical_Calculations(Data_Sourcing):
         self.long_run = 50
         self.rsi_period = 14
         
-        super().__init__(exchange)
+        super().__init__()
+        super(Technical_Calculations, self).exchange_data(exchange)
+        super(Technical_Calculations, self).market_data(market)
         super(Technical_Calculations, self).intervals(interval)
-        super(Technical_Calculations, self).apis(asset, market)
+        super(Technical_Calculations, self).apis(asset)
 
     def Moving_Average_Convergence_Divergence(self):
         ema1 = self.df['Adj Close'].ewm(span = self.fast_length, adjust = False).mean()

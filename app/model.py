@@ -1,28 +1,26 @@
 import numpy as np
 import pandas as pd
 from app.scaling import Preprocessing
-from tensorflow.keras.models import load_model
-from sklearn.preprocessing import MultiLabelBinarizer, MinMaxScaler
+from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
 from sklearn.metrics import r2_score
 import datetime as dt
 
 class Prediction(Preprocessing):
     
-    def __init__(self, exchange, interval, asset, market = None):
+    def __init__(self, exchange, interval, asset, action_model, price_model, market = None):
         super().__init__(exchange, interval, asset, market)
 
         self.start_date = self.df.index[-3]
-        
-        self.action_model = load_model("models/action_prediction_model.h5")
-        self.price_model = load_model("models/price_prediction_model.h5")
+        self.action_model = action_model
+        self.price_model = price_model
 
         features = ['High', 'Low', 'Open', 'Volume', 'Adj Close', 'P', 'R1', 'R2', 'R3', 'S1', 'S2', 'S3', 
                     'OBV', 'MACD', 'MACDS', 'MACDH', 'SMA', 'LMA', 'RSI', 'SR_K', 'SR_D', 'HL_PCT', 'PCT_CHG']
         self.df_action = self.df.copy()[features + ['Distinct_Action']]
         self.df_price = self.df.copy()[features + ['Future_Adj_Close']]
 
-        self.mn_scaler = MinMaxScaler()
-        self.df_price['Future_Adj_Close_Scaled'] = self.mn_scaler.fit_transform(self.df_price[['Future_Adj_Close']].values).reshape(-1)
+        self.scaler = StandardScaler()
+        self.df_price['Future_Adj_Close_Scaled'] = self.scaler.fit_transform(self.df_price[['Future_Adj_Close']].values).reshape(-1)
         self.action_features, self.action_labels = super(Prediction, self).scaling(self.df_action)
         self.price_features, self.price_labels = super(Prediction, self).scaling(self.df_price[features + ['Future_Adj_Close_Scaled']])
         self.mlb = MultiLabelBinarizer(classes = ['Buy', 'Hold', 'Sell'])
@@ -33,7 +31,7 @@ class Prediction(Preprocessing):
         self.model_prediction_price = self.price_model.predict(self.price_features)
         
         self.model_prediction_action = np.array(self.mlb.inverse_transform(self.model_prediction_action.round()))
-        self.model_prediction_price = self.mn_scaler.inverse_transform(self.model_prediction_price).flatten()
+        self.model_prediction_price = self.scaler.inverse_transform(self.model_prediction_price).flatten()
         self.requested_prediction_action = str(self.model_prediction_action[-1][-1])
         self.requested_prediction_price = round(float(self.model_prediction_price[-1]), 8)
 

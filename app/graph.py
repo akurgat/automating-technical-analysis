@@ -5,8 +5,8 @@ from plotly.subplots import make_subplots
 
 class Visualization(Prediction):
     
-    def __init__(self, exchange, interval, asset, indication, market = None):
-        super().__init__(exchange, interval, asset, market)  
+    def __init__(self, exchange, interval, asset, indication, action_model, price_model, market = None):
+        super().__init__(exchange, interval, asset, action_model, price_model, market)  
         super(Visualization, self).get_prediction()
         super(Visualization, self).prediction_postprocessing(indication)
 
@@ -50,6 +50,8 @@ class Visualization(Prediction):
         marker = dict(color = '#E74C3C')), row = 1, col = 1)
         self.fig_analysis.append_trace(go.Bar(x = self.df_visulization_technical.index, y = self.df_visulization_technical['MACDH'], name = "MACDH", 
         marker = dict(color = '#000000')), row = 1, col = 1)
+        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visulization_technical.index.min(), x1 = self.df_visulization_technical.index.max(), 
+        y0 = 0, y1 = 0, line = dict(color = '#000000', width = 0.5), row = 1, col = 1)
 
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visulization_technical.index, y = self.df_visulization_technical['RSI'], name = "RSI", 
         marker = dict(color = '#A569BD')), row = 2, col = 1)

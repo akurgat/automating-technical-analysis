@@ -46,8 +46,7 @@ def date_utc(date_):
     return date_
         
 class Data_Sourcing:
-    def __init__(self, exchange):
-        self.exchange = exchange
+    def __init__(self):
         self.df_crypto = pd.read_csv('market_data/crypto.txt')
         self.df_stocks = pd.read_csv('market_data/snp500.txt')
         
@@ -57,12 +56,19 @@ class Data_Sourcing:
         elif (dt.datetime.now() - pd.to_datetime(self.df_stocks['Last Update'][0])).days >= 90:
             update_market_data('stock')
             self.df_stocks = pd.read_csv('market_data/snp500.txt')
-        
+
+    def exchange_data(self, exchange):
+        self.exchange = exchange
         if self.exchange == 'Bittrex' or self.exchange == 'Binance':
             self.markets = np.sort(self.df_crypto['Market Name'].unique())
-            self.currencies = np.sort(self.df_crypto['Currency Name'].unique())
         else: 
             self.stocks = np.sort(self.df_stocks['Company'].unique())
+
+    def market_data(self, market):
+        self.market = market
+        if self.exchange != 'Yahoo! Finance':
+            self.assets = np.sort(self.df_crypto[(self.df_crypto['Market Name'] == self.market)]['Currency Name'].unique())
+            self.currency = self.df_crypto[(self.df_crypto['Market Name'] == self.market)]['Market'].values[0]
             
     def intervals(self, selected_interval):
         self.selected_interval = selected_interval
@@ -85,9 +91,8 @@ class Data_Sourcing:
             else:
                 self.period = 'max'
                     
-    def apis(self, asset, market = None):
+    def apis(self, asset):
         self.asset = asset
-        self.market = market
         
         if self.exchange != 'Yahoo! Finance':
             self.ticker_market = self.df_crypto[((self.df_crypto['Currency Name'] == self.asset) & 

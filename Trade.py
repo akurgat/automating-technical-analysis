@@ -1,7 +1,11 @@
 from app.data_sourcing import Data_Sourcing
 from app.graph import Visualization
+from tensorflow.keras.models import load_model
 import streamlit as st 
-import numpy as np
+
+action_model = load_model("models/action_prediction_model.h5")
+price_model = load_model("models/price_prediction_model.h5")
+app_data = Data_Sourcing()
 
 def main():
     st.set_page_config(layout = "wide")
@@ -9,12 +13,11 @@ def main():
     indication = st.sidebar.selectbox('', ('Predicted', 'Analysed'))
     
     st.sidebar.subheader('Exchange:')
-    exchange = st.sidebar.selectbox('', ('Bittrex', 'Binance', 'Yahoo! Finance'))
-    st.cache(max_entries = 5)
-    app_data = Data_Sourcing(exchange)
+    exchange = st.sidebar.selectbox('', ('Binance', 'Bittrex', 'Yahoo! Finance'))
+    app_data.exchange_data(exchange)
 
     if exchange == 'Yahoo! Finance':
-        assets = np.sort(app_data.df_stocks['Company'].values)
+        assets = app_data.stocks
         market = None
         
         st.sidebar.subheader('Stock:')
@@ -25,12 +28,13 @@ def main():
         interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week'))        
         label = 'Stock'
     else:
-        markets = np.sort(app_data.df_crypto['Market Name'].unique())
+        markets = app_data.markets
         
         st.sidebar.subheader('Market:')
         market = st.sidebar.selectbox('', markets)
-        assets = np.sort(app_data.df_crypto[(app_data.df_crypto['Market Name'] == market)]['Currency Name'].unique())
-        currency = app_data.df_crypto[(app_data.df_crypto['Market Name'] == market)]['Market'].values[0]
+        app_data.market_data(market)
+        assets = app_data.assets
+        currency = app_data.currency
         
         st.sidebar.subheader('Crypto:')
         asset = st.sidebar.selectbox('', assets)
@@ -48,7 +52,7 @@ def main():
     
     st.cache(max_entries = 5) 
     future_price = 30   
-    analysis = Visualization(exchange, interval, asset, indication, market)
+    analysis = Visualization(exchange, interval, asset, indication, action_model, price_model, market)
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
     requested_prediction_price = float(analysis.requested_prediction_price)
