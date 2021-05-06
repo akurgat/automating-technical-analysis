@@ -105,4 +105,6 @@ def main():
         st.write(analysis.df[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10)) 
 
 if __name__ == '__main__':
+    import warnings
+    warnings.filterwarnings("ignore")
     main()
