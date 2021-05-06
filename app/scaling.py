@@ -7,13 +7,13 @@ class Preprocessing(Indications):
     
     def __init__(self, exchange, interval, asset, market = None):
         super().__init__(exchange, interval, asset, market)
-        super(Preprocessing, self).Engulfing_Analysis()
-        super(Preprocessing, self).Support_Resistance()
-        super(Preprocessing, self).Moving_Average_Analysis()
-        super(Preprocessing, self).MACD_Analysis()
-        super(Preprocessing, self).Stochastic_Analysis()
-        super(Preprocessing, self).RSI_Divagence_Convergence()
-        super(Preprocessing, self).Price_Action()
+        super(Preprocessing, self).engulfing_analysis()
+        super(Preprocessing, self).support_resistance()
+        super(Preprocessing, self).moving_average_analysis()
+        super(Preprocessing, self).macd_analysis()
+        super(Preprocessing, self).stochastic_analysis()
+        super(Preprocessing, self).rsi_divagence_convergence()
+        super(Preprocessing, self).price_action()
 
     def scaling(self, df_values):
         self.training_window = 60

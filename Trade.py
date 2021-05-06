@@ -57,12 +57,26 @@ def main():
     current_price = float(analysis.df['Adj Close'][-1])
     requested_prediction_price = float(analysis.requested_prediction_price)
 
+    st.sidebar.subheader('Trading Risk:')
+    risks = {'Low': [analysis.df['S1'].values[-1], analysis.df['R1'].values[-1]], 
+            'Medium': [analysis.df['S2'].values[-1], analysis.df['R2'].values[-1]],   
+            'High': [analysis.df['S3'].values[-1], analysis.df['R3'].values[-1]],}
+
+    risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
+    buy_price = float(risks[risk][0])
+    sell_price = float(risks[risk][1])
+    requested_prediction_action = analysis.requested_prediction_action
+
     if label == 'Stock':
         current_price = f'{float(current_price):,.2f}'
         requested_prediction_price = f'{float(requested_prediction_price):,.2f}'
+        buy_price = f'{float(buy_price):,.2f}'
+        sell_price = f'{float(sell_price):,.2f}'
     else:
         current_price = f'{float(current_price):,.8f}'
         requested_prediction_price = f'{float(requested_prediction_price):,.8f}'
+        buy_price = f'{float(buy_price):,.8f}'
+        sell_price = f'{float(sell_price):,.8f}'
 
     if analysis.requested_prediction_action == 'Hold':
         present_statement_prefix = 'off from taking any action with'
@@ -81,8 +95,10 @@ def main():
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}')
     st.markdown(f'**Current Price:** {currency} {current_price}')
-    st.markdown(f'**Current Trading Prediction:** You should **{analysis.requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
-    st.markdown(f'**Future Price Prediction:** The {label.lower()[:6]} price for  **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[analysis.score_price])}')
+    st.markdown(f'**Current Trading Action Recommendation:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
+    st.markdown(f'**Future Price Estimation:** The {label.lower()[:6]} price for  **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[analysis.score_price])}')
+    if requested_prediction_action == 'Hold':
+        st.markdown(f'**Trading Recommendation:** You should consider buying more **{asset}** at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
     st.cache(max_entries = 5)
     prediction_fig = analysis.prediction_graph()

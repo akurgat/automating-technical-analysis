@@ -8,49 +8,49 @@ class Indications(Technical_Calculations):
         self.lma = -20
         
         super().__init__(exchange, interval, asset, market)
-        super(Indications, self).Pivot_Point()
-        super(Indications, self).On_Balance_Volume()
-        super(Indications, self).Moving_Average_Convergence_Divergence()
-        super(Indications, self).Moving_Averages()
-        super(Indications, self).Relative_Strength_Index()
-        super(Indications, self).Slow_Stochastic()
-        super(Indications, self).Price_Analysis()
+        super(Indications, self).pivot_point()
+        super(Indications, self).on_balance_volume()
+        super(Indications, self).moving_average_convergence_divergence()
+        super(Indications, self).moving_averages()
+        super(Indications, self).relative_strength_index()
+        super(Indications, self).slow_stochastic()
+        super(Indications, self).price_analysis()
 
-    def Engulfing_Analysis(self):
+    def engulfing_analysis(self):
         self.df.loc[((self.df['Adj Close'] < self.df['Open']) | (self.df['Adj Close'] <= self.df['Open'].shift(self.engulfing_period)) & 
         (self.df['Adj Close'].shift(self.engulfing_period) > self.df['Open'].shift(self.engulfing_period))), 'Engulfing_Indication'] = 2
         self.df.loc[((self.df['Adj Close'] > self.df['Open']) | (self.df['Adj Close'] >= self.df['Open'].shift(self.engulfing_period)) & 
         (self.df['Adj Close'].shift(self.engulfing_period) < self.df['Open'].shift(self.engulfing_period))), 'Engulfing_Indication'] = 0
         self.df['Engulfing_Indication'].fillna(1, inplace = True)        
 
-    def MACD_Analysis(self):
+    def macd_analysis(self):
         self.df.loc[((self.df['MACD'] < self.df['MACDS'])), 'MADC_Indication'] = 2
         self.df.loc[((self.df['MACD'] > self.df['MACDS'])), 'MADC_Indication'] = 0 
         self.df['MADC_Indication'].fillna(1, inplace = True)
 
-    def RSI_Divagence_Convergence(self):
+    def rsi_divagence_convergence(self):
         self.df.loc[((self.df['RSI'] >= 70)), 'RSI_Divagence_Convergence'] = 0
         self.df.loc[((self.df['RSI'] <= 30)), 'RSI_Divagence_Convergence'] = 2
         self.df['RSI_Divagence_Convergence'].fillna(1, inplace = True)
 
-    def Stochastic_Analysis(self):
+    def stochastic_analysis(self):
         self.df.loc[((self.df['SR_K'] > self.df['SR_D']) & (self.df['SR_K'] >= 80) & (self.df['RSI'] >= 70)), 'SR_Indication'] = 0
         self.df.loc[((self.df['SR_K'] < self.df['SR_D']) & (self.df['SR_K'] <= 20) & (self.df['RSI'] <= 30)), 'SR_Indication'] = 2
         self.df['SR_Indication'].fillna(1, inplace = True)
 
-    def Moving_Average_Analysis(self):
+    def moving_average_analysis(self):
         self.df.loc[((self.df['SMA'] < self.df['LMA']) & (self.df['SMA'].shift(self.sma) > self.df['LMA'].shift(self.lma))), 'MA_Indication'] = 0
         self.df.loc[((self.df['SMA'] > self.df['LMA']) & (self.df['SMA'].shift(self.sma) < self.df['LMA'].shift(self.lma))), 'MA_Indication'] = 2
         self.df['MA_Indication'].fillna(1, inplace = True)
 
-    def Support_Resistance(self):
+    def support_resistance(self):
         self.df.loc[((self.df['SMA'] < self.df['Adj Close']) & (self.df['SMA'].shift(self.sma) > self.df['Adj Close'].shift(self.sma))), 
         'Support_Resistance_Indication'] = 0
         self.df.loc[((self.df['SMA'] > self.df['Adj Close']) & (self.df['SMA'].shift(self.sma) < self.df['Adj Close'].shift(self.sma))), 
         'Support_Resistance_Indication'] = 2
         self.df['Support_Resistance_Indication'].fillna(1, inplace = True)
 
-    def Price_Action(self):
+    def price_action(self):
         self.indication_estimate = 3
         self.df['Indication'] =  self.df.loc[:, 'Engulfing_Indication':].ewm(com = self.indication_estimate - 1, 
                                                                              min_periods = self.indication_estimate, 
