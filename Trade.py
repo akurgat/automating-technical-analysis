@@ -98,7 +98,7 @@ def main():
     st.markdown(f'**Current Trading Action Recommendation:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
     st.markdown(f'**Future Price Estimation:** The {label.lower()[:6]} price for  **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{int(interval.split()[0]) * future_price} {str(interval.split()[1]).lower()}s**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
-        st.markdown(f'**Trading Recommendation:** You should consider buying more **{asset}** at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
+        st.markdown(f'**Trading Recommendation:** You should consider buying more **{asset}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
     st.cache(max_entries = 5)
     prediction_fig = analysis.prediction_graph()
