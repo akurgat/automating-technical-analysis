@@ -49,13 +49,13 @@ class Technical_Calculations(Data_Sourcing):
 
     def pivot_point(self): 
         self.df['P'] = (self.df['Adj Close'] + self.df['High'] + self.df['Low']) / 3
-        self.df['R1'] = (self.df['P'] * 2) - self.df['Low']
-        self.df['R2'] = self.df['P'] + (self.df['High'] - self.df['Low'])
-        self.df['R3'] = self.df['High'] + 2 * (self.df['P'] - self.df['Low'])
-        self.df['S1'] = (self.df['P'] * 2) - self.df['High']
-        self.df['S2'] =self.df['P'] - (self.df['High'] - self.df['Low'])
-        self.df['S3'] = self.df['Low'] - 2 * (self.df['High'] - self.df['P'])
-
+        self.df['R1'] = self.df['P'] + (0.382 * (self.df['High'] - self.df['Low']))
+        self.df['R2'] = self.df['P'] + (0.618 * (self.df['High'] - self.df['Low']))
+        self.df['R3'] = self.df['P'] + (1 * (self.df['High'] - self.df['Low']))
+        self.df['S1'] = self.df['P'] - (0.382 * (self.df['High'] - self.df['Low']))
+        self.df['S2'] = self.df['P'] - (0.618 * (self.df['High'] - self.df['Low']))
+        self.df['S3'] = self.df['P'] - (1 * (self.df['High'] - self.df['Low']))
+        
     def on_balance_volume(self):
         self.df['OBV'] = 0
         self.df.loc[((self.df['Volume'].shift(-1)) < (self.df['Volume'])), 'OBV'] = self.df['OBV'] + self.df['Volume'].shift(-1)

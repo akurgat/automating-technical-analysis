@@ -71,6 +71,4 @@ class Prediction(Preprocessing):
 
         self.df_future_price = pd.DataFrame(future_date, columns = ['Date'])
         self.df_future_price['Future Price'] = self.model_prediction_price[-33:].reshape(-1)
-        self.df_future_price.set_index('Date', inplace = True) 
-
-
+        self.df_future_price.set_index('Date', inplace = True)
