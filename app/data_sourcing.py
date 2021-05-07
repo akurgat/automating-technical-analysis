@@ -28,7 +28,7 @@ def update_market_data(data):
                           'GBP': ['Bristol', 'United Kingdom', 'Surrey', 'UK'], 
                           'CHf': ['Switzerland'], 
                           'BMD': ['Bermuda']}
-            currency_name = {'USD': 'US Dollar', 'EUR': 'Euro', 'GBP': 'British Pound', 'CHf': 'Swiss franc', 'BMD': 'Bermuda Dollar'}
+            currency_name = {'USD': 'US Dollar', 'EUR': 'Euro', 'GBP': 'British Pound', 'CHf': 'Swiss Franc', 'BMD': 'Bermuda Dollar'}
 
             for key, values in currencies.items():
                 df_stocks.loc[df_stocks['Headquarters Location'].apply(lambda x: x.split(',')[1].strip(' ')).isin(values), 'Currency'] = key
