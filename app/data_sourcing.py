@@ -28,6 +28,7 @@ def update_market_data(data):
                           'GBP': ['Bristol', 'United Kingdom', 'Surrey', 'UK'], 
                           'CHf': ['Switzerland'], 
                           'BMD': ['Bermuda']}
+            currency_name = {'USD': 'US Dollar', 'EUR': 'Euro', 'GBP': 'British Pound', 'CHf': 'Swiss franc', 'BMD': 'Bermuda Dollar'}
 
             for key, values in currencies.items():
                 df_stocks.loc[df_stocks['Headquarters Location'].apply(lambda x: x.split(',')[1].strip(' ')).isin(values), 'Currency'] = key
@@ -35,6 +36,7 @@ def update_market_data(data):
 
             df_stocks = df_stocks[['Symbol', 'Security', 'Currency']]
             df_stocks.columns = ['Ticker', 'Company', 'Currency']
+            df_stocks['Currency_Name'] = df_stocks['Currency'].map(currency_name)
             df_stocks.loc[0, 'Last Update'] = dt.date.today()
             df_stocks.to_csv('market_data/snp500.txt', index = False)
         except:

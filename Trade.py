@@ -18,11 +18,11 @@ def main():
 
     if exchange == 'Yahoo! Finance':
         assets = app_data.stocks
-        market = None
         
         st.sidebar.subheader('Stock:')
         asset = st.sidebar.selectbox('', assets)
-        currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].values[0]
+        currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].unique()[0]
+        market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
             
         st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week'))        
