@@ -45,6 +45,9 @@ def main():
         else:
             interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'))
         label = 'Cryptocurrency'
+        
+    st.sidebar.subheader('Trading Risk:')
+    risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
 
     st.title(f'Automated Technical Analysis for {label} Trading.')
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
@@ -56,16 +59,13 @@ def main():
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
     requested_prediction_price = float(analysis.requested_prediction_price)
+    requested_prediction_action = analysis.requested_prediction_action
 
-    st.sidebar.subheader('Trading Risk:')
     risks = {'Low': [analysis.df['S1'].values[-1], analysis.df['R1'].values[-1]], 
             'Medium': [analysis.df['S2'].values[-1], analysis.df['R2'].values[-1]],   
             'High': [analysis.df['S3'].values[-1], analysis.df['R3'].values[-1]],}
-
-    risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
     buy_price = float(risks[risk][0])
     sell_price = float(risks[risk][1])
-    requested_prediction_action = analysis.requested_prediction_action
 
     if label == 'Stock':
         current_price = f'{float(current_price):,.2f}'
