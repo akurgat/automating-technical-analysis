@@ -53,7 +53,6 @@ def main():
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
     st.info(f'Predicting...')
     
-    st.cache(max_entries = 5) 
     future_price = 30   
     analysis = Visualization(exchange, interval, asset, indication, action_model, price_model, market)
     requested_date = analysis.df.index[-1]
