@@ -51,7 +51,7 @@ class Prediction(Preprocessing):
         self.df_visulization['Action_Predictions'] = self.model_prediction_action
         self.df_visulization = self.df_visulization[['Adj Close', 'Volume', 'Distinct_Action', 
                                                      'Action_Predictions', 'Future_Adj_Close']]
-        self.df_visulization = self.df_visulization.iloc[-366:]
+        #self.df_visulization = self.df_visulization.iloc[-366:]
         self.df_visulization['Price_Buy'] = self.df_visulization[self.df_visulization[indicators[self.indication]] == 'Buy']['Adj Close']
         self.df_visulization['Price_Sell'] = self.df_visulization[self.df_visulization[indicators[self.indication]] == 'Sell']['Adj Close']
 
