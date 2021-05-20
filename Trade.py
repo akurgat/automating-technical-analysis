@@ -119,6 +119,7 @@ def main():
         st.markdown(f'Sourced {label} Data.')
         st.write(analysis.df[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10)) 
 
+        
 if __name__ == '__main__':
     import warnings
     warnings.filterwarnings("ignore")
