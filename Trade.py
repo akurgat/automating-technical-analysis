@@ -99,7 +99,6 @@ def main():
     if requested_prediction_action == 'Hold':
         st.markdown(f'**Trading Recommendation:** You should consider buying more **{asset}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
-    st.cache(max_entries = 5)
     prediction_fig = analysis.prediction_graph()
     if indication == 'Predicted':
         testing_prefix = 'Predicted'
@@ -122,5 +121,7 @@ def main():
         
 if __name__ == '__main__':
     import warnings
+    import gc
     warnings.filterwarnings("ignore")
     main()
+    gc.collect()
