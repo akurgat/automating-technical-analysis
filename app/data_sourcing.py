@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 import yfinance as yf
+import gc
 
 def update_market_data(data):
     if data == 'crypto':
@@ -52,6 +53,8 @@ def data_update():
     elif (dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 90:
         update_market_data('stock')
         df_stocks = pd.read_csv('market_data/snp500.txt')
+
+    gc.collect()
         
 def date_utc(date_):
     date_ = pd.to_datetime(date_, utc = True)
