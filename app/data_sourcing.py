@@ -41,6 +41,17 @@ def update_market_data(data):
             df_stocks.to_csv('market_data/snp500.txt', index = False)
         except:
             pass
+
+def data_update():
+    df_crypto = pd.read_csv('market_data/crypto.txt')
+    df_stocks = pd.read_csv('market_data/snp500.txt')
+
+    if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 30:
+        update_market_data('crypto')
+        df_crypto = pd.read_csv('market_data/crypto.txt')
+    elif (dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 90:
+        update_market_data('stock')
+        df_stocks = pd.read_csv('market_data/snp500.txt')
         
 def date_utc(date_):
     date_ = pd.to_datetime(date_, utc = True)
@@ -51,13 +62,6 @@ class Data_Sourcing:
     def __init__(self):
         self.df_crypto = pd.read_csv('market_data/crypto.txt')
         self.df_stocks = pd.read_csv('market_data/snp500.txt')
-        
-        if (dt.datetime.now() - pd.to_datetime(self.df_crypto['Last Update'][0])).days >= 30:
-            update_market_data('crypto')
-            self.df_crypto = pd.read_csv('market_data/crypto.txt')
-        elif (dt.datetime.now() - pd.to_datetime(self.df_stocks['Last Update'][0])).days >= 90:
-            update_market_data('stock')
-            self.df_stocks = pd.read_csv('market_data/snp500.txt')
 
     def exchange_data(self, exchange):
         self.exchange = exchange
