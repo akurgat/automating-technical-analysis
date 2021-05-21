@@ -5,6 +5,8 @@ from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
 from sklearn.metrics import r2_score
 import datetime as dt
 
+pd.set_option("display.precision", 8)
+
 class Prediction(Preprocessing):
     
     def __init__(self, exchange, interval, asset, action_model, price_model, market = None):

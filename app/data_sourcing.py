@@ -6,6 +6,8 @@ import datetime as dt
 import yfinance as yf
 import gc
 
+pd.set_option("display.precision", 8)
+
 def update_market_data(data):
     if data == 'crypto':
         url = 'https://api.bittrex.com/api/v1.1/public/getmarkets'

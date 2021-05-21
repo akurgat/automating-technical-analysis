@@ -3,9 +3,9 @@ from app.graph import Visualization
 from tensorflow.keras.models import load_model
 import streamlit as st 
 
+data_update()
 action_model = load_model("models/action_prediction_model.h5")
 price_model = load_model("models/price_prediction_model.h5")
-data_update()
 app_data = Data_Sourcing()
 
 def main():
