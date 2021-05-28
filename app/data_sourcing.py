@@ -86,7 +86,7 @@ class Data_Sourcing:
         self.period = None
         exchange_interval = {'Yahoo! Finance': {'5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', '1 Hour':'60m', 
                                          '1 Day':'1d', '1 Week':'1wk', '1 Month':'1mo'}, 
-                     'Binance': {'5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
+                     'Binance': {'3 Minute':'3m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
                                  '1 Hour':'1h', '1 Day':'1d', '1 Week':'1w', '1 Month':'1M'}, 
                      'Bittrex': {'5 Minute':'fiveMin', '30 Minute':'thirtyMin', '1 Hour':'hour', '1 Day':'day'}}
         
