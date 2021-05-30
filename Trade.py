@@ -5,13 +5,9 @@ import streamlit as st
 import gc
 
 gc.collect()
-
 data_update()
-action_model = load_model("models/action_prediction_model.h5")
-price_model = load_model("models/price_prediction_model.h5")
-app_data = Data_Sourcing()
 
-def main():
+def main(app_data):
     st.set_page_config(layout = "wide")
     st.sidebar.subheader('Indication:')
     indication = st.sidebar.selectbox('', ('Predicted', 'Analysed'))
@@ -126,6 +122,9 @@ def main():
 if __name__ == '__main__':
     import warnings
     import gc
-    warnings.filterwarnings("ignore")
-    main()
+    warnings.filterwarnings("ignore") 
     gc.collect()
+    action_model = load_model("models/action_prediction_model.h5")
+    price_model = load_model("models/price_prediction_model.h5")
+    app_data = Data_Sourcing()
+    main(app_data = app_data)
