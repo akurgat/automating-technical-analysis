@@ -17,7 +17,7 @@ def update_market_data(data):
         url = 'https://api.binance.com/api/v3/exchangeInfo'
         df_binance = pd.DataFrame(requests.get(url).json()['symbols'])
         df_binance = df_binance[df_binance['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
-        df_binance.columns = ['Currency', 'Market', 'Binance Pair']
+        df_binance.columns = ['Binance Pair', 'Currency', 'Market']
         df_binance = df_binance[(df_binance['Market'].isin(df_bittrex['Market']))]
         df_binance = df_binance[(df_binance['Currency'].isin(df_bittrex['Currency']))]
 
