@@ -32,9 +32,9 @@ class Prediction(Preprocessing):
         self.model_prediction_action = self.action_model.predict(self.action_features)
         self.model_prediction_price = self.price_model.predict(self.price_features)
         
-        self.model_prediction_action = np.array(self.mlb.inverse_transform(self.model_prediction_action.round()))
+        self.model_prediction_action = np.array(self.mlb.inverse_transform(self.model_prediction_action.round())).flatten()
         self.model_prediction_price = self.scaler.inverse_transform(self.model_prediction_price).flatten()
-        self.requested_prediction_action = str(self.model_prediction_action[-1][-1])
+        self.requested_prediction_action = str(self.model_prediction_action[-1])
         self.requested_prediction_price = round(float(self.model_prediction_price[-1]), 8)
 
         price_prediction_length = self.model_prediction_price.shape[0]
