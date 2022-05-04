@@ -1,4 +1,5 @@
 from app.data_sourcing import Data_Sourcing, data_update
+from app.indicator_analysis import Indications
 from app.graph import Visualization
 from tensorflow.keras.models import load_model
 import streamlit as st 
@@ -9,8 +10,9 @@ data_update()
 
 def main(app_data):
     st.set_page_config(layout = "wide")
-    st.sidebar.subheader('Indication:')
-    indication = st.sidebar.selectbox('', ('Predicted', 'Analysed'))
+    #st.sidebar.subheader('Indication:')
+    #indication = st.sidebar.selectbox('', ('Predicted', 'Analysed'))
+    indication = 'Predicted'
     
     st.sidebar.subheader('Exchange:')
     exchange = st.sidebar.selectbox('', ('Binance', 'Bittrex', 'Yahoo! Finance'))
@@ -25,7 +27,7 @@ def main(app_data):
         market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
             
         st.sidebar.subheader('Interval:')
-        interval = st.sidebar.selectbox('', ('1 Hour', '1 Day', '1 Week'))        
+        interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)        
         label = 'Stock'
     else:
         markets = app_data.markets
@@ -41,12 +43,12 @@ def main(app_data):
 
         st.sidebar.subheader('Interval:')
         if exchange == 'Binance':
-            interval = st.sidebar.selectbox('', ('3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'))
+            interval = st.sidebar.selectbox('', ('3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day'), index = 1)
         else:
-            interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'))
+            interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'), index = 1)
         label = 'Cryptocurrency'
         
-    st.sidebar.subheader('Trading Risk:')
+    st.sidebar.subheader('Trading Volatility:')
     risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
 
     st.title(f'Automated Technical Analysis for {label} Trading.')
@@ -55,14 +57,15 @@ def main(app_data):
     
     future_price = 30   
     analysis = Visualization(exchange, interval, asset, indication, action_model, price_model, market)
+    analysis_day = Indications(exchange, '1 Day', asset, market)
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
     requested_prediction_price = float(analysis.requested_prediction_price)
     requested_prediction_action = analysis.requested_prediction_action
 
-    risks = {'Low': [analysis.df['S1'].values[-1], analysis.df['R1'].values[-1]], 
-            'Medium': [analysis.df['S2'].values[-1], analysis.df['R2'].values[-1]],   
-            'High': [analysis.df['S3'].values[-1], analysis.df['R3'].values[-1]],}
+    risks = {'Low': [analysis_day.df['S1'].values[-1], analysis_day.df['R1'].values[-1]], 
+            'Medium': [analysis_day.df['S2'].values[-1], analysis_day.df['R2'].values[-1]],   
+            'High': [analysis_day.df['S3'].values[-1], analysis_day.df['R3'].values[-1]],}
     buy_price = float(risks[risk][0])
     sell_price = float(risks[risk][1])
 
@@ -110,15 +113,10 @@ def main(app_data):
 
     technical_analysis_fig = analysis.technical_analysis_graph()
     st.success (f'Technical Analysis results from the {label[:6]} Data...')
-    st.plotly_chart(technical_analysis_fig, use_container_width = True)
+    st.plotly_chart(technical_analysis_fig, use_container_width = True) 
 
-    st.sidebar.info('Other Options:')
-    if st.sidebar.checkbox('The Sourced Data'):
-        st.success ('Sourcing...')
-        st.markdown(f'Sourced {label} Data.')
-        st.write(analysis.df[['High', 'Low', 'Open', 'Volume', 'Adj Close']].tail(10)) 
 
-        
+
 if __name__ == '__main__':
     import warnings
     import gc

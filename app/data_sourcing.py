@@ -130,6 +130,7 @@ class Data_Sourcing:
             self.df = yf.download(tickers = self.ticker, period = self.period, interval = self.exchange_interval, 
                                   auto_adjust = True, prepost = True, threads = True, proxy = None).reset_index()
             self.df = self.df.rename(columns = {'Datetime':'Date', 'Close': 'Adj Close'})
+            self.df = self.df.iloc[-750:]
             
         self.df['Date'] = date_utc(self.df['Date'])
         self.df.set_index('Date', inplace = True)
