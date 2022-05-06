@@ -87,7 +87,7 @@ def main(app_data):
         present_statement_prefix = ''
         present_statement_suffix = ''
                 
-    accuracy_threshold = {analysis.score_action: 70., analysis.score_price: 60.}
+    accuracy_threshold = {analysis.score_action: 75., analysis.score_price: 75.}
     confidence = dict()
     for score, threshold in accuracy_threshold.items():
         if float(score) >= threshold:
