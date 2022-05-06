@@ -44,7 +44,7 @@ class Prediction(Preprocessing):
 
         self.score_action = self.action_model.evaluate(self.action_features, self.action_labels, verbose = 0) 
         self.score_price = r2_score(self.df_price['Adj Close'].values[1:], self.model_prediction_price[:-1])
-        self.score_action, self.score_price = round((self.score_action[1] * 100), 2), round((self.score_price * 100), 2)
+        self.score_action, self.score_price = round((self.score_action[1] * 100), 1), round((self.score_price * 100), 1)
         
     def prediction_postprocessing(self, indication):
         self.indication = indication
