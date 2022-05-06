@@ -11,18 +11,10 @@ class Visualization(Prediction):
         super(Visualization, self).prediction_postprocessing(indication)
 
     def prediction_graph(self):
-        if self.score_price < 50.:
-            future = False
-        else:
-            future = True
 
         self.fig_action = make_subplots(specs = [[{"secondary_y": True}]])
         self.fig_action.add_trace(go.Scatter(x = self.df_visulization.index, y = self.df_visulization['Adj Close'], name = "Close Price", connectgaps = False,  
         marker = dict(color = '#000000')), secondary_y = False)
-
-        if future:
-            self.fig_action.add_trace(go.Scatter(x = self.df_future_price.index, y = self.df_future_price['Future Price'], name = "Furture Price", 
-            connectgaps = False, marker = dict(color = '#A9A9A9', size = 6)), secondary_y = False)
 
         self.fig_action.add_trace(go.Scatter(x = self.df_visulization.index, y = self.df_visulization['Price_Buy'], mode = 'markers', name = "Buy",  
         marker = dict(color = '#32AB60', opacity = 0.8, size = 7.5)), secondary_y = False)
