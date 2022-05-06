@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from app.scaling import Preprocessing
-from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.metrics import r2_score
 import datetime as dt
 
@@ -27,14 +27,14 @@ class Prediction(Preprocessing):
         self.df_price['Adj Close_Scaled'] = self.scaler.fit_transform(self.df_price[['Adj Close']].values).reshape(-1)
         self.action_features, self.action_labels = super(Prediction, self).scaling(self.df_action)
         self.price_features, self.price_labels = super(Prediction, self).scaling(self.df_price[price_features + ['Adj Close_Scaled']])
-        self.mlb = MultiLabelBinarizer(classes = ['Buy', 'Hold', 'Sell'])
-        self.action_labels = self.mlb.fit_transform(self.action_labels)
+        self.ohe = OneHotEncoder(categories = [['Buy', 'Hold', 'Sell']], sparse = False)
+        self.action_labels = self.ohe.fit_transform(self.action_labels)
         
     def get_prediction(self):         
         self.model_prediction_action = self.action_model.predict(self.action_features)
         self.model_prediction_price = self.price_model.predict(self.price_features)
         
-        self.model_prediction_action = np.array(self.mlb.inverse_transform(self.model_prediction_action.round())).flatten()
+        self.model_prediction_action = np.array(self.ohe.inverse_transform(self.model_prediction_action.round())).flatten()
         self.model_prediction_price = self.scaler.inverse_transform(self.model_prediction_price).flatten()
         self.requested_prediction_action = str(self.model_prediction_action[-1])
         self.requested_prediction_price = round(float(self.model_prediction_price[-1]), 8)
