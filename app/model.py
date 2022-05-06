@@ -27,7 +27,7 @@ class Prediction(Preprocessing):
         self.df_price['Adj Close_Scaled'] = self.scaler.fit_transform(self.df_price[['Adj Close']].values).reshape(-1)
         self.action_features, self.action_labels = super(Prediction, self).scaling(self.df_action)
         self.price_features, self.price_labels = super(Prediction, self).scaling(self.df_price[price_features + ['Adj Close_Scaled']])
-        self.ohe = OneHotEncoder(categories = [['Buy', 'Hold', 'Sell']], sparse = False)
+        self.ohe = OneHotEncoder(categories = [['Buy', 'Hold', 'Sell']], sparse = False, handle_unknown = 'ignore')
         self.action_labels = self.ohe.fit_transform(self.action_labels)
         
     def get_prediction(self):         
