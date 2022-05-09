@@ -45,17 +45,27 @@ def update_market_data(data):
             df_stocks.to_csv('market_data/snp500.txt', index = False)
         except:
             pass
+        try:
+            df_indexes = pd.read_html('https://finance.yahoo.com/world-indices/')[0]
+            df_indexes = df_indexes[['Symbol', 'Name']]
+            df_indexes.columns = ['Ticker', 'Indexes']
+            df_indexes.loc[0, 'Last Update'] = dt.date.today()
+            df_indexes.to_csv('indexes.txt', index = False)
+        except:
+            pass
 
 def data_update():
     df_crypto = pd.read_csv('market_data/crypto.txt')
     df_stocks = pd.read_csv('market_data/snp500.txt')
+    df_indexes = pd.read_csv('market_data/indexes.txt')
 
     if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 30:
         update_market_data('crypto')
         df_crypto = pd.read_csv('market_data/crypto.txt')
-    elif (dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 90:
+    elif ((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 30) or ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 30):
         update_market_data('stock')
         df_stocks = pd.read_csv('market_data/snp500.txt')
+        df_indexes = pd.read_csv('market_data/indexes.txt')
 
     gc.collect()
         
@@ -68,6 +78,7 @@ class Data_Sourcing:
     def __init__(self):
         self.df_crypto = pd.read_csv('market_data/crypto.txt')
         self.df_stocks = pd.read_csv('market_data/snp500.txt')
+        self.df_indexes = pd.read_csv('market_data/indexes.txt')
 
     def exchange_data(self, exchange):
         self.exchange = exchange
@@ -75,6 +86,7 @@ class Data_Sourcing:
             self.markets = np.sort(self.df_crypto['Market Name'].unique())
         else: 
             self.stocks = np.sort(self.df_stocks['Company'].unique())
+            self.indexes = np.sort(self.df_stocks['Company'].unique())
 
     def market_data(self, market):
         self.market = market
