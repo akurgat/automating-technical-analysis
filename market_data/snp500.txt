@@ -1,5 +1,5 @@
 Ticker,Company,Currency,Currency_Name,Last Update
-MMM,3M,USD,US Dollar,2022-05-04
+MMM,3M,USD,US Dollar,2022-05-13
 AOS,A. O. Smith,USD,US Dollar,
 ABT,Abbott,USD,US Dollar,
 ABBV,AbbVie,USD,US Dollar,
@@ -57,7 +57,7 @@ AZO,AutoZone,USD,US Dollar,
 AVB,AvalonBay Communities,USD,US Dollar,
 AVY,Avery Dennison,USD,US Dollar,
 BKR,Baker Hughes,USD,US Dollar,
-BLL,Ball,USD,US Dollar,
+BALL,Ball,USD,US Dollar,
 BAC,Bank of America,USD,US Dollar,
 BBWI,Bath & Body Works,USD,US Dollar,
 BAX,Baxter,USD,US Dollar,
