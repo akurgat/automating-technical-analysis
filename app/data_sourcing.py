@@ -86,7 +86,7 @@ class Data_Sourcing:
             self.markets = np.sort(self.df_crypto['Market Name'].unique())
         else: 
             self.stocks = np.sort(self.df_stocks['Company'].unique())
-            self.indexes = np.sort(self.df_stocks['Company'].unique())
+            self.indexes = np.sort(self.df_indexes['Indexes'].unique())
 
     def market_data(self, market):
         self.market = market
@@ -137,8 +137,10 @@ class Data_Sourcing:
                 self.df['Date'] = self.df['Date'].apply(lambda x: x.replace('T', ' '))
                 
         else:
-            self.ticker = self.df_stocks[(self.df_stocks['Company'] == self.asset)]['Ticker'].values[0]
-            self.currency = self.df_stocks[(self.df_stocks['Company'] == self.asset)]['Currency'].values[0]
+            try:
+                self.ticker = self.df_stocks[(self.df_stocks['Company'] == self.asset)]['Ticker'].values[0]
+            except:
+                self.ticker = self.df_indexes[(self.df_indexes['Indexes'] == self.asset)]['Ticker'].values[0]
             self.df = yf.download(tickers = self.ticker, period = self.period, interval = self.exchange_interval, 
                                   auto_adjust = True, prepost = True, threads = True, proxy = None).reset_index()
             self.df = self.df.rename(columns = {'Datetime':'Date', 'Close': 'Adj Close'})

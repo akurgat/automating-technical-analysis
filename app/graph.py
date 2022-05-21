@@ -10,9 +10,14 @@ class Visualization(Prediction):
         super(Visualization, self).get_prediction()
         super(Visualization, self).prediction_postprocessing(indication)
 
-    def prediction_graph(self):
-
+    def prediction_graph(self, equity = None):
+        
         self.df_visulization = self.df_visulization.iloc[-450:]
+
+        if equity == 'Index fund' or equity == 'Futures':
+            prediction_title = f"{self.asset}."
+        else:
+             prediction_title = f"{self.asset} to {self.market}."
 
         if self.df_visulization['Open'].iloc[-1] > self.df_visulization['Adj Close'].iloc[-1]:
             trace_color = 'rgba(255, 0, 0, 0.15)'
@@ -35,7 +40,7 @@ class Visualization(Prediction):
         marker = dict(color = '#D2042D', opacity = 0.75)), secondary_y = True)
 
         self.fig_action.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = 'rgba(255, 255, 255, 0.88)', 
-        title = dict(text = f"{self.asset} to {self.market}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)), 
+        title = dict(text = prediction_title, y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)), 
         xaxis_range = (self.df_visulization.index.min(), self.df_visulization.index.max()), 
         yaxis_range = (self.df_visulization['Adj Close'].min() - self.df_visulization['Adj Close'].std() / 10, self.df_visulization['Adj Close'].max() + self.df_visulization['Adj Close'].std() / 3))
         self.fig_action.update_xaxes(title_text = "Date", zeroline = False, showline = False, showgrid = False, linewidth = 2, rangeslider_visible = True)

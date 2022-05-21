@@ -1,5 +1,5 @@
 Currency Name,Market Name,Bittrex Pair,Binance Pair,Market,Last Update
-Litecoin,Bitcoin,BTC-LTC,LTCBTC,BTC,2022-05-13
+Litecoin,Bitcoin,BTC-LTC,LTCBTC,BTC,2022-05-22
 Dogecoin,Bitcoin,BTC-DOGE,DOGEBTC,BTC,
 Dash,Bitcoin,BTC-DASH,DASHBTC,BTC,
 Groestlcoin,Bitcoin,BTC-GRS,GRSBTC,BTC,

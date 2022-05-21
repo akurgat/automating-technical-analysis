@@ -10,8 +10,6 @@ data_update()
 
 def main(app_data):
     st.set_page_config(layout = "wide")
-    #st.sidebar.subheader('Indication:')
-    #indication = st.sidebar.selectbox('', ('Predicted', 'Analysed'))
     indication = 'Predicted'
     
     st.sidebar.subheader('Exchange:')
@@ -19,17 +17,27 @@ def main(app_data):
     app_data.exchange_data(exchange)
 
     if exchange == 'Yahoo! Finance':
-        assets = app_data.stocks
+        st.sidebar.subheader('Equities:')
+        equity = st.sidebar.selectbox('', ('Index fund', 'Stocks'), index = 1)
+        if equity == 'Stocks':
+            assets = app_data.stocks
+        if equity == 'Index fund':
+            assets = app_data.indexes
         
-        st.sidebar.subheader('Stock:')
+        st.sidebar.subheader(f'{equity}:')
         asset = st.sidebar.selectbox('', assets)
-        currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].unique()[0]
-        market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
-            
+        if equity == 'Stocks':
+            currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].unique()[0]
+            market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
+        if equity == 'Index fund':
+            currency = 'Pts'
+            market = None
+
         st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)        
-        label = 'Stock'
+        label = equity
     else:
+        equity = None
         markets = app_data.markets
         
         st.sidebar.subheader('Market:')
@@ -69,7 +77,7 @@ def main(app_data):
     buy_price = float(risks[risk][0])
     sell_price = float(risks[risk][1])
 
-    if label == 'Stock':
+    if exchange == 'Yahoo! Finance':
         current_price = f'{float(current_price):,.2f}'
         requested_prediction_price = f'{float(requested_prediction_price):,.2f}'
         buy_price = f'{float(buy_price):,.2f}'
@@ -101,14 +109,19 @@ def main(app_data):
     else:
         forcast_suffix = str(interval.split()[1]).lower()
 
+    if label == 'Index fund':
+        asset_suffix = 'approximation'
+    else:
+        asset_suffix = 'price'
+
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
     st.markdown(f'**Current Price:** {currency} {current_price}.')
     st.markdown(f'**Current Trading Action Recommendation:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
-    st.markdown(f'**Future Price Estimation:** The {label.lower()[:6]} price for  **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
+    st.markdown(f'**Future Price Estimation:** The {label.lower()[:6]} {asset_suffix} for **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
         st.markdown(f'**Trading Recommendation:** You should consider buying more **{asset}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
-    prediction_fig = analysis.prediction_graph()
+    prediction_fig = analysis.prediction_graph(equity)
     if indication == 'Predicted':
         testing_prefix = 'Predicted'
     else:
