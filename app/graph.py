@@ -14,7 +14,7 @@ class Visualization(Prediction):
         
         self.df_visulization = self.df_visulization.iloc[-450:]
 
-        if equity == 'Index fund' or equity == 'Futures':
+        if equity == 'Index Fund' or equity == 'Futures':
             prediction_title = f"{self.asset}."
         else:
              prediction_title = f"{self.asset} to {self.market}."
