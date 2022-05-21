@@ -45,6 +45,7 @@ def update_market_data(data):
             df_stocks.to_csv('market_data/snp500.txt', index = False)
         except:
             pass
+        
         try:
             df_indexes = pd.read_html('https://finance.yahoo.com/world-indices/')[0]
             df_indexes = df_indexes[['Symbol', 'Name']]
