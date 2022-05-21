@@ -12,28 +12,40 @@ class Visualization(Prediction):
 
     def prediction_graph(self):
 
+        self.df_visulization = self.df_visulization.iloc[-450:]
+
+        if self.df_visulization['Open'].iloc[-1] > self.df_visulization['Adj Close'].iloc[-1]:
+            trace_color = 'rgba(255, 0, 0, 0.15)'
+            price_tag = 'Bearish'
+        else:
+            trace_color = 'rgba(0, 128, 0, 0.15)'
+            price_tag = 'Bullish'
+
         self.fig_action = make_subplots(specs = [[{"secondary_y": True}]])
-        self.fig_action.add_trace(go.Scatter(x = self.df_visulization.index, y = self.df_visulization['Adj Close'], name = "Close Price", connectgaps = False,  
-        marker = dict(color = '#000000')), secondary_y = False)
+        self.fig_action.add_trace(go.Scatter(x = self.df_visulization.index, y = self.df_visulization['Adj Close'], name = f"Close Price ({price_tag})", connectgaps = False,  
+        marker = dict(color = '#000000'), fill = 'tozeroy', fillcolor = trace_color), secondary_y = False)
 
         self.fig_action.add_trace(go.Scatter(x = self.df_visulization.index, y = self.df_visulization['Price_Buy'], mode = 'markers', name = "Buy",  
-        marker = dict(color = '#32AB60', opacity = 0.8, size = 7.5)), secondary_y = False)
+        marker = dict(color = '#32AB60', opacity = 0.85, size = 7.5)), secondary_y = False)
         self.fig_action.add_trace(go.Scatter(x = self.df_visulization.index, y = self.df_visulization['Price_Sell'], mode = 'markers', name = "Sell", 
-        marker = dict(color = '#DB4052', opacity = 0.8, size = 7.5)), secondary_y = False)
-        self.fig_action.add_trace(go.Bar(x = self.df_visulization.index, y = self.df_visulization['Volume'], name = "Volume", 
-        marker = dict(color = '#5DADE2', opacity = 0.45)), secondary_y = True)
+        marker = dict(color = '#DB4052', opacity = 0.85, size = 7.5)), secondary_y = False)
+        self.fig_action.add_trace(go.Bar(x = self.df_visulization.index, y = self.df_visulization['Bullish Volume'], name = "Bullish Volume", 
+        marker = dict(color = '#008000', opacity = 0.75)), secondary_y = True)
+        self.fig_action.add_trace(go.Bar(x = self.df_visulization.index, y = self.df_visulization['Bearish Volume'], name = "Bearish Volume", 
+        marker = dict(color = '#D2042D', opacity = 0.75)), secondary_y = True)
 
-        self.fig_action.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = '#ECF0F1', 
-        title = dict(text = f"{self.asset} to {self.market}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)))
-        self.fig_action.update_xaxes(title_text = "Date", showline = True, linewidth = 2, linecolor = '#000000', rangeslider_visible = True, 
-        range = [self.df_visulization.index.min(), self.df_visulization.index.max()])
-        self.fig_action.update_yaxes(title_text = "Close Price & Action", secondary_y = False, showline = True, linewidth = 2, linecolor = '#000000')
-        self.fig_action.update_yaxes(title_text = "Volume", secondary_y = True, showline = True, linewidth = 2, linecolor = '#000000')
+        self.fig_action.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = 'rgba(255, 255, 255, 0.88)', 
+        title = dict(text = f"{self.asset} to {self.market}.", y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)), 
+        xaxis_range = (self.df_visulization.index.min(), self.df_visulization.index.max()), 
+        yaxis_range = (self.df_visulization['Adj Close'].min() - self.df_visulization['Adj Close'].std() / 10, self.df_visulization['Adj Close'].max() + self.df_visulization['Adj Close'].std() / 3))
+        self.fig_action.update_xaxes(title_text = "Date", zeroline = False, showline = False, showgrid = False, linewidth = 2, rangeslider_visible = True)
+        self.fig_action.update_yaxes(title_text = "Close Price & Action", secondary_y = False, showgrid = False, showline = False)
+        self.fig_action.update_yaxes(title_text = "Volume", secondary_y = True, showgrid = False, showline = False)
 
         return self.fig_action
 
     def technical_analysis_graph(self):
-        self.df_visulization_technical = self.df.iloc[-366:]
+        self.df_visulization_technical = self.df.iloc[-450:]
         
         self.fig_analysis = make_subplots(rows = 3, cols = 1)
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visulization_technical.index, y = self.df_visulization_technical['MACD'], name = "MACD", 
@@ -59,12 +71,12 @@ class Visualization(Prediction):
         self.fig_analysis.add_shape(type = 'line', x0 = self.df_visulization_technical.index.min(), x1 = self.df_visulization_technical.index.max(), y0 = 20, y1 = 20, line = dict(color = '#008000', width = 1), row = 3, col = 1)
         self.fig_analysis.add_shape(type = 'line', x0 = self.df_visulization_technical.index.min(), x1 = self.df_visulization_technical.index.max(), y0 = 80, y1 = 80, line = dict(color = '#FF0000', width = 1), row = 3, col = 1)
 
-        self.fig_analysis.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = '#ECF0F1', 
+        self.fig_analysis.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = 'rgba(255, 255, 255, 0.88)', 
         title = dict(text = "Technical Analysis.", y = 0.95, x = 0.5, xanchor = 'center', yanchor = 'top', font = dict(size = 20)))
         self.fig_analysis.update_shapes(dict(opacity = 0.7))
-        self.fig_analysis.update_xaxes(showgrid = True, zeroline = True, showline = True, linewidth = 2, linecolor = '#000000')
+        self.fig_analysis.update_xaxes(showgrid = False, zeroline = False, showline = False)
         self.fig_analysis.update_xaxes(title_text = "Date", row = 3, col = 1)
-        self.fig_analysis.update_yaxes(zeroline = True, showline = True, linewidth = 2, linecolor = '#000000')
+        self.fig_analysis.update_yaxes(showgrid = False, zeroline = False, showline = False)
         self.fig_analysis.update_yaxes(title_text = "MACD", row = 1, col = 1)
         self.fig_analysis.update_yaxes(title_text = "RSI", range = [0, 100], tickvals = [0, 30, 70, 100], row = 2, col = 1)
         self.fig_analysis.update_yaxes(title_text = "%K & %D", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 3, col = 1)
