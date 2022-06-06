@@ -9,22 +9,25 @@ import gc
 pd.set_option("display.precision", 8)
 
 def update_market_data(data):
-    if data == 'crypto':
-        url = 'https://api.bittrex.com/api/v1.1/public/getmarkets'
-        df_bittrex = pd.DataFrame(requests.get(url).json()['result'])[['MarketCurrency', 'BaseCurrency', 'MarketCurrencyLong', 'BaseCurrencyLong', 'MarketName']]
-        df_bittrex.columns = ['Currency', 'Market', 'Currency Name', 'Market Name', 'Bittrex Pair']
-
-        url = 'https://api.binance.com/api/v3/exchangeInfo'
-        df_binance = pd.DataFrame(requests.get(url).json()['symbols'])
-        df_binance = df_binance[df_binance['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
-        df_binance.columns = ['Binance Pair', 'Currency', 'Market']
-        df_binance = df_binance[(df_binance['Market'].isin(df_bittrex['Market']))]
-        df_binance = df_binance[(df_binance['Currency'].isin(df_bittrex['Currency']))]
-
-        df_crypto = pd.merge(df_bittrex, df_binance, how = 'inner', on = ['Currency', 'Market']).drop_duplicates()
-        df_crypto.loc[0, 'Last Update'] = dt.date.today()
-        df_crypto[['Currency Name', 'Market Name', 'Bittrex Pair', 'Binance Pair', 'Market', 'Last Update']].to_csv('market_data/crypto.txt', index = False)    
     
+    if data == 'crypto':
+        try:
+            url = 'https://api.bittrex.com/api/v1.1/public/getmarkets'
+            df_bittrex = pd.DataFrame(requests.get(url).json()['result'])[['MarketCurrency', 'BaseCurrency', 'MarketCurrencyLong', 'BaseCurrencyLong', 'MarketName']]
+            df_bittrex.columns = ['Currency', 'Market', 'Currency Name', 'Market Name', 'Bittrex Pair']
+
+            url = 'https://api.binance.com/api/v3/exchangeInfo'
+            df_binance = pd.DataFrame(requests.get(url).json()['symbols'])
+            df_binance = df_binance[df_binance['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
+            df_binance.columns = ['Binance Pair', 'Currency', 'Market']
+            df_binance = df_binance[(df_binance['Market'].isin(df_bittrex['Market']))]
+            df_binance = df_binance[(df_binance['Currency'].isin(df_bittrex['Currency']))]
+
+            df_crypto = pd.merge(df_bittrex, df_binance, how = 'inner', on = ['Currency', 'Market']).drop_duplicates()
+            df_crypto.loc[0, 'Last Update'] = dt.date.today()
+            df_crypto[['Currency Name', 'Market Name', 'Bittrex Pair', 'Binance Pair', 'Market', 'Last Update']].to_csv('market_data/crypto.txt', index = False)
+        except:
+            pass    
     elif data == 'stock':
         try:
             df_stocks = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
@@ -60,10 +63,10 @@ def data_update():
     df_stocks = pd.read_csv('market_data/snp500.txt')
     df_indexes = pd.read_csv('market_data/indexes.txt')
 
-    if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 30:
+    if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 10:
         update_market_data('crypto')
         df_crypto = pd.read_csv('market_data/crypto.txt')
-    elif ((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 30) or ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 30):
+    elif ((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 10) or ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 10):
         update_market_data('stock')
         df_stocks = pd.read_csv('market_data/snp500.txt')
         df_indexes = pd.read_csv('market_data/indexes.txt')
