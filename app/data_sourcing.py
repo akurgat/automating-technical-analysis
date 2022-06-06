@@ -54,7 +54,7 @@ def update_market_data(data):
             df_indexes = df_indexes[['Symbol', 'Name']]
             df_indexes.columns = ['Ticker', 'Indexes']
             df_indexes.loc[0, 'Last Update'] = dt.date.today()
-            df_indexes.to_csv('indexes.txt', index = False)
+            df_indexes.to_csv('market_data/indexes.txt', index = False)
         except:
             pass
 
