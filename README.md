@@ -7,7 +7,7 @@
 
 ## Project goal:
 
-Profitable stock and crypto trading involves a lot of know how and experience in Technical Analysis. However, the fundamentals behind technical analysis techniques, tools, resources and effective strategies can be complex to grasp, understand and even expensive to access.
+Profitable stocks and crypto trading involves a lot of know how and experience in Technical Analysis. However, the fundamentals behind technical analysis techniques, tools, resources and effective strategies can be complex to grasp, understand and even expensive to access.
 
 ## Solution:
 
