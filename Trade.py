@@ -18,18 +18,20 @@ def main(app_data):
 
     if exchange == 'Yahoo! Finance':
         st.sidebar.subheader('Equities:')
-        equity = st.sidebar.selectbox('', ('Index Fund', 'Stocks'), index = 1)
+        equity = st.sidebar.selectbox('', ('Index Fund', 'Futures', 'Stocks'), index = 2)
         if equity == 'Stocks':
             assets = app_data.stocks
         elif equity == 'Index Fund':
             assets = app_data.indexes
+        elif equity == 'Futures':
+            assets = app_data.futures
         
         st.sidebar.subheader(f'{equity}:')
         asset = st.sidebar.selectbox('', assets)
         if equity == 'Stocks':
             currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].unique()[0]
             market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
-        elif equity == 'Index Fund':
+        elif equity == 'Index Fund' or 'Futures':
             currency = 'Pts'
             market = None
 

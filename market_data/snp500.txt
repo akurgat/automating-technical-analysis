@@ -1,5 +1,5 @@
 Ticker,Company,Currency,Currency_Name,Last Update
-MMM,3M,USD,US Dollar,2022-06-09
+MMM,3M,USD,US Dollar,2022-06-12
 AOS,A. O. Smith,USD,US Dollar,
 ABT,Abbott,USD,US Dollar,
 ABBV,AbbVie,USD,US Dollar,

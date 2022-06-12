@@ -58,18 +58,33 @@ def update_market_data(data):
         except:
             pass
 
+        try:
+            df_futures = pd.read_html('https://finance.yahoo.com/commodities')[0]
+            df_futures = df_futures[['Symbol', 'Name']]
+            df_futures.columns = ['Ticker', 'Futures']
+            for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures']]:
+                df_futures.loc[len(df_futures)] = futures_
+            df_futures.loc[0, 'Last Update'] = dt.date.today()
+            df_futures.to_csv('market_data/futures.txt', index = False)
+        except:
+            pass
+
 def data_update():
     df_crypto = pd.read_csv('market_data/crypto.txt')
     df_stocks = pd.read_csv('market_data/snp500.txt')
     df_indexes = pd.read_csv('market_data/indexes.txt')
+    df_futures = pd.read_csv('market_data/futures.txt')
 
     if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 10:
         update_market_data('crypto')
         df_crypto = pd.read_csv('market_data/crypto.txt')
-    elif ((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 10) or ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 10):
+    if (((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 10) or 
+        ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 10) or 
+        ((dt.datetime.now() - pd.to_datetime(df_futures['Last Update'][0])).days >= 10)):
         update_market_data('stock')
         df_stocks = pd.read_csv('market_data/snp500.txt')
         df_indexes = pd.read_csv('market_data/indexes.txt')
+        df_futures = pd.read_csv('market_data/futures.txt')
 
     gc.collect()
         
@@ -83,6 +98,7 @@ class Data_Sourcing:
         self.df_crypto = pd.read_csv('market_data/crypto.txt')
         self.df_stocks = pd.read_csv('market_data/snp500.txt')
         self.df_indexes = pd.read_csv('market_data/indexes.txt')
+        self.df_futures = pd.read_csv('market_data/futures.txt')
 
     def exchange_data(self, exchange):
         self.exchange = exchange
@@ -91,6 +107,7 @@ class Data_Sourcing:
         else: 
             self.stocks = np.sort(self.df_stocks['Company'].unique())
             self.indexes = np.sort(self.df_indexes['Indexes'].unique())
+            self.futures = np.sort(self.df_futures['Futures'].unique())
 
     def market_data(self, market):
         self.market = market
@@ -144,7 +161,11 @@ class Data_Sourcing:
             try:
                 self.ticker = self.df_stocks[(self.df_stocks['Company'] == self.asset)]['Ticker'].values[0]
             except:
-                self.ticker = self.df_indexes[(self.df_indexes['Indexes'] == self.asset)]['Ticker'].values[0]
+                try:
+                    self.ticker = self.df_indexes[(self.df_indexes['Indexes'] == self.asset)]['Ticker'].values[0]
+                except:
+                    self.ticker = self.df_futures[(self.df_futures['Futures'] == self.asset)]['Ticker'].values[0]
+                    
             self.df = yf.download(tickers = self.ticker, period = self.period, interval = self.exchange_interval, 
                                   auto_adjust = True, prepost = True, threads = True, proxy = None).reset_index()
             self.df = self.df.rename(columns = {'Datetime':'Date', 'Close': 'Adj Close'})
