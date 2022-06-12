@@ -62,8 +62,9 @@ def update_market_data(data):
             df_futures = pd.read_html('https://finance.yahoo.com/commodities')[0]
             df_futures = df_futures[['Symbol', 'Name']]
             df_futures.columns = ['Ticker', 'Futures']
-            for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures']]:
+            for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures'], ['AW=F', 'BLOOMBERG COMMODITY INDEX']]:
                 df_futures.loc[len(df_futures)] = futures_
+            df_futures = df_futures.drop_duplicates(subset = ['Ticker', 'Futures'], keep = False)
             df_futures.loc[0, 'Last Update'] = dt.date.today()
             df_futures.to_csv('market_data/futures.txt', index = False)
         except:
@@ -78,6 +79,7 @@ def data_update():
     if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 10:
         update_market_data('crypto')
         df_crypto = pd.read_csv('market_data/crypto.txt')
+
     if (((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 10) or 
         ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 10) or 
         ((dt.datetime.now() - pd.to_datetime(df_futures['Last Update'][0])).days >= 10)):

@@ -31,8 +31,11 @@ def main(app_data):
         if equity == 'Stocks':
             currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].unique()[0]
             market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
-        elif equity == 'Index Fund' or 'Futures':
+        elif equity == 'Index Fund':
             currency = 'Pts'
+            market = None
+        elif equity == 'Futures':
+            currency = 'USD'
             market = None
 
         st.sidebar.subheader('Interval:')
