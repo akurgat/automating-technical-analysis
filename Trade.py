@@ -64,7 +64,7 @@ def main(app_data):
     st.sidebar.subheader('Trading Volatility:')
     risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
 
-    st.title(f'Automated Technical Analysis for {label} Trading.')
+    #st.title(f'Automated Technical Analysis for {label} Trading.')
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
     st.info(f'Predicting...')
     
@@ -73,6 +73,7 @@ def main(app_data):
     analysis_day = Indications(exchange, '1 Day', asset, market)
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
+    change = float(analysis.df['Adj Close'].pct_change()[-1]) * 100
     requested_prediction_price = float(analysis.requested_prediction_price)
     requested_prediction_action = analysis.requested_prediction_action
 
@@ -82,6 +83,7 @@ def main(app_data):
     buy_price = float(risks[risk][0])
     sell_price = float(risks[risk][1])
 
+    change = f'{float(change):,.2f}'
     if exchange == 'Yahoo! Finance':
         current_price = f'{float(current_price):,.2f}'
         requested_prediction_price = f'{float(requested_prediction_price):,.2f}'
@@ -121,8 +123,9 @@ def main(app_data):
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
     st.markdown(f'**Current Price:** {currency} {current_price}.')
+    st.markdown(f'**{interval} Change:** {change}%.')
     st.markdown(f'**Current Trading Action Recommendation:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
-    st.markdown(f'**Future Price Estimation:** The {label.lower()[:6]} {asset_suffix} for **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
+    st.markdown(f'**Forcast Price Estimation:** The {label.lower()[:6]} {asset_suffix} for **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
         st.markdown(f'**Trading Recommendation:** You should consider buying more **{asset}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
