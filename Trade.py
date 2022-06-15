@@ -64,7 +64,7 @@ def main(app_data):
     st.sidebar.subheader('Trading Volatility:')
     risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
 
-    #st.title(f'Automated Technical Analysis for {label} Trading.')
+    st.title(f'Automated Technical Analysis.')
     st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
     st.info(f'Predicting...')
     
