@@ -125,7 +125,7 @@ def main(app_data):
     st.markdown(f'**Current Price:** {currency} {current_price}.')
     st.markdown(f'**{interval} Price Change:** {change}%.')
     st.markdown(f'**Recommended Trading Action:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
-    st.markdown(f'**Estimated Forcast Price:** The {label.lower()[:6]} {asset_suffix} for **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
+    st.markdown(f'**Estimated Forecast Price:** The {label.lower()[:6]} {asset_suffix} for **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
         st.markdown(f'**Recommended Trading Margins:** You should consider buying more **{asset}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
