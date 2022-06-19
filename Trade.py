@@ -11,38 +11,39 @@ data_update()
 def main(app_data):
     st.set_page_config(layout = "wide")
     indication = 'Predicted'
-    
-    st.sidebar.subheader('Exchange:')
-    exchange = st.sidebar.selectbox('', ('Binance', 'Bittrex', 'Yahoo! Finance'))
-    app_data.exchange_data(exchange)
 
-    if exchange == 'Yahoo! Finance':
-        st.sidebar.subheader('Equities:')
-        equity = st.sidebar.selectbox('', ('Index Fund', 'Futures', 'Stocks'), index = 2)
-        if equity == 'Stocks':
+    st.sidebar.subheader('Asset:')
+    asset = st.sidebar.selectbox('', ('Cryptocurrency', 'Index Fund', 'Futures', 'Stocks'), index = 0)
+
+    if asset in ['Index Fund', 'Futures', 'Stocks']:
+        exchange = 'Yahoo! Finance'
+        app_data.exchange_data(exchange)
+        if asset == 'Stocks':
             assets = app_data.stocks
-        elif equity == 'Index Fund':
+        elif asset == 'Index Fund':
             assets = app_data.indexes
-        elif equity == 'Futures':
+        elif asset == 'Futures':
             assets = app_data.futures
         
-        st.sidebar.subheader(f'{equity}:')
-        asset = st.sidebar.selectbox('', assets)
-        if equity == 'Stocks':
-            currency = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency'].unique()[0]
-            market = app_data.df_stocks[(app_data.df_stocks['Company'] == asset)]['Currency_Name'].unique()[0]
-        elif equity == 'Index Fund':
+        st.sidebar.subheader(f'{asset}:')
+        equity = st.sidebar.selectbox('', assets)
+
+        if asset == 'Stocks':
+            currency = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency'].unique()[0]
+            market = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency_Name'].unique()[0]
+        elif asset == 'Index Fund':
             currency = 'Pts'
             market = None
-        elif equity == 'Futures':
+        elif asset == 'Futures':
             currency = 'USD'
             market = None
 
         st.sidebar.subheader('Interval:')
-        interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)        
-        label = equity
-    else:
-        equity = None
+        interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)     
+
+    elif asset in ['Cryptocurrency']:
+        exchange = 'Binance'
+        app_data.exchange_data(exchange)
         markets = app_data.markets
         
         st.sidebar.subheader('Market:')
@@ -52,25 +53,23 @@ def main(app_data):
         currency = app_data.currency
         
         st.sidebar.subheader('Crypto:')
-        asset = st.sidebar.selectbox('', assets)
+        equity = st.sidebar.selectbox('', assets)
 
         st.sidebar.subheader('Interval:')
-        if exchange == 'Binance':
-            interval = st.sidebar.selectbox('', ('3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week'), index = 1)
-        else:
-            interval = st.sidebar.selectbox('', ('5 Minute', '30 Minute', '1 Hour', '1 Day'), index = 1)
-        label = 'Cryptocurrency'
+        interval = st.sidebar.selectbox('', ('3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week'), index = 1)
+        
+    label = asset
         
     st.sidebar.subheader('Trading Volatility:')
     risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
 
     st.title(f'Automated Technical Analysis.')
-    st.subheader(f'{label} Data Sourced from {exchange} in {interval} Interval.')
+    st.subheader(f'{label} Data Sourced from {exchange}.')
     st.info(f'Predicting...')
     
     future_price = 1   
-    analysis = Visualization(exchange, interval, asset, indication, action_model, price_model, market)
-    analysis_day = Indications(exchange, '1 Day', asset, market)
+    analysis = Visualization(exchange, interval, equity, indication, action_model, price_model, market)
+    analysis_day = Indications(exchange, '1 Day', equity, market)
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
     change = float(analysis.df['Adj Close'].pct_change()[-1]) * 100
@@ -125,11 +124,11 @@ def main(app_data):
     st.markdown(f'**Current Price:** {currency} {current_price}.')
     st.markdown(f'**{interval} Price Change:** {change}%.')
     st.markdown(f'**Recommended Trading Action:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
-    st.markdown(f'**Estimated Forecast Price:** The {label.lower()[:6]} {asset_suffix} for **{asset}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
+    st.markdown(f'**Estimated Forecast Price:** The {label.lower()[:6]} {asset_suffix} for **{equity}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
-        st.markdown(f'**Recommended Trading Margins:** You should consider buying more **{asset}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
+        st.markdown(f'**Recommended Trading Margins:** You should consider buying more **{equity}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
-    prediction_fig = analysis.prediction_graph(equity)
+    prediction_fig = analysis.prediction_graph(asset)
     if indication == 'Predicted':
         testing_prefix = 'Predicted'
     else:
