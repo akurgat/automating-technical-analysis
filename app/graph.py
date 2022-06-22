@@ -14,10 +14,10 @@ class Visualization(Prediction):
         
         self.df_visulization = self.df_visulization.iloc[-450:]
 
-        if equity == 'Index Fund' or equity == 'Futures':
+        if equity == 'Index Fund' or equity == 'Futures' or equity == 'Forex':
             prediction_title = f"{self.asset}."
         else:
-             prediction_title = f"{self.asset} to {self.market}."
+            prediction_title = f"{self.asset} to {self.market}."
 
         if self.df_visulization['Open'].iloc[-1] > self.df_visulization['Adj Close'].iloc[-1]:
             trace_color = 'rgba(255, 0, 0, 0.15)'

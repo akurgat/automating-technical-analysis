@@ -13,9 +13,9 @@ def main(app_data):
     indication = 'Predicted'
 
     st.sidebar.subheader('Asset:')
-    asset = st.sidebar.selectbox('', ('Cryptocurrency', 'Index Fund', 'Futures', 'Stocks'), index = 0)
+    asset = st.sidebar.selectbox('', ('Cryptocurrency', 'Index Fund', 'Forex', 'Futures', 'Stocks'), index = 0)
 
-    if asset in ['Index Fund', 'Futures', 'Stocks']:
+    if asset in ['Index Fund', 'Forex', 'Futures', 'Stocks']:
         exchange = 'Yahoo! Finance'
         app_data.exchange_data(exchange)
         if asset == 'Stocks':
@@ -24,6 +24,8 @@ def main(app_data):
             assets = app_data.indexes
         elif asset == 'Futures':
             assets = app_data.futures
+        elif asset == 'Forex':
+            assets = app_data.forex
         
         st.sidebar.subheader(f'{asset}:')
         equity = st.sidebar.selectbox('', assets)
@@ -37,6 +39,9 @@ def main(app_data):
         elif asset == 'Futures':
             currency = 'USD'
             market = None
+        elif asset == 'Forex':
+            currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
+            market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
 
         st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)     
