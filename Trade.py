@@ -120,10 +120,7 @@ def main(app_data):
     else:
         forcast_suffix = str(interval.split()[1]).lower()
 
-    if label == 'Index Fund':
-        asset_suffix = 'approximation'
-    else:
-        asset_suffix = 'price'
+    asset_suffix = 'price'
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
     st.markdown(f'**Current Price:** {currency} {current_price}.')
