@@ -1,5 +1,5 @@
 Ticker,Futures,Last Update
-ES=F,S&P Futures,2022-06-22
+ES=F,S&P Futures,2022-06-27
 YM=F,Dow Futures,
 NQ=F,Nasdaq Futures,
 RTY=F,Russell 2000 Futures,
