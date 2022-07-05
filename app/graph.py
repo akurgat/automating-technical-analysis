@@ -16,6 +16,8 @@ class Visualization(Prediction):
 
         if equity == 'Index Fund' or equity == 'Futures' or equity == 'Forex':
             prediction_title = f"{self.asset}."
+        elif equity == 'Stock':
+            prediction_title = f"{self.asset} to The {self.market}."
         else:
             prediction_title = f"{self.asset} to {self.market}."
 

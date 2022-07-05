@@ -34,7 +34,7 @@ def update_market_data(data):
             df_dow['Currency'] = 'USD'
             df_dow = df_dow[['Symbol', 'Company']]
             df_dow.columns = ['Ticker', 'Company']
-            df_dow['Index Fund'] = 'Dow Jones'
+            df_dow['Index Fund'] = 'US Dow Jones'
             df_dow['Currency'] = 'USD'
             df_dow['Currency_Name'] = 'US Dollar'
         except:
@@ -43,7 +43,7 @@ def update_market_data(data):
             df_nasdaq = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[3]
             df_nasdaq = df_nasdaq[['Ticker', 'Company']]
             df_nasdaq.columns = ['Ticker', 'Company']
-            df_nasdaq['Index Fund'] = 'NASDAQ 100'
+            df_nasdaq['Index Fund'] = 'US NASDAQ 100'
             df_nasdaq['Currency'] = 'USD'
             df_nasdaq['Currency_Name'] = 'US Dollar'
         except:
@@ -52,18 +52,45 @@ def update_market_data(data):
             df_snp = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
             df_snp = df_snp[['Symbol', 'Security']]
             df_snp.columns = ['Ticker', 'Company']
-            df_snp['Index Fund'] = 'S&P 500'
+            df_snp['Index Fund'] = 'US S&P 500'
             df_snp['Currency'] = 'USD'
             df_snp['Currency_Name'] = 'US Dollar'
         except:
             df_snp = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
         try:
+            df_sse = pd.read_html('https://en.wikipedia.org/wiki/SSE_50_Index')[1]
+            df_sse = df_sse[['Ticker symbol', 'Name']]
+            df_sse.columns = ['Ticker', 'Company']
+            df_sse['Ticker'] = df_sse['Ticker'].apply(lambda x: x.split(' ')[1] + '.SS')
+            df_sse['Index Fund'] = 'Chinese SSE 50'
+            df_sse['Currency'] = 'CNY'
+            df_sse['Currency_Name'] = 'Chinese Yen'
+        except:
+            df_sse = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
+        try:
+            df_csi = pd.read_html('https://en.wikipedia.org/wiki/CSI_300_Index')[3]
+            df_csi.loc[df_csi['Stock exchange'] == 'Shanghai', 'Ticker'] =  df_csi['Index'].astype('str') + '.SS'
+            df_csi.loc[df_csi['Stock exchange'] == 'Shenzhen', 'Ticker'] =  df_csi['Index'].astype('str') + '.SZ'
+            tickers = []
+            zeros = ['0']
+            for ticker in df_csi['Ticker'].values:
+                if len(ticker) < 9:
+                    sum_zeros = zeros * (9 - len(ticker))
+                    ticker = ''.join(sum_zeros) + ticker
+                tickers.append(ticker)
+            df_csi['Ticker'] = tickers
+            df_csi = df_csi[['Ticker', 'Company']]
+            df_csi['Index Fund'] = 'Chinese CSI 300'
+            df_csi['Currency'] = 'CNY'
+            df_csi['Currency_Name'] = 'Chinese Yen'
+        except:
+            df_csi = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
+        try:
             df_ftse = pd.read_html('https://en.wikipedia.org/wiki/FTSE_100_Index')[3]
-            df_ftse['Currency'] = 'USD'
             df_ftse = df_ftse[['EPIC', 'Company']]
             df_ftse.columns = ['Ticker', 'Company']
             df_ftse['Ticker'] = df_ftse['Ticker'].apply(lambda x: x + '.L')
-            df_ftse['Index Fund'] = 'FTSE 100'
+            df_ftse['Index Fund'] = 'British FTSE 100'
             df_ftse['Currency'] = 'GBP'
             df_ftse['Currency_Name'] = 'British Pound'
         except:
@@ -72,7 +99,7 @@ def update_market_data(data):
             df_dax = pd.read_html('https://en.wikipedia.org/wiki/DAX')[3]
             df_dax = df_dax[['Ticker symbol', 'Company']]
             df_dax.columns = ['Ticker', 'Company']
-            df_dax['Index Fund'] = 'DAX'
+            df_dax['Index Fund'] = 'German DAX'
             df_dax['Currency'] = 'EUR'
             df_dax['Currency_Name'] = 'Euro'
         except:
@@ -81,7 +108,7 @@ def update_market_data(data):
             df_cac = pd.read_html('https://en.wikipedia.org/wiki/CAC_40')[3]
             df_cac = df_cac[['Ticker', 'Company']]
             df_cac.columns = ['Ticker', 'Company']
-            df_cac['Index Fund'] = 'CAC 40'
+            df_cac['Index Fund'] = 'French CAC 40'
             df_cac['Currency'] = 'EUR'
             df_cac['Currency_Name'] = 'Euro'
         except:
@@ -90,7 +117,7 @@ def update_market_data(data):
             df_bse_sensex = pd.read_html('https://en.wikipedia.org/wiki/BSE_SENSEX')[1]
             df_bse_sensex = df_bse_sensex[['Symbol', 'Companies']]
             df_bse_sensex.columns = ['Ticker', 'Company']
-            df_bse_sensex['Index Fund'] = 'S&P BSE SENSEX'
+            df_bse_sensex['Index Fund'] = 'Indian S&P BSE SENSEX'
             df_bse_sensex['Currency'] = 'INR'
             df_bse_sensex['Currency_Name'] = 'Indian Rupee'
         except:
@@ -100,7 +127,7 @@ def update_market_data(data):
             df_nifty = df_nifty[['Symbol', 'Company Name']]
             df_nifty.columns = ['Ticker', 'Company']
             df_nifty['Ticker'] = df_nifty['Ticker'].apply(lambda x: x + '.NS')
-            df_nifty['Index Fund'] = 'Nifty 50'
+            df_nifty['Index Fund'] = 'Indian Nifty 50'
             df_nifty['Currency'] = 'INR'
             df_nifty['Currency_Name'] = 'Indian Rupee'
         except:
@@ -110,13 +137,13 @@ def update_market_data(data):
             df_asx = df_asx[['Code', 'Company']]
             df_asx.columns = ['Ticker', 'Company']
             df_asx['Ticker'] = df_asx['Ticker'].apply(lambda x: x + '.AX')
-            df_asx['Index Fund'] = 'S&P ASX 200'
+            df_asx['Index Fund'] = 'Australian S&P ASX 200'
             df_asx['Currency'] = 'AUD'
             df_asx['Currency_Name'] = 'Australian Dollar'
         except:
             df_asx = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
 
-        df_stocks = pd.concat([df_snp, df_nasdaq, df_dow, df_ftse, df_dax, df_cac, df_bse_sensex, df_nifty, df_asx], ignore_index = True)
+        df_stocks = pd.concat([df_snp, df_nasdaq, df_dow, df_sse, df_csi, df_ftse, df_dax, df_cac, df_bse_sensex, df_nifty, df_asx], ignore_index = True)
         df_stocks.loc[0, 'Last Update'] = dt.date.today()
         df_stocks.to_csv('stocks.txt', index = False)
         
