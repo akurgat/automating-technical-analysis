@@ -1,5 +1,5 @@
 Ticker,Company,Currency,Currency_Name,Last Update
-MMM,3M,USD,US Dollar,2022-06-27
+MMM,3M,USD,US Dollar,2022-07-05
 AOS,A. O. Smith,USD,US Dollar,
 ABT,Abbott,USD,US Dollar,
 ABBV,AbbVie,USD,US Dollar,
@@ -42,7 +42,6 @@ AMGN,Amgen,USD,US Dollar,
 APH,Amphenol,USD,US Dollar,
 ADI,Analog Devices,USD,US Dollar,
 ANSS,Ansys,USD,US Dollar,
-ANTM,Anthem,USD,US Dollar,
 AON,Aon,GBP,British Pound,
 APA,APA Corporation,USD,US Dollar,
 AAPL,Apple Inc.,USD,US Dollar,
@@ -170,6 +169,7 @@ ECL,Ecolab,USD,US Dollar,
 EIX,Edison International,USD,US Dollar,
 EW,Edwards Lifesciences,USD,US Dollar,
 EA,Electronic Arts,USD,US Dollar,
+ELV,Elevance Health,USD,US Dollar,
 LLY,Eli Lilly and Company,USD,US Dollar,
 EMR,Emerson Electric,USD,US Dollar,
 ENPH,Enphase,USD,US Dollar,
