@@ -19,6 +19,7 @@ class Preprocessing(Indications):
         self.training_window = 60
         self.df_predictors = df_values
         predictors = self.df_predictors.iloc[:, :-1].columns
+        self.df_predictors = self.df_predictors.replace([np.inf, -np.inf], 0)
         
         scaler = StandardScaler()
         self.df_predictors[predictors] = scale(self.df_predictors[predictors])
