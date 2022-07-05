@@ -62,6 +62,7 @@ def update_market_data(data):
             df_ftse['Currency'] = 'USD'
             df_ftse = df_ftse[['EPIC', 'Company']]
             df_ftse.columns = ['Ticker', 'Company']
+            df_ftse['Ticker'] = df_ftse['Ticker'].apply(lambda x: x + '.L')
             df_ftse['Index Fund'] = 'FTSE 100'
             df_ftse['Currency'] = 'GBP'
             df_ftse['Currency_Name'] = 'British Pound'
@@ -98,6 +99,7 @@ def update_market_data(data):
             df_nifty = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50')[1]
             df_nifty = df_nifty[['Symbol', 'Company Name']]
             df_nifty.columns = ['Ticker', 'Company']
+            df_nifty['Ticker'] = df_nifty['Ticker'].apply(lambda x: x + '.NS')
             df_nifty['Index Fund'] = 'Nifty 50'
             df_nifty['Currency'] = 'INR'
             df_nifty['Currency_Name'] = 'Indian Rupee'
