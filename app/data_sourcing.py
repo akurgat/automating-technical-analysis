@@ -192,7 +192,7 @@ class Data_Sourcing:
         if self.exchange == 'Bittrex' or self.exchange == 'Binance':
             self.markets = np.sort(self.df_crypto['Market Name'].unique())
         else: 
-            self.stocks_options = np.sort(self.df_stocks['Index Fund'].unique())
+            self.stock_indexes = np.sort(self.df_stocks['Index Fund'].unique())
             self.indexes = np.sort(self.df_indexes['Indexes'].unique())
             self.futures = np.sort(self.df_futures['Futures'].unique())
             self.forex = np.sort(self.df_forex['Currencies'].unique())

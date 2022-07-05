@@ -21,12 +21,12 @@ def main(app_data):
         app_data.exchange_data(exchange)
 
         if asset == 'Stocks':
-            st.sidebar.subheader(f'Stock Options:')
-            stock_options  = app_data.stocks_options
-            stock_option = st.sidebar.selectbox('', stock_options, index = 6)
-            app_data.market_data(stock_option)
+            st.sidebar.subheader(f'Stock Index:')
+            stock_indexes  = app_data.stock_indexes
+            stock_index = st.sidebar.selectbox('', stock_indexes, index = 6)
+            app_data.market_data(stock_index)
             assets = app_data.stocks
-            asset = f'{stock_option} Companies'
+            asset = f'{stock_index} Companies'
         elif asset == 'Index Fund':
             assets = app_data.indexes
         elif asset == 'Futures':
@@ -37,16 +37,16 @@ def main(app_data):
         st.sidebar.subheader(f'{asset}:')
         equity = st.sidebar.selectbox('', assets)
 
-        if asset == f'{stock_option} Companies':
-            currency = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency'].unique()[0]
-            market = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency_Name'].unique()[0]
-            asset = 'Stock'
+        if asset == 'Index Fund' or asset == 'Futures':
+            currency = 'USD'
+            market = None
         elif asset == 'Forex':
             currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
             market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
-        else:
-            currency = 'USD'
-            market = None
+        elif asset == f'{stock_index} Companies':
+            currency = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency'].unique()[0]
+            market = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency_Name'].unique()[0]
+            asset = 'Stock'
         
         st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)     
