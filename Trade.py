@@ -13,13 +13,20 @@ def main(app_data):
     indication = 'Predicted'
 
     st.sidebar.subheader('Asset:')
-    asset = st.sidebar.selectbox('', ('Cryptocurrency', 'Index Fund', 'Forex', 'Futures', 'Stocks'), index = 0)
+    asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures', 'Stocks'])
+    asset = st.sidebar.selectbox('', asset_options, index = 0)
 
     if asset in ['Index Fund', 'Forex', 'Futures', 'Stocks']:
         exchange = 'Yahoo! Finance'
         app_data.exchange_data(exchange)
+
         if asset == 'Stocks':
+            st.sidebar.subheader(f'Stock Options:')
+            stock_options  = app_data.stocks_options
+            stock_option = st.sidebar.selectbox('', stock_options, index = 2)
+            app_data.market_data(stock_option)
             assets = app_data.stocks
+            asset = f'{stock_option} Companies'
         elif asset == 'Index Fund':
             assets = app_data.indexes
         elif asset == 'Futures':
@@ -30,19 +37,17 @@ def main(app_data):
         st.sidebar.subheader(f'{asset}:')
         equity = st.sidebar.selectbox('', assets)
 
-        if asset == 'Stocks':
+        if asset == f'{stock_option} Companies':
             currency = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency'].unique()[0]
             market = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency_Name'].unique()[0]
-        elif asset == 'Index Fund':
-            currency = 'Pts'
-            market = None
-        elif asset == 'Futures':
-            currency = 'USD'
-            market = None
+            asset = 'Stock'
         elif asset == 'Forex':
             currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
             market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
-
+        else:
+            currency = 'USD'
+            market = None
+        
         st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)     
 
