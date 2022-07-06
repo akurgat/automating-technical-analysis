@@ -13,10 +13,10 @@ def main(app_data):
     indication = 'Predicted'
 
     st.sidebar.subheader('Asset:')
-    asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures', 'Stocks'])
+    asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures & Commodities', 'Stocks'])
     asset = st.sidebar.selectbox('', asset_options, index = 0)
 
-    if asset in ['Index Fund', 'Forex', 'Futures', 'Stocks']:
+    if asset in ['Index Fund', 'Forex', 'Futures & Commodities', 'Stocks']:
         exchange = 'Yahoo! Finance'
         app_data.exchange_data(exchange)
 
@@ -29,7 +29,7 @@ def main(app_data):
             asset = f'{stock_index} Companies'
         elif asset == 'Index Fund':
             assets = app_data.indexes
-        elif asset == 'Futures':
+        elif asset == 'Futures & Commodities':
             assets = app_data.futures
         elif asset == 'Forex':
             assets = app_data.forex
@@ -37,8 +37,11 @@ def main(app_data):
         st.sidebar.subheader(f'{asset}:')
         equity = st.sidebar.selectbox('', assets)
 
-        if asset == 'Index Fund' or asset == 'Futures':
+        if asset == 'Futures & Commodities':
             currency = 'USD'
+            market = None
+        elif asset == 'Index Fund':
+            currency = 'Pts'
             market = None
         elif asset == 'Forex':
             currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
@@ -92,7 +95,14 @@ def main(app_data):
     buy_price = float(risks[risk][0])
     sell_price = float(risks[risk][1])
 
+    if change > 0:
+        change_suffix = 'gain'
+    elif change < 0:
+        change_suffix = 'loss'
+    else:
+        change_suffix = 'change'
     change = f'{float(change):,.2f}'
+
     if exchange == 'Yahoo! Finance':
         current_price = f'{float(current_price):,.2f}'
         requested_prediction_price = f'{float(requested_prediction_price):,.2f}'
@@ -129,7 +139,7 @@ def main(app_data):
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
     st.markdown(f'**Current Price:** {currency} {current_price}.')
-    st.markdown(f'**{interval} Price Change:** {change}%.')
+    st.markdown(f'**{interval} Price Change:** A **{change}%** {change_suffix}.')
     st.markdown(f'**Recommended Trading Action:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
     st.markdown(f'**Estimated Forecast Price:** The {label.lower()[:6]} {asset_suffix} for **{equity}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
@@ -147,8 +157,7 @@ def main(app_data):
     technical_analysis_fig = analysis.technical_analysis_graph()
     st.success (f'Technical Analysis results from the {label[:6]} Data...')
     st.plotly_chart(technical_analysis_fig, use_container_width = True) 
-
-
+    
 
 if __name__ == '__main__':
     import warnings
