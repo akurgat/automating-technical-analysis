@@ -64,7 +64,7 @@ def update_market_data(data):
             df_sse['Ticker'] = df_sse['Ticker'].apply(lambda x: x.split(' ')[1] + '.SS')
             df_sse['Index Fund'] = 'Chinese SSE 50'
             df_sse['Currency'] = 'CNY'
-            df_sse['Currency_Name'] = 'Chinese Yen'
+            df_sse['Currency_Name'] = 'Chinese Yuan'
         except:
             df_sse = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
         try:
@@ -82,7 +82,7 @@ def update_market_data(data):
             df_csi = df_csi[['Ticker', 'Company']]
             df_csi['Index Fund'] = 'Chinese CSI 300'
             df_csi['Currency'] = 'CNY'
-            df_csi['Currency_Name'] = 'Chinese Yen'
+            df_csi['Currency_Name'] = 'Chinese Yuan'
         except:
             df_csi = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
         try:
