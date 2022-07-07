@@ -23,10 +23,10 @@ def main(app_data):
         if asset == 'Stocks':
             st.sidebar.subheader(f'Stock Index:')
             stock_indexes  = app_data.stock_indexes
-            stock_index = st.sidebar.selectbox('', stock_indexes, index = 10)
-            app_data.market_data(stock_index)
+            market = st.sidebar.selectbox('', stock_indexes, index = 10)
+            app_data.market_data(market)
             assets = app_data.stocks
-            asset = f'{stock_index} Companies'
+            asset = f'{market} Companies'
         elif asset == 'Index Fund':
             assets = app_data.indexes
         elif asset == 'Futures & Commodities':
@@ -46,9 +46,8 @@ def main(app_data):
         elif asset == 'Forex':
             currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
             market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
-        elif asset == f'{stock_index} Companies':
+        elif asset == f'{market} Companies':
             currency = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency'].unique()[0]
-            market = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency_Name'].unique()[0]
             asset = 'Stock'
         
         st.sidebar.subheader('Interval:')
