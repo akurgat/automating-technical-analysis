@@ -47,7 +47,7 @@ def main(app_data):
             currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
             market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
         elif asset == f'{market} Companies':
-            currency = app_data.df_stocks[(app_data.df_stocks['Company'] == equity)]['Currency'].unique()[0]
+            currency = app_data.df_stocks[((app_data.df_stocks['Company'] == equity) & (app_data.df_stocks['Index Fund'] == market))]['Currency'].unique()[0]
             asset = 'Stock'
         
         st.sidebar.subheader('Interval:')
