@@ -279,7 +279,7 @@ class Data_Sourcing:
         else:
             try:
                 self.ticker = self.df_stocks[((self.df_stocks['Company'] == self.asset) & (self.df_stocks['Index Fund'] == self.market))]['Ticker'].values[0]
-                self.currency_market = self.df_stocks[((self.df_stocks['Company'] == self.asset) & 
+                self.market_currency = self.df_stocks[((self.df_stocks['Company'] == self.asset) & 
                                                         (self.df_stocks['Index Fund'] == self.market))]['Currency_Name'].unique()[0]
             except:
                 try:
