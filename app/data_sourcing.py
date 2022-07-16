@@ -12,22 +12,17 @@ def update_market_data(data):
     
     if data == 'crypto':
         try:
-            url = 'https://api.bittrex.com/api/v1.1/public/getmarkets'
-            df_bittrex = pd.DataFrame(requests.get(url).json()['result'])[['MarketCurrency', 'BaseCurrency', 'MarketCurrencyLong', 'BaseCurrencyLong', 'MarketName']]
-            df_bittrex.columns = ['Currency', 'Market', 'Currency Name', 'Market Name', 'Bittrex Pair']
-
             url = 'https://api.binance.com/api/v3/exchangeInfo'
-            df_binance = pd.DataFrame(requests.get(url).json()['symbols'])
-            df_binance = df_binance[df_binance['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
+            data = requests.get(url).json()
+            df_binance = pd.DataFrame(data['symbols'])[pd.DataFrame(data['symbols'])['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
+            df_binance = df_binance[(df_binance['quoteAsset'].isin(['BTC', 'USDT', 'BUSD', 'ETH', 'BNB']))]
             df_binance.columns = ['Binance Pair', 'Currency', 'Market']
-            df_binance = df_binance[(df_binance['Market'].isin(df_bittrex['Market']))]
-            df_binance = df_binance[(df_binance['Currency'].isin(df_bittrex['Currency']))]
+            df_binance.loc[0, 'Last Update'] = dt.date.today()
 
-            df_crypto = pd.merge(df_bittrex, df_binance, how = 'inner', on = ['Currency', 'Market']).drop_duplicates()
-            df_crypto.loc[0, 'Last Update'] = dt.date.today()
-            df_crypto[['Currency Name', 'Market Name', 'Bittrex Pair', 'Binance Pair', 'Market', 'Last Update']].to_csv('market_data/crypto.txt', index = False)
+            df_binance.to_csv('market_data/binance.txt', index = False)
         except:
-            pass    
+            pass
+
     elif data == 'stock':
         try:
             df_dow = pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')[1]
@@ -145,7 +140,7 @@ def update_market_data(data):
 
         df_stocks = pd.concat([df_snp, df_nasdaq, df_dow, df_sse, df_csi, df_ftse, df_dax, df_cac, df_bse_sensex, df_nifty, df_asx], ignore_index = True)
         df_stocks.loc[0, 'Last Update'] = dt.date.today()
-        df_stocks.to_csv('stocks.txt', index = False)
+        df_stocks.to_csv('market_data/stocks.txt', index = False)
         
         try:
             df_indexes = pd.read_html('https://finance.yahoo.com/world-indices/')[0]
@@ -176,12 +171,12 @@ def update_market_data(data):
             df_forex['Market'] = df_forex['Currencies'].apply(lambda x: x.split('/')[1])
             df_forex['Currencies'] = df_forex['Currencies'].apply(lambda x: x.replace('/', ' to '))
             df_forex.loc[0, 'Last Update'] = dt.date.today()
-            df_forex.to_csv('forex.txt', index = False)
+            df_forex.to_csv('market_data/forex.txt', index = False)
         except:
             pass
 
 def data_update():
-    df_crypto = pd.read_csv('market_data/crypto.txt')
+    df_crypto = pd.read_csv('market_data/binance.txt')
     df_stocks = pd.read_csv('market_data/stocks.txt')
     df_indexes = pd.read_csv('market_data/indexes.txt')
     df_futures = pd.read_csv('market_data/futures.txt')
@@ -189,7 +184,7 @@ def data_update():
 
     if (dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 10:
         update_market_data('crypto')
-        df_crypto = pd.read_csv('market_data/crypto.txt')
+        df_crypto = pd.read_csv('market_data/binance.txt')
 
     if (((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 10) or 
         ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 10) or 
@@ -210,7 +205,7 @@ def date_utc(date_):
         
 class Data_Sourcing:
     def __init__(self):
-        self.df_crypto = pd.read_csv('market_data/crypto.txt')
+        self.df_crypto = pd.read_csv('market_data/binance.txt')
         self.df_stocks = pd.read_csv('market_data/stocks.txt')
         self.df_indexes = pd.read_csv('market_data/indexes.txt')
         self.df_futures = pd.read_csv('market_data/futures.txt')
@@ -218,8 +213,8 @@ class Data_Sourcing:
 
     def exchange_data(self, exchange):
         self.exchange = exchange
-        if self.exchange == 'Bittrex' or self.exchange == 'Binance':
-            self.markets = np.sort(self.df_crypto['Market Name'].unique())
+        if self.exchange == 'Binance':
+            self.markets = np.sort(self.df_crypto['Market'].unique())
         else: 
             self.stock_indexes = np.sort(self.df_stocks['Index Fund'].unique())
             self.indexes = np.sort(self.df_indexes['Indexes'].unique())
@@ -229,8 +224,8 @@ class Data_Sourcing:
     def market_data(self, market):
         self.market = market
         if self.exchange != 'Yahoo! Finance':
-            self.assets = np.sort(self.df_crypto[(self.df_crypto['Market Name'] == self.market)]['Currency Name'].unique())
-            self.currency = self.df_crypto[(self.df_crypto['Market Name'] == self.market)]['Market'].values[0]
+            self.assets = np.sort(self.df_crypto[(self.df_crypto['Market'] == self.market)]['Currency'].unique())
+            self.currency = self.market
         else:
             self.stocks = np.sort(self.df_stocks[(self.df_stocks['Index Fund'] == self.market)]['Company'].unique())
             
@@ -238,10 +233,9 @@ class Data_Sourcing:
         self.selected_interval = selected_interval
         self.period = None
         exchange_interval = {'Yahoo! Finance': {'5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', '1 Hour':'60m', 
-                                         '1 Day':'1d', '1 Week':'1wk', '1 Month':'1mo'}, 
-                     'Binance': {'3 Minute':'3m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
-                                 '1 Hour':'1h', '6 Hour':'6h', '12 Hour':'12h', '1 Day':'1d', '1 Week':'1w', '1 Month':'1M'}, 
-                     'Bittrex': {'5 Minute':'fiveMin', '30 Minute':'thirtyMin', '1 Hour':'hour', '1 Day':'day'}}
+                                                '1 Day':'1d', '1 Week':'1wk', '1 Month':'1mo'}, 
+                            'Binance': {'3 Minute':'3m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
+                                        '1 Hour':'1h', '6 Hour':'6h', '12 Hour':'12h', '1 Day':'1d', '1 Week':'1w', '1 Month':'1M'}}
         
         self.exchange_interval = exchange_interval[self.exchange][self.selected_interval]
         
@@ -259,22 +253,15 @@ class Data_Sourcing:
         self.asset = asset
         
         if self.exchange != 'Yahoo! Finance':
-            self.ticker_market = self.df_crypto[((self.df_crypto['Currency Name'] == self.asset) & 
-                 (self.df_crypto['Market Name'] == self.market))][f'{self.exchange} Pair'].values[0]
-            self.currency = self.df_crypto[((self.df_crypto['Currency Name'] == self.asset) & 
-                 (self.df_crypto['Market Name'] == self.market))]['Market'].values[0]
+            self.ticker_market = self.df_crypto[((self.df_crypto['Currency'] == self.asset) & 
+                 (self.df_crypto['Market'] == self.market))][f'{self.exchange} Pair'].values[0]
+            self.currency = self.markets
             if self.exchange == 'Binance':
                 url = f"https://api.binance.com/api/v3/klines?symbol={self.ticker_market}&interval={self.exchange_interval}"
                 self.df = pd.DataFrame(json.loads(requests.get(url).text))
                 self.df.columns = ['open_time', 'Open', 'High', 'Low', 'Adj Close', 'Volume', 'close_time', 
                                 'quoted average volume', 'num_trades', 'taker_base_vol', 'taker_quote_vol', 'ignore']
                 self.df['Date'] = [dt.datetime.fromtimestamp(x/1000.0).replace(microsecond = 0) for x in self.df.close_time]
-            elif self.exchange == 'Bittrex':
-                url = f"https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName={self.ticker_market}&tickInterval={self.exchange_interval}"
-                self.df = pd.DataFrame(json.loads(requests.get(url).text)['result'])
-                self.df = self.df.rename(columns = {'O':'Open', 'H':'High', 'L':'Low', 'C':'Adj Close', 'V':'Volume', 
-                                     'BV':'Base Volume', 'T':'Date'})
-                self.df['Date'] = self.df['Date'].apply(lambda x: x.replace('T', ' '))
                 
         else:
             try:

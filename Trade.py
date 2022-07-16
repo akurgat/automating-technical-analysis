@@ -51,7 +51,8 @@ def main(app_data):
             asset = 'Stock'
         
         st.sidebar.subheader('Interval:')
-        interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)     
+        interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)
+        volitility_index = 0     
 
     elif asset in ['Cryptocurrency']:
         exchange = 'Binance'
@@ -59,7 +60,7 @@ def main(app_data):
         markets = app_data.markets
         
         st.sidebar.subheader('Market:')
-        market = st.sidebar.selectbox('', markets)
+        market = st.sidebar.selectbox('', markets, index = 1)
         app_data.market_data(market)
         assets = app_data.assets
         currency = app_data.currency
@@ -69,11 +70,13 @@ def main(app_data):
 
         st.sidebar.subheader('Interval:')
         interval = st.sidebar.selectbox('', ('3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week'), index = 1)
+
+        volitility_index = 2 
         
     label = asset
         
     st.sidebar.subheader('Trading Volatility:')
-    risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'))
+    risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'), index = volitility_index)
 
     st.title(f'Automated Technical Analysis.')
     st.subheader(f'{label} Data Sourced from {exchange}.')

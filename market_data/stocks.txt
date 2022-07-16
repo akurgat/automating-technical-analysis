@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-07-06
+MMM,3M,US S&P 500,USD,US Dollar,2022-07-16
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -1059,7 +1059,7 @@ RTO.L,Rentokil Initial,British FTSE 100,GBP,British Pound,
 RMV.L,Rightmove,British FTSE 100,GBP,British Pound,
 RIO.L,Rio Tinto,British FTSE 100,GBP,British Pound,
 RR.L,Rolls-Royce Holdings,British FTSE 100,GBP,British Pound,
-RS.L,RS Group plc,British FTSE 100,GBP,British Pound,
+RS1.L,RS Group plc,British FTSE 100,GBP,British Pound,
 SGE.L,Sage Group,British FTSE 100,GBP,British Pound,
 SBRY.L,Sainsbury's,British FTSE 100,GBP,British Pound,
 SDR.L,Schroders,British FTSE 100,GBP,British Pound,
