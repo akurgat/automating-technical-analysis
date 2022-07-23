@@ -1,5 +1,5 @@
 Ticker,Futures,Last Update
-ES=F,E-Mini S&P 500 Sep 22,2022-07-16
+ES=F,E-Mini S&P 500 Sep 22,2022-07-10
 YM=F,Mini Dow Jones Indus.-$5 Sep 22,
 NQ=F,Nasdaq 100 Sep 22,
 RTY=F,E-mini Russell 2000 Index Futur,

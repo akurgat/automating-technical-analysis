@@ -35,7 +35,7 @@ def update_market_data(data):
         except:
             df_dow = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
         try:
-            df_nasdaq = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[3]
+            df_nasdaq = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[4]
             df_nasdaq = df_nasdaq[['Ticker', 'Company']]
             df_nasdaq.columns = ['Ticker', 'Company']
             df_nasdaq['Index Fund'] = 'US NASDAQ 100'

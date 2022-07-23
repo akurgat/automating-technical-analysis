@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-07-16
+MMM,3M,US S&P 500,USD,US Dollar,2022-07-23
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -1022,8 +1022,8 @@ FLTR.L,Flutter Entertainment,British FTSE 100,GBP,British Pound,
 FRES.L,Fresnillo plc,British FTSE 100,GBP,British Pound,
 GLEN.L,Glencore,British FTSE 100,GBP,British Pound,
 GSK.L,GSK plc,British FTSE 100,GBP,British Pound,
+HLN.L,Haleon,British FTSE 100,GBP,British Pound,
 HLMA.L,Halma plc,British FTSE 100,GBP,British Pound,
-HBR.L,Harbour Energy,British FTSE 100,GBP,British Pound,
 HL.L,Hargreaves Lansdown,British FTSE 100,GBP,British Pound,
 HIK.L,Hikma Pharmaceuticals,British FTSE 100,GBP,British Pound,
 HWDN.L,Howdens Joinery,British FTSE 100,GBP,British Pound,
