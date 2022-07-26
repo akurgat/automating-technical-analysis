@@ -1,5 +1,5 @@
 Ticker,Indexes,Last Update
-^GSPC,S&P 500,2022-07-23
+^GSPC,S&P 500,2022-07-26
 ^DJI,Dow 30,
 ^IXIC,Nasdaq,
 ^NYA,NYSE COMPOSITE (DJ),
@@ -17,7 +17,7 @@ IMOEX.ME,MOEX Russia Index,
 ^N225,Nikkei 225,
 ^HSI,HANG SENG INDEX,
 000001.SS,SSE Composite Index,
-399001.SZ,Shenzhen Component,
+399001.SZ,Shenzhen Index,
 ^STI,STI Index,
 ^AXJO,S&P/ASX 200,
 ^AORD,ALL ORDINARIES,

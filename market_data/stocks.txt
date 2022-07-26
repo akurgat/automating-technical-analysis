@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-07-23
+MMM,3M,US S&P 500,USD,US Dollar,2022-07-26
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -561,7 +561,7 @@ LRCX,Lam Research,US NASDAQ 100,USD,US Dollar,
 LCID,Lucid Motors,US NASDAQ 100,USD,US Dollar,
 LULU,Lululemon,US NASDAQ 100,USD,US Dollar,
 MAR,Marriott International,US NASDAQ 100,USD,US Dollar,
-MRVL,"Marvell Technology, Inc.",US NASDAQ 100,USD,US Dollar,
+MRVL,Marvell Technology,US NASDAQ 100,USD,US Dollar,
 MTCH,Match Group,US NASDAQ 100,USD,US Dollar,
 MELI,MercadoLibre,US NASDAQ 100,USD,US Dollar,
 META,Meta Platforms,US NASDAQ 100,USD,US Dollar,

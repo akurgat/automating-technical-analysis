@@ -1,5 +1,5 @@
 Ticker,Futures,Last Update
-ES=F,E-Mini S&P 500 Sep 22,2022-07-10
+ES=F,E-Mini S&P 500 Sep 22,2022-07-26
 YM=F,Mini Dow Jones Indus.-$5 Sep 22,
 NQ=F,Nasdaq 100 Sep 22,
 RTY=F,E-mini Russell 2000 Index Futur,
@@ -27,7 +27,7 @@ ZR=F,"Rough Rice Futures,Sep-2022",
 ZM=F,"Soybean Meal Futures,Dec-2022",
 ZL=F,"Soybean Oil Futures,Dec-2022",
 ZS=F,"Soybean Futures,Nov-2022",
-GF=F,"Feeder Cattle Futures,Aug-2022",
+GF=F,"Feeder Cattle Futures,Sep-2022",
 HE=F,"Lean Hogs Futures,Aug-2022",
 LE=F,"Live Cattle Futures,Aug-2022",
 CC=F,Cocoa Sep 22,
