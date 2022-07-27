@@ -16,29 +16,30 @@ class Preprocessing(Indications):
         super(Preprocessing, self).price_action()
 
     def scaling(self, df_values):
-        self.training_window = 60
-        self.df_predictors = df_values
-        predictors = self.df_predictors.iloc[:, :-1].columns
-        self.df_predictors = self.df_predictors.replace([np.inf, -np.inf], 0)
+        training_window = 60
+        df_predictors = df_values
+        predictors = df_predictors.iloc[:, :-1].columns
+        df_predictors = df_predictors.replace([np.inf, -np.inf], 0)
         
         scaler = StandardScaler()
-        self.df_predictors[predictors] = scale(self.df_predictors[predictors])
-        self.df_predictors[predictors] = scaler.fit_transform(self.df_predictors[predictors])
+        df_predictors[predictors] = scale(df_predictors[predictors])
+        df_predictors[predictors] = scaler.fit_transform(df_predictors[predictors])
 
         training_sequence = []
-        previous_days = deque(maxlen = self.training_window)
-        for i in self.df_predictors.values:
+        previous_days = deque(maxlen = training_window)
+        for i in df_predictors.values:
             previous_days.append([x for x in i[:-1]])
-            if len(previous_days) == self.training_window:
+            if len(previous_days) == training_window:
                 training_sequence.append([np.array(previous_days), i[-1:]])
                 
-        self.X = []
-        self.y = []
+        X = []
+        y = []
+        
         for features, action in training_sequence:
-            self.X.append(features)
-            self.y.append(action)
+            X.append(features)
+            y.append(action)
             
-        self.X = np.array(self.X)
-        self.y = np.array(self.y)
+        X = np.array(X)
+        y = np.array(y)
                                                
-        return self.X, self.y
+        return X, y
