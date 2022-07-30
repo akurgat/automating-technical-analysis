@@ -102,7 +102,7 @@ def main(app_data):
     elif change < 0:
         change_display = f'A **{float(change):,.2f}%** loss'
     else:
-        change_display = '**UNCH**'
+        change_display = 'UNCH'
 
     if exchange == 'Yahoo! Finance':
         current_price = f'{float(current_price):,.2f}'
