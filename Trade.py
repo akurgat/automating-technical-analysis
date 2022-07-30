@@ -98,12 +98,11 @@ def main(app_data):
     sell_price = float(risks[risk][1])
 
     if change > 0:
-        change_suffix = 'gain'
+        change_display = f'A **{float(change):,.2f}%** gain'
     elif change < 0:
-        change_suffix = 'loss'
+        change_display = f'A **{float(change):,.2f}%** loss'
     else:
-        change_suffix = 'change'
-    change = f'{float(change):,.2f}'
+        change_display = 'UNCH'
 
     if exchange == 'Yahoo! Finance':
         current_price = f'{float(current_price):,.2f}'
@@ -141,7 +140,7 @@ def main(app_data):
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
     st.markdown(f'**Current Price:** {currency} {current_price}.')
-    st.markdown(f'**{interval} Price Change:** A **{change}%** {change_suffix}.')
+    st.markdown(f'**{interval} Price Change:** {change_display}.')
     st.markdown(f'**Recommended Trading Action:** You should **{requested_prediction_action.lower()}** {present_statement_prefix} this {label.lower()[:6]}{present_statement_suffix}. {str(confidence[analysis.score_action])}')
     st.markdown(f'**Estimated Forecast Price:** The {label.lower()[:6]} {asset_suffix} for **{equity}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
     if requested_prediction_action == 'Hold':
