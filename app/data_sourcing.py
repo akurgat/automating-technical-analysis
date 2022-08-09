@@ -251,7 +251,7 @@ class Data_Sourcing:
                     
     def apis(self, asset):
         self.asset = asset
-        limit = 500
+        limit = 600
         
         if self.exchange != 'Yahoo! Finance':
             self.ticker_market = self.df_crypto[((self.df_crypto['Currency'] == self.asset) & 
