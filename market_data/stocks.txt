@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-07-26
+MMM,3M,US S&P 500,USD,US Dollar,2022-08-14
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -365,7 +365,7 @@ PH,Parker Hannifin,US S&P 500,USD,US Dollar,
 PAYX,Paychex,US S&P 500,USD,US Dollar,
 PAYC,Paycom,US S&P 500,USD,US Dollar,
 PYPL,PayPal,US S&P 500,USD,US Dollar,
-PENN,Penn National Gaming,US S&P 500,USD,US Dollar,
+PENN,Penn Entertainment,US S&P 500,USD,US Dollar,
 PNR,Pentair,US S&P 500,USD,US Dollar,
 PEP,PepsiCo,US S&P 500,USD,US Dollar,
 PKI,PerkinElmer,US S&P 500,USD,US Dollar,
