@@ -1,6 +1,6 @@
 h5py==3.6.0
 Keras==2.8.0
-numpy==1.22.0
+numpy==1.21.6
 pandas==1.2.4
 plotly==5.7.0
 requests==2.27.1
