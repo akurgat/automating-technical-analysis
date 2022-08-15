@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-08-14
+MMM,3M,US S&P 500,USD,US Dollar,2022-08-15
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -1004,7 +1004,7 @@ BKG.L,Berkeley Group Holdings,British FTSE 100,GBP,British Pound,
 BP.L,BP,British FTSE 100,GBP,British Pound,
 BATS.L,British American Tobacco,British FTSE 100,GBP,British Pound,
 BLND.L,British Land,British FTSE 100,GBP,British Pound,
-BT-A.L,BT Group,British FTSE 100,GBP,British Pound,
+BT.A.L,BT Group,British FTSE 100,GBP,British Pound,
 BNZL.L,Bunzl,British FTSE 100,GBP,British Pound,
 BRBY.L,Burberry,British FTSE 100,GBP,British Pound,
 CNA.L,Centrica,British FTSE 100,GBP,British Pound,

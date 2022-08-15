@@ -52,7 +52,7 @@ class Visualization(Prediction):
         return self.fig_action
 
     def technical_analysis_graph(self):
-        self.df_visulization_technical = self.df.iloc[-450:]
+        self.df_visulization_technical = self.df_visulization_technical.iloc[-450:]
         
         self.fig_analysis = make_subplots(rows = 3, cols = 1)
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visulization_technical.index, y = self.df_visulization_technical['MACD'], name = "MACD", 

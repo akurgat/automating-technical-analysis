@@ -12,7 +12,7 @@ class Preprocessing(Indications):
         super(Preprocessing, self).moving_average_analysis()
         super(Preprocessing, self).macd_analysis()
         super(Preprocessing, self).stochastic_analysis()
-        super(Preprocessing, self).rsi_divagence_convergence()
+        super(Preprocessing, self).rsi_divergence_convergence()
         super(Preprocessing, self).price_action()
 
     def scaling(self, df_values):
