@@ -69,7 +69,7 @@ def main(app_data):
         equity = st.sidebar.selectbox('', assets)
 
         st.sidebar.subheader('Interval:')
-        interval = st.sidebar.selectbox('', ('3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week'), index = 1)
+        interval = st.sidebar.selectbox('', ('1 Minute', '3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week'), index = 2)
 
         volitility_index = 2 
         

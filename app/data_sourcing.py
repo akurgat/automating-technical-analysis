@@ -234,7 +234,7 @@ class Data_Sourcing:
         self.period = None
         exchange_interval = {'Yahoo! Finance': {'5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', '1 Hour':'60m', 
                                                 '1 Day':'1d', '1 Week':'1wk', '1 Month':'1mo'}, 
-                            'Binance': {'3 Minute':'3m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
+                            'Binance': {'1 Minute':'1m', '3 Minute':'3m', '5 Minute':'5m', '15 Minute':'15m', '30 Minute':'30m', 
                                         '1 Hour':'1h', '6 Hour':'6h', '12 Hour':'12h', '1 Day':'1d', '1 Week':'1w', '1 Month':'1M'}}
         
         self.exchange_interval = exchange_interval[self.exchange][self.selected_interval]
