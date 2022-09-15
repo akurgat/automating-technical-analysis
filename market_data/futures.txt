@@ -1,8 +1,8 @@
 Ticker,Futures,Last Update
-ES=F,E-Mini S&P 500 Sep 22,2022-09-06
-YM=F,Mini Dow Jones Indus.-$5 Sep 22,
-NQ=F,Nasdaq 100 Sep 22,
-RTY=F,E-mini Russell 2000 Index Futur,
+ES=F,S&P Futures,2022-09-15
+YM=F,Dow Futures,
+NQ=F,Nasdaq Futures,
+RTY=F,Russell 2000 Futures,
 ZB=F,"U.S. Treasury Bond Futures,Dec-",
 ZN=F,"10-Year T-Note Futures,Dec-2022",
 ZF=F,Five-Year US Treasury Note Futu,
