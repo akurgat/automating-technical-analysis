@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-09-23
+MMM,3M,US S&P 500,USD,US Dollar,2022-09-26
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -1027,7 +1027,7 @@ HLN.L,Haleon,British FTSE 100,GBP,British Pound,
 HLMA.L,Halma plc,British FTSE 100,GBP,British Pound,
 HBR.L,Harbour Energy,British FTSE 100,GBP,British Pound,
 HL.L,Hargreaves Lansdown,British FTSE 100,GBP,British Pound,
-HSV.L,Homeserve,British FTSE 100,GBP,British Pound,
+HSV.L,HomeServe,British FTSE 100,GBP,British Pound,
 HSBA.L,HSBC,British FTSE 100,GBP,British Pound,
 IHG.L,IHG Hotels & Resorts,British FTSE 100,GBP,British Pound,
 IMB.L,Imperial Brands,British FTSE 100,GBP,British Pound,
