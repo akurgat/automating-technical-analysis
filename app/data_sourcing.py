@@ -91,8 +91,8 @@ def update_market_data(data):
         except:
             df_ftse = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
         try:
-            df_dax = pd.read_html('https://en.wikipedia.org/wiki/DAX')[3]
-            df_dax = df_dax[['Ticker symbol', 'Company']]
+            df_dax = pd.read_html('https://en.wikipedia.org/wiki/DAX')[4]
+            df_dax = df_dax[['Ticker', 'Company']]
             df_dax.columns = ['Ticker', 'Company']
             df_dax['Index Fund'] = 'German DAX'
             df_dax['Currency'] = 'EUR'
