@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-10-10
+MMM,3M,US S&P 500,USD,US Dollar,2022-10-14
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -336,7 +336,6 @@ NEM,Newmont,US S&P 500,USD,US Dollar,
 NWSA,News Corp (Class A),US S&P 500,USD,US Dollar,
 NWS,News Corp (Class B),US S&P 500,USD,US Dollar,
 NEE,NextEra Energy,US S&P 500,USD,US Dollar,
-NLSN,Nielsen Holdings,US S&P 500,USD,US Dollar,
 NKE,"Nike, Inc.",US S&P 500,USD,US Dollar,
 NI,NiSource,US S&P 500,USD,US Dollar,
 NDSN,Nordson Corporation,US S&P 500,USD,US Dollar,
@@ -437,6 +436,7 @@ TMUS,T-Mobile US,US S&P 500,USD,US Dollar,
 TROW,T. Rowe Price,US S&P 500,USD,US Dollar,
 TTWO,Take-Two Interactive,US S&P 500,USD,US Dollar,
 TPR,"Tapestry, Inc.",US S&P 500,USD,US Dollar,
+TRGP,Targa Resources,US S&P 500,USD,US Dollar,
 TGT,Target Corporation,US S&P 500,USD,US Dollar,
 TEL,TE Connectivity,US S&P 500,USD,US Dollar,
 TDY,Teledyne Technologies,US S&P 500,USD,US Dollar,
