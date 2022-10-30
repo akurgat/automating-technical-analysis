@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-10-24
+MMM,3M,US S&P 500,USD,US Dollar,2022-10-30
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -453,7 +453,6 @@ TDG,TransDigm Group,US S&P 500,USD,US Dollar,
 TRV,The Travelers Companies,US S&P 500,USD,US Dollar,
 TRMB,Trimble Inc.,US S&P 500,USD,US Dollar,
 TFC,Truist,US S&P 500,USD,US Dollar,
-TWTR,Twitter Inc.,US S&P 500,USD,US Dollar,
 TYL,Tyler Technologies,US S&P 500,USD,US Dollar,
 TSN,Tyson Foods,US S&P 500,USD,US Dollar,
 USB,U.S. Bank,US S&P 500,USD,US Dollar,
