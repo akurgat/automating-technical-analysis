@@ -2,7 +2,6 @@ import json
 import requests
 import datetime as dt
 import pandas as pd
-import numpy as np
 
 def update_market_data():
     url = 'https://api.binance.com/api/v3/exchangeInfo'
