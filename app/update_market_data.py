@@ -117,7 +117,7 @@ def update_market_data():
     except:
         df_nifty = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
     try:
-        df_asx = pd.read_html('https://en.wikipedia.org/wiki/S%26P/ASX_200')[0]
+        df_asx = pd.read_html('https://en.wikipedia.org/wiki/S%26P/ASX_200')[1]
         df_asx = df_asx[['Code', 'Company']]
         df_asx.columns = ['Ticker', 'Company']
         df_asx['Ticker'] = df_asx['Ticker'].apply(lambda x: x + '.AX')
