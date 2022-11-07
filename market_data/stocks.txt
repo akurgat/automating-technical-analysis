@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-10-31
+MMM,3M,US S&P 500,USD,US Dollar,2022-11-07
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -47,6 +47,7 @@ APA,APA Corporation,US S&P 500,USD,US Dollar,
 AAPL,Apple Inc.,US S&P 500,USD,US Dollar,
 AMAT,Applied Materials,US S&P 500,USD,US Dollar,
 APTV,Aptiv,US S&P 500,USD,US Dollar,
+ACGL,Arch Capital Group,US S&P 500,USD,US Dollar,
 ANET,Arista Networks,US S&P 500,USD,US Dollar,
 AJG,Arthur J. Gallagher & Co.,US S&P 500,USD,US Dollar,
 AIZ,Assurant,US S&P 500,USD,US Dollar,

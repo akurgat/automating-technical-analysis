@@ -46,8 +46,8 @@ class Visualization(Prediction):
         xaxis_range = (self.df_visulization.index.min(), self.df_visulization.index.max()), 
         yaxis_range = (self.df_visulization['Adj Close'].min() - self.df_visulization['Adj Close'].std() / 10, self.df_visulization['Adj Close'].max() + self.df_visulization['Adj Close'].std() / 3))
         self.fig_action.update_xaxes(title_text = "Date", zeroline = False, showline = False, showgrid = False, linewidth = 2, rangeslider_visible = True)
-        self.fig_action.update_yaxes(title_text = "Close Price & Trading Action", secondary_y = False, showgrid = False, showline = False)
-        self.fig_action.update_yaxes(title_text = "Volume", secondary_y = True, showgrid = False, showline = False)
+        self.fig_action.update_yaxes(title_text = "Price & Trading Action", secondary_y = False, showgrid = False, showline = False)
+        self.fig_action.update_yaxes(title_text = "Volume", secondary_y = True, showgrid = False, showline = False, visible = False)
 
         return self.fig_action
 
