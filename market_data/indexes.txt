@@ -1,5 +1,5 @@
 Ticker,Indexes,Last Update
-^GSPC,S&P 500,2022-11-07
+^GSPC,S&P 500,2022-11-18
 ^DJI,Dow Jones Industrial Average,
 ^IXIC,NASDAQ Composite,
 ^NYA,NYSE COMPOSITE (DJ),

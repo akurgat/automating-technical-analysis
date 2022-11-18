@@ -1,4 +1,5 @@
 h5py==3.6.0
+html5lib
 Keras==2.8.0
 numpy==1.22.0
 pandas==1.2.4

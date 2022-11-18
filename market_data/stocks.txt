@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-11-07
+MMM,3M,US S&P 500,USD,US Dollar,2022-11-18
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -213,6 +213,7 @@ BEN,Franklin Templeton,US S&P 500,USD,US Dollar,
 FCX,Freeport-McMoRan,US S&P 500,USD,US Dollar,
 GRMN,Garmin,US S&P 500,USD,US Dollar,
 IT,Gartner,US S&P 500,USD,US Dollar,
+GEN,Gen Digital Inc.,US S&P 500,USD,US Dollar,
 GNRC,Generac,US S&P 500,USD,US Dollar,
 GD,General Dynamics,US S&P 500,USD,US Dollar,
 GE,General Electric,US S&P 500,USD,US Dollar,
@@ -343,7 +344,6 @@ NDSN,Nordson Corporation,US S&P 500,USD,US Dollar,
 NSC,Norfolk Southern Railway,US S&P 500,USD,US Dollar,
 NTRS,Northern Trust,US S&P 500,USD,US Dollar,
 NOC,Northrop Grumman,US S&P 500,USD,US Dollar,
-NLOK,NortonLifeLock,US S&P 500,USD,US Dollar,
 NCLH,Norwegian Cruise Line Holdings,US S&P 500,USD,US Dollar,
 NRG,NRG Energy,US S&P 500,USD,US Dollar,
 NUE,Nucor,US S&P 500,USD,US Dollar,
