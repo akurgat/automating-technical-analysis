@@ -7,5 +7,5 @@ plotly==5.7.0
 requests==2.27.1
 scikit-learn==0.24.2
 streamlit==1.8.1
-tensorflow-cpu==2.8.2
+tensorflow-cpu==2.9.3
 yfinance==0.1.70
