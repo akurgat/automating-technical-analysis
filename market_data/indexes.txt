@@ -1,12 +1,12 @@
 Ticker,Indexes,Last Update
-^GSPC,S&P 500,2022-11-22
-^DJI,Dow Jones Industrial Average,
-^IXIC,NASDAQ Composite,
+^GSPC,S&P 500,2022-11-28
+^DJI,Dow 30,
+^IXIC,Nasdaq,
 ^NYA,NYSE COMPOSITE (DJ),
 ^XAX,NYSE AMEX COMPOSITE INDEX,
 ^BUK100P,Cboe UK 100,
 ^RUT,Russell 2000,
-^VIX,Vix,
+^VIX,CBOE Volatility Index,
 ^FTSE,FTSE 100,
 ^GDAXI,DAX PERFORMANCE-INDEX,
 ^FCHI,CAC 40,

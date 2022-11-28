@@ -1,12 +1,12 @@
 Ticker,Futures,Last Update
-ES=F,S&P Futures,2022-11-22
-YM=F,Dow Futures,
-NQ=F,Nasdaq Futures,
-RTY=F,Russell 2000 Futures,
+ES=F,E-Mini S&P 500 Dec 22,2022-11-28
+YM=F,Mini Dow Jones Indus.-$5 Dec 22,
+NQ=F,Nasdaq 100 Dec 22,
+RTY=F,E-mini Russell 2000 Index Futur,
 ZB=F,"U.S. Treasury Bond Futures,Dec-",
 ZN=F,"10-Year T-Note Futures,Dec-2022",
 ZF=F,Five-Year US Treasury Note Futu,
-ZT=F,"2-Year T-Note Futures,Dec-2022",
+ZT=F,"2-Year T-Note Futures,Mar-2023",
 GC=F,Gold,
 MGC=F,"Micro Gold Futures,Feb-2023",
 SI=F,Silver,
