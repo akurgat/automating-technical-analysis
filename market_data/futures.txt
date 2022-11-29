@@ -1,5 +1,5 @@
 Ticker,Futures,Last Update
-ES=F,E-Mini S&P 500 Dec 22,2022-11-28
+ES=F,E-Mini S&P 500 Dec 22,2022-11-29
 YM=F,Mini Dow Jones Indus.-$5 Dec 22,
 NQ=F,Nasdaq 100 Dec 22,
 RTY=F,E-mini Russell 2000 Index Futur,
@@ -12,7 +12,7 @@ MGC=F,"Micro Gold Futures,Feb-2023",
 SI=F,Silver,
 SIL=F,"Micro Silver Futures,Dec-2022",
 PL=F,Platinum Jan 23,
-HG=F,Copper Dec 22,
+HG=F,Copper Mar 23,
 PA=F,Palladium Mar 23,
 CL=F,Crude Oil,
 HO=F,Heating Oil Dec 22,

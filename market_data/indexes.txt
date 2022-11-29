@@ -1,5 +1,5 @@
 Ticker,Indexes,Last Update
-^GSPC,S&P 500,2022-11-28
+^GSPC,S&P 500,2022-11-29
 ^DJI,Dow 30,
 ^IXIC,Nasdaq,
 ^NYA,NYSE COMPOSITE (DJ),

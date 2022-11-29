@@ -147,16 +147,12 @@ def main(app_data):
         st.markdown(f'**Recommended Trading Margins:** You should consider buying more **{equity}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
 
     prediction_fig = analysis.prediction_graph(asset)
-    if indication == 'Predicted':
-        testing_prefix = 'Predicted'
-    else:
-        testing_prefix = 'Analysed'
-
-    st.success(f'Historical {label[:6]} Price Action...({testing_prefix})')
+    
+    st.success(f'Historical {label[:6]} Price Action.')
     st.plotly_chart(prediction_fig, use_container_width = True)
 
     technical_analysis_fig = analysis.technical_analysis_graph()
-    st.success (f'Technical Analysis results from the {label[:6]} Data...')
+    st.success (f'Technical Analysis results from the {label[:6]} Data.')
     st.plotly_chart(technical_analysis_fig, use_container_width = True) 
     
 
