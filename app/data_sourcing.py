@@ -16,11 +16,13 @@ def data_update():
     df_futures = pd.read_csv('market_data/futures.txt')
     df_forex = pd.read_csv('market_data/forex.txt')
 
-    if (((dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= 10) or 
-        ((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= 10) or 
-        ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= 10) or 
-        ((dt.datetime.now() - pd.to_datetime(df_futures['Last Update'][0])).days >= 10) or 
-        ((dt.datetime.now() - pd.to_datetime(df_forex['Last Update'][0])).days >= 10)):
+    day_limit = 15
+
+    if (((dt.datetime.now() - pd.to_datetime(df_crypto['Last Update'][0])).days >= day_limit) or 
+        ((dt.datetime.now() - pd.to_datetime(df_stocks['Last Update'][0])).days >= day_limit) or 
+        ((dt.datetime.now() - pd.to_datetime(df_indexes['Last Update'][0])).days >= day_limit) or 
+        ((dt.datetime.now() - pd.to_datetime(df_futures['Last Update'][0])).days >= day_limit) or 
+        ((dt.datetime.now() - pd.to_datetime(df_forex['Last Update'][0])).days >= day_limit)):
         update_market_data()
 
     gc.collect()

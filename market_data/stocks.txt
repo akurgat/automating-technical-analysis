@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2022-11-29
+MMM,3M,US S&P 500,USD,US Dollar,2022-12-01
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -542,6 +542,7 @@ DOCU,DocuSign,US NASDAQ 100,USD,US Dollar,
 DLTR,Dollar Tree,US NASDAQ 100,USD,US Dollar,
 EBAY,eBay,US NASDAQ 100,USD,US Dollar,
 EA,Electronic Arts,US NASDAQ 100,USD,US Dollar,
+ENPH,Enphase Energy,US NASDAQ 100,USD,US Dollar,
 EXC,Exelon,US NASDAQ 100,USD,US Dollar,
 FAST,Fastenal,US NASDAQ 100,USD,US Dollar,
 FISV,Fiserv,US NASDAQ 100,USD,US Dollar,
@@ -576,7 +577,6 @@ NFLX,Netflix,US NASDAQ 100,USD,US Dollar,
 NVDA,Nvidia,US NASDAQ 100,USD,US Dollar,
 NXPI,NXP,US NASDAQ 100,USD,US Dollar,
 ORLY,O'Reilly Automotive,US NASDAQ 100,USD,US Dollar,
-OKTA,"Okta, Inc.",US NASDAQ 100,USD,US Dollar,
 ODFL,Old Dominion Freight Line,US NASDAQ 100,USD,US Dollar,
 PCAR,Paccar,US NASDAQ 100,USD,US Dollar,
 PANW,Palo Alto Networks,US NASDAQ 100,USD,US Dollar,

@@ -132,7 +132,7 @@ def update_market_data():
     df_stocks.to_csv('market_data/stocks.txt', index = False)
 
     df_forex = pd.read_html('https://finance.yahoo.com/currencies')[0]
-    df_forex = df_forex[['Symbol', 'Name']]
+    df_forex = df_forex[['Symbol', 'Name']].iloc[:-1]
     df_forex.columns = ['Ticker', 'Currencies']
     df_forex['Currency'] = df_forex['Currencies'].astype('str').apply(lambda x: x.split('/')[0])
     df_forex['Market'] = df_forex['Currencies'].astype('str').apply(lambda x: x.split('/')[1])
