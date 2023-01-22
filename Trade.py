@@ -14,7 +14,7 @@ def main(app_data):
 
     st.sidebar.subheader('Asset:')
     asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures & Commodities', 'Stocks'])
-    asset = st.sidebar.selectbox('', asset_options, index = 0)
+    asset = st.sidebar.selectbox('', asset_options, index = 5)
 
     if asset in ['Index Fund', 'Forex', 'Futures & Commodities', 'Stocks']:
         exchange = 'Yahoo! Finance'
