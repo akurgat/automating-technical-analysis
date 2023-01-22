@@ -3,7 +3,6 @@
 ## Links:
 
 * https://share.streamlit.io/akurgat/automating-technical-analysis/Trade.py
-* https://automated-technical-analysis.herokuapp.com/
 
 ## Project goal:
 
