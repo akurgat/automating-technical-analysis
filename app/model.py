@@ -17,9 +17,11 @@ class Prediction(Preprocessing):
         self.price_model = price_model
 
         features = ['High', 'Low', 'Open', 'Volume', 'Adj Close', 'P', 'R1', 'R2', 'R3', 'S1', 'S2', 'S3', 
-                    'OBV', 'MACD', 'MACDS', 'MACDH', 'SMA', 'LMA', 'RSI', 'SR_K', 'SR_D', 'HL_PCT', 'PCT_CHG']
+                    'OBV', 'MACD', 'MACDS', 'MACDH', 'SMA', 'LMA', 'SEMA', 'LEMA', 'RSI', 'SR_K', 'SR_D', 
+                    'SR_RSI_K', 'SR_RSI_D', 'ATR', 'HL_PCT', 'PCT_CHG']
         price_features = ['High', 'Low', 'Open', 'Volume', 'P', 'R1', 'R2', 'R3', 'S1', 'S2', 'S3', 
-                        'OBV', 'MACD', 'MACDS', 'MACDH', 'SMA', 'LMA', 'RSI', 'SR_K', 'SR_D', 'HL_PCT', 'PCT_CHG']
+                          'OBV', 'MACD', 'MACDS', 'MACDH', 'SMA', 'LMA', 'SEMA', 'LEMA', 'RSI', 'SR_K', 'SR_D', 
+                          'SR_RSI_K', 'SR_RSI_D', 'ATR', 'HL_PCT', 'PCT_CHG']
         self.df_action = self.df.copy()[features + ['Distinct_Action']]
         self.df_price = self.df.copy()[features]
 

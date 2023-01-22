@@ -4,12 +4,15 @@ import datetime as dt
 import pandas as pd
 
 def update_market_data():
-    url = 'https://api.binance.com/api/v3/exchangeInfo'
-    data = requests.get(url).json()
-    df_binance = pd.DataFrame(data['symbols'])[pd.DataFrame(data['symbols'])['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
-    df_binance = df_binance[(df_binance['quoteAsset'].isin(['BTC', 'USDT', 'BUSD', 'ETH', 'BNB']))]
-    df_binance.columns = ['Binance Pair', 'Currency', 'Market']
-    df_binance.loc[0, 'Last Update'] = dt.date.today()
+    try:
+        url = 'https://api.binance.com/api/v3/exchangeInfo'
+        data = requests.get(url).json()
+        df_binance = pd.DataFrame(data['symbols'])[pd.DataFrame(data['symbols'])['status'] == 'TRADING'][['symbol', 'baseAsset', 'quoteAsset']]
+        df_binance = df_binance[(df_binance['quoteAsset'].isin(['BTC', 'USDT', 'BUSD', 'ETH', 'BNB']))]
+        df_binance.columns = ['Binance Pair', 'Currency', 'Market']
+        df_binance.loc[0, 'Last Update'] = dt.date.today()
+    except:
+        pass
 
     df_binance.to_csv('market_data/binance.txt', index = False)
 
