@@ -1,5 +1,5 @@
 Ticker,Indexes,Last Update
-^GSPC,S&P 500,2023-01-22
+^GSPC,S&P 500,2023-01-23
 ^DJI,Dow 30,
 ^IXIC,Nasdaq,
 ^NYA,NYSE COMPOSITE (DJ),
