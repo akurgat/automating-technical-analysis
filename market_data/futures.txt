@@ -1,8 +1,8 @@
 Ticker,Futures,Last Update
-ES=F,E-Mini S&P 500 Mar 23,2023-01-23
-YM=F,Mini Dow Jones Indus.-$5 Mar 23,
-NQ=F,Nasdaq 100 Mar 23,
-RTY=F,E-mini Russell 2000 Index Futur,
+ES=F,S&P Futures,2023-01-27
+YM=F,Dow Futures,
+NQ=F,Nasdaq Futures,
+RTY=F,Russell 2000 Futures,
 ZB=F,"U.S. Treasury Bond Futures,Mar-",
 ZN=F,"10-Year T-Note Futures,Mar-2023",
 ZF=F,Five-Year US Treasury Note Futu,
@@ -11,7 +11,7 @@ GC=F,Gold,
 MGC=F,"Micro Gold Futures,Apr-2023",
 SI=F,Silver,
 SIL=F,"Micro Silver Futures,Mar-2023",
-PL=F,Platinum Jan 23,
+PL=F,Platinum Apr 23,
 HG=F,Copper Mar 23,
 PA=F,Palladium Mar 23,
 CL=F,Crude Oil,
