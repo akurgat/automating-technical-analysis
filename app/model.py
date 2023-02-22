@@ -53,15 +53,15 @@ class Prediction(Preprocessing):
         indicators = {'Analysed':'Distinct_Action', 'Predicted':'Action_Predictions'}
 
         action_prediction_length = self.model_prediction_action.shape[0]
-        self.df_visulization = self.df.iloc[-action_prediction_length:]
-        self.df_visulization['Action_Predictions'] = self.model_prediction_action
+        self.df_visualization = self.df.iloc[-action_prediction_length:]
+        self.df_visualization['Action_Predictions'] = self.model_prediction_action
 
-        self.df_visulization = self.df_visulization[['Open', 'Adj Close', 'Volume', 'Distinct_Action', 'Action_Predictions']]
+        self.df_visualization = self.df_visualization[['Open', 'Adj Close', 'Volume', 'Distinct_Action', 'Action_Predictions']]
 
-        self.df_visulization['Price_Buy'] = self.df_visulization[self.df_visulization[indicators[self.indication]] == 'Buy']['Adj Close']
-        self.df_visulization['Price_Sell'] = self.df_visulization[self.df_visulization[indicators[self.indication]] == 'Sell']['Adj Close']
+        self.df_visualization['Price_Buy'] = self.df_visualization[self.df_visualization[indicators[self.indication]] == 'Buy']['Adj Close']
+        self.df_visualization['Price_Sell'] = self.df_visualization[self.df_visualization[indicators[self.indication]] == 'Sell']['Adj Close']
 
-        self.df_visulization['Bullish Volume'] = self.df_visulization[self.df_visulization['Adj Close'] >= self.df_visulization['Open']]['Volume']
-        self.df_visulization['Bearish Volume'] = self.df_visulization[self.df_visulization['Adj Close'] < self.df_visulization['Open']]['Volume']
+        self.df_visualization['Bullish Volume'] = self.df_visualization[self.df_visualization['Adj Close'] >= self.df_visualization['Open']]['Volume']
+        self.df_visualization['Bearish Volume'] = self.df_visualization[self.df_visualization['Adj Close'] < self.df_visualization['Open']]['Volume']
 
-        self.df_visulization_technical = self.df[['OBV', 'MACD', 'MACDS', 'MACDH', 'RSI', 'SR_K', 'SR_D', 'SR_RSI_K', 'SR_RSI_D', 'ATR']]
+        self.df_visualization_technical = self.df[['OBV', 'MACD', 'MACDS', 'MACDH', 'RSI', 'SR_K', 'SR_D', 'SR_RSI_K', 'SR_RSI_D', 'ATR']]
