@@ -88,8 +88,7 @@ def update_market_data():
         df_csi = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
     try:
         df_ftse = pd.read_html('https://en.wikipedia.org/wiki/FTSE_100_Index')[4]
-        df_ftse = df_ftse[['EPIC', 'Company']]
-        df_ftse.columns = ['Ticker', 'Company']
+        df_ftse = df_ftse[['Ticker', 'Company']]
         df_ftse['Ticker'] = df_ftse['Ticker'].apply(lambda x: x + '.L')
         df_ftse['Index Fund'] = 'British FTSE 100'
         df_ftse['Currency'] = 'GBP'
@@ -148,27 +147,36 @@ def update_market_data():
     df_stocks.loc[0, 'Last Update'] = dt.date.today()
     df_stocks.to_csv('market_data/stocks.txt', index = False)
 
-    df_forex = pd.read_html('https://finance.yahoo.com/currencies')[0]
-    df_forex = df_forex[['Symbol', 'Name']].iloc[:-1]
-    df_forex.columns = ['Ticker', 'Currencies']
-    df_forex['Currency'] = df_forex['Currencies'].astype('str').apply(lambda x: x.split('/')[0])
-    df_forex['Market'] = df_forex['Currencies'].astype('str').apply(lambda x: x.split('/')[1])
-    df_forex['Currencies'] = df_forex['Currencies'].apply(lambda x: x.replace('/', ' to '))
-    df_forex.loc[0, 'Last Update'] = dt.date.today()
-    df_forex.to_csv('market_data/forex.txt', index = False)
+    try:
+        df_forex = pd.read_html('https://finance.yahoo.com/currencies')[0]
+        df_forex = df_forex[['Symbol', 'Name']].iloc[:-1]
+        df_forex.columns = ['Ticker', 'Currencies']
+        df_forex['Currency'] = df_forex['Currencies'].astype('str').apply(lambda x: x.split('/')[0])
+        df_forex['Market'] = df_forex['Currencies'].astype('str').apply(lambda x: x.split('/')[1])
+        df_forex['Currencies'] = df_forex['Currencies'].apply(lambda x: x.replace('/', ' to '))
+        df_forex.loc[0, 'Last Update'] = dt.date.today()
+        df_forex.to_csv('market_data/forex.txt', index = False)
+    except:
+        pass
 
-    df_futures = pd.read_html('https://finance.yahoo.com/commodities')[0]
-    df_futures = df_futures[['Symbol', 'Name']]
-    df_futures.columns = ['Ticker', 'Futures']
-    for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures']]:
-        df_futures.loc[len(df_futures)] = futures_
-    df_futures = df_futures.drop_duplicates(subset = ['Ticker', 'Futures'], keep = False)
-    df_futures.loc[0, 'Last Update'] = dt.date.today()
-    df_futures.to_csv('market_data/futures.txt', index = False)
+    try:
+        df_futures = pd.read_html('https://finance.yahoo.com/commodities')[0]
+        df_futures = df_futures[['Symbol', 'Name']]
+        df_futures.columns = ['Ticker', 'Futures']
+        for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures']]:
+            df_futures.loc[len(df_futures)] = futures_
+        df_futures = df_futures.drop_duplicates(subset = ['Ticker', 'Futures'], keep = False)
+        df_futures.loc[0, 'Last Update'] = dt.date.today()
+        df_futures.to_csv('market_data/futures.txt', index = False)
+    except:
+        pass
 
-    df_indexes = pd.read_html('https://finance.yahoo.com/world-indices/')[0]
-    df_indexes = df_indexes[['Symbol', 'Name']]
-    df_indexes.columns = ['Ticker', 'Indexes']
-    df_indexes.loc[0, 'Last Update'] = dt.date.today()
-    df_indexes.to_csv('market_data/indexes.txt', index = False)
-    
+    try:
+        df_indexes = pd.read_html('https://finance.yahoo.com/world-indices/')[0]
+        df_indexes = df_indexes[['Symbol', 'Name']]
+        df_indexes.columns = ['Ticker', 'Indexes']
+        df_indexes.loc[0, 'Last Update'] = dt.date.today()
+        df_indexes.to_csv('market_data/indexes.txt', index = False)
+    except:
+        pass
+        

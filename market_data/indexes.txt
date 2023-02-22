@@ -1,7 +1,7 @@
 Ticker,Indexes,Last Update
-^GSPC,S&P 500,2023-01-27
-^DJI,Dow 30,
-^IXIC,Nasdaq,
+^GSPC,S&P 500,2023-02-22
+^DJI,Dow Jones Industrial Average,
+^IXIC,NASDAQ Composite,
 ^NYA,NYSE COMPOSITE (DJ),
 ^XAX,NYSE AMEX COMPOSITE INDEX,
 ^BUK100P,Cboe UK 100,
@@ -22,9 +22,9 @@ IMOEX.ME,MOEX Russia Index,
 ^AXJO,S&P/ASX 200,
 ^AORD,ALL ORDINARIES,
 ^BSESN,S&P BSE SENSEX,
-^JKSE,Jakarta Composite Index,
+^JKSE,IDX COMPOSITE,
 ^KLSE,FTSE Bursa Malaysia KLCI,
-^NZ50,S&P/NZX 50 INDEX GROSS,
+^NZ50,S&P/NZX 50 INDEX GROSS ( GROSS,
 ^KS11,KOSPI Composite Index,
 ^TWII,TSEC weighted index,
 ^GSPTSE,S&P/TSX Composite index,
