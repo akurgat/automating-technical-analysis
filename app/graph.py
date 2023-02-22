@@ -36,10 +36,10 @@ class Visualization(Prediction):
         marker = dict(color = '#32AB60', opacity = 0.85, size = 7.5)), secondary_y = False)
         self.fig_action.add_trace(go.Scatter(x = self.df_visualization.index, y = self.df_visualization['Price_Sell'], mode = 'markers', name = "Sell", 
         marker = dict(color = '#DB4052', opacity = 0.85, size = 7.5)), secondary_y = False)
-        self.fig_action.add_trace(go.Bar(x = self.df_visualization.index, y = self.df_visualization['Bullish Volume'], name = "Bullish Volume", opacity = 0.75,
-        marker = dict(color = '#008000', opacity = 0.75)), secondary_y = True)
-        self.fig_action.add_trace(go.Bar(x = self.df_visualization.index, y = self.df_visualization['Bearish Volume'], name = "Bearish Volume" , opacity = 0.75,
-        marker = dict(color = '#D2042D', opacity = 0.75)), secondary_y = True)
+        self.fig_action.add_trace(go.Bar(x = self.df_visualization.index, y = self.df_visualization['Bullish Volume'], name = "Bullish Volume", opacity = 0.5,
+        marker = dict(color = '#008000')), secondary_y = True)
+        self.fig_action.add_trace(go.Bar(x = self.df_visualization.index, y = self.df_visualization['Bearish Volume'], name = "Bearish Volume" , opacity = 0.5,
+        marker = dict(color = '#D2042D')), secondary_y = True)
 
         self.fig_action.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = 'rgba(255, 255, 255, 0.88)', 
         title = dict(text = prediction_title, y = 0.95, x = 0.5, xanchor =  'center', yanchor = 'top', font = dict(size = 20)), 
