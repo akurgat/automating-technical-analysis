@@ -123,7 +123,7 @@ def update_market_data():
     except:
         df_bse_sensex = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
     try:
-        df_nifty = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50')[1]
+        df_nifty = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50')[2]
         df_nifty = df_nifty[['Symbol', 'Company Name']]
         df_nifty.columns = ['Ticker', 'Company']
         df_nifty['Ticker'] = df_nifty['Ticker'].apply(lambda x: x + '.NS')
