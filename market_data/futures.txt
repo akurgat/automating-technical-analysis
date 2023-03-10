@@ -1,8 +1,8 @@
 Ticker,Futures,Last Update
-ES=F,E-Mini S&P 500 Mar 23,2023-03-05
-YM=F,Mini Dow Jones Indus.-$5 Mar 23,
-NQ=F,Nasdaq 100 Mar 23,
-RTY=F,E-mini Russell 2000 Index Futur,
+ES=F,S&P Futures,2023-03-10
+YM=F,Dow Futures,
+NQ=F,Nasdaq Futures,
+RTY=F,Russell 2000 Futures,
 ZB=F,"U.S. Treasury Bond Futures,Jun-",
 ZN=F,"10-Year T-Note Futures,Jun-2023",
 ZF=F,Five-Year US Treasury Note Futu,
