@@ -152,7 +152,6 @@ def main(app_data):
     st.plotly_chart(prediction_fig, use_container_width = True)
 
     technical_analysis_fig = analysis.technical_analysis_graph()
-    st.success (f'Technical Analysis results from the {label[:6]} Data.')
     st.plotly_chart(technical_analysis_fig, use_container_width = True) 
     
 

@@ -54,38 +54,46 @@ class Visualization(Prediction):
     def technical_analysis_graph(self):
         self.df_visualization_technical = self.df_visualization_technical.iloc[-450:]
         
-        self.fig_analysis = make_subplots(rows = 3, cols = 1)
+        self.fig_analysis = make_subplots(rows = 4, cols = 1)
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['MACD'], name = "MACD", 
         marker = dict(color = '#2ECC71')), row = 1, col = 1)
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['MACDS'], name = "MACDS", 
         marker = dict(color = '#E74C3C')), row = 1, col = 1)
-        self.fig_analysis.append_trace(go.Bar(x = self.df_visualization_technical.index, y = self.df_visualization_technical['MACDH'], name = "MACDH", 
+        self.fig_analysis.append_trace(go.Bar(x = self.df_visualization_technical.index, y = self.df_visualization_technical['MACDH'], name = "MACDH", opacity = 0.3,
         marker = dict(color = '#000000')), row = 1, col = 1)
         self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), 
         y0 = 0, y1 = 0, line = dict(color = '#000000', width = 0.5), row = 1, col = 1)
 
+        self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['SR_RSI_K'], name = "Stochastic RSI K", 
+        marker = dict(color = '#F39C12')), row = 2, col = 1)
+        self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['SR_RSI_D'], name = "Stochastic RSI D", 
+        marker = dict(color = '#3780BF')), row = 2, col = 1)
+        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), y0 = 20, y1 = 20, line = dict(color = '#008000', width = 1), row = 2, col = 1)
+        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), y0 = 80, y1 = 80, line = dict(color = '#FF0000', width = 1), row = 2, col = 1)
+
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['RSI'], name = "RSI", 
-        marker = dict(color = '#A569BD')), row = 2, col = 1)
+        marker = dict(color = '#A569BD')), row = 3, col = 1)
         self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), 
-        y0 = 30, y1 = 30, line = dict(color = '#008000', width = 1), row = 2, col = 1)
+        y0 = 30, y1 = 30, line = dict(color = '#008000', width = 1), row = 3, col = 1)
         self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), 
-        y0 = 70, y1 = 70, line = dict(color = '#FF0000', width = 1), row = 2, col = 1)
+        y0 = 70, y1 = 70, line = dict(color = '#FF0000', width = 1), row = 3, col = 1)
 
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['SR_K'], name = "Stochastic K", 
-        marker = dict(color = '#F39C12')), row = 3, col = 1)
+        marker = dict(color = '#F39C12')), row = 4, col = 1)
         self.fig_analysis.append_trace(go.Scatter(x = self.df_visualization_technical.index, y = self.df_visualization_technical['SR_D'], name = "Stochastic D", 
-        marker = dict(color = '#3780BF')), row = 3, col = 1)
-        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), y0 = 20, y1 = 20, line = dict(color = '#008000', width = 1), row = 3, col = 1)
-        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), y0 = 80, y1 = 80, line = dict(color = '#FF0000', width = 1), row = 3, col = 1)
+        marker = dict(color = '#3780BF')), row = 4, col = 1)
+        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), y0 = 20, y1 = 20, line = dict(color = '#008000', width = 1), row = 4, col = 1)
+        self.fig_analysis.add_shape(type = 'line', x0 = self.df_visualization_technical.index.min(), x1 = self.df_visualization_technical.index.max(), y0 = 80, y1 = 80, line = dict(color = '#FF0000', width = 1), row = 4, col = 1)
 
         self.fig_analysis.update_layout(autosize = False, height = 750, dragmode = False, hovermode = 'x', plot_bgcolor = 'rgba(255, 255, 255, 0.88)', 
-        title = dict(text = "Technical Analysis.", y = 0.95, x = 0.5, xanchor = 'center', yanchor = 'top', font = dict(size = 20)))
+        title = dict(text = "Technical Indicators.", y = 0.95, x = 0.5, xanchor = 'center', yanchor = 'top', font = dict(size = 20)))
         self.fig_analysis.update_shapes(dict(opacity = 0.7))
         self.fig_analysis.update_xaxes(showgrid = False, zeroline = False, showline = False)
-        self.fig_analysis.update_xaxes(title_text = "Date", row = 3, col = 1)
+        self.fig_analysis.update_xaxes(title_text = "Date", row = 4, col = 1)
         self.fig_analysis.update_yaxes(showgrid = False, zeroline = False, showline = False)
         self.fig_analysis.update_yaxes(title_text = "MACD", row = 1, col = 1)
-        self.fig_analysis.update_yaxes(title_text = "RSI", range = [0, 100], tickvals = [0, 30, 70, 100], row = 2, col = 1)
-        self.fig_analysis.update_yaxes(title_text = "%K & %D", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 3, col = 1)
+        self.fig_analysis.update_yaxes(title_text = "Stochastic RSI", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 2, col = 1)
+        self.fig_analysis.update_yaxes(title_text = "RSI", range = [0, 100], tickvals = [0, 30, 70, 100], row = 3, col = 1)
+        self.fig_analysis.update_yaxes(title_text = "%K & %D", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 4, col = 1)
 
         return self.fig_analysis
