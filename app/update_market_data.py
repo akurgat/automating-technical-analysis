@@ -50,6 +50,14 @@ def update_market_data():
     except:
         df_nasdaq = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
     try:
+        df_russell = pd.read_html('https://en.wikipedia.org/wiki/Russell_1000_Index')[2]
+        df_russell = df_russell[['Ticker', 'Company']]
+        df_russell['Index Fund'] = 'US Russell 1000'
+        df_russell['Currency'] = 'USD'
+        df_russell['Currency_Name'] = 'US Dollar'
+    except:
+        df_russell = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
+    try:
         df_snp = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
         df_snp = df_snp[['Symbol', 'Security']]
         df_snp.columns = ['Ticker', 'Company']
@@ -143,7 +151,7 @@ def update_market_data():
     except:
         df_asx = pd.DataFrame(columns = ['Ticker', 'Company', 'Index Fund', 'Currency', 'Currency_Name'])
 
-    df_stocks = pd.concat([df_snp, df_nasdaq, df_dow, df_sse, df_csi, df_ftse, df_dax, df_cac, df_bse_sensex, df_nifty, df_asx], ignore_index = True)
+    df_stocks = pd.concat([df_snp, df_nasdaq, df_dow, df_russell, df_sse, df_csi, df_ftse, df_dax, df_cac, df_bse_sensex, df_nifty, df_asx], ignore_index = True)
     df_stocks.loc[0, 'Last Update'] = dt.date.today()
     df_stocks.to_csv('market_data/stocks.txt', index = False)
 

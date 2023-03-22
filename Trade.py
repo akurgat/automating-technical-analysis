@@ -23,7 +23,7 @@ def main(app_data):
         if asset == 'Stocks':
             st.sidebar.subheader(f'Stock Index:')
             stock_indexes  = app_data.stock_indexes
-            market = st.sidebar.selectbox('', stock_indexes, index = 10)
+            market = st.sidebar.selectbox('', stock_indexes, index = 11)
             app_data.market_data(market)
             assets = app_data.stocks
             asset = f'{market} Companies'
