@@ -5,7 +5,7 @@ numpy==1.22.0
 pandas==1.2.4
 plotly==5.7.0
 requests==2.27.1
-scikit-learn==0.24.2
+scikit-learn==1.20.0
 streamlit
 tensorflow-cpu
 yfinance==0.1.70
