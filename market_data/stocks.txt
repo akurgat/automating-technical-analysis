@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2023-03-16
+MMM,3M,US S&P 500,USD,US Dollar,2023-03-23
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -193,6 +193,7 @@ EXR,Extra Space Storage,US S&P 500,USD,US Dollar,
 XOM,ExxonMobil,US S&P 500,USD,US Dollar,
 FFIV,"F5, Inc.",US S&P 500,USD,US Dollar,
 FDS,FactSet,US S&P 500,USD,US Dollar,
+FICO,Fair Isaac,US S&P 500,USD,US Dollar,
 FAST,Fastenal,US S&P 500,USD,US Dollar,
 FRT,Federal Realty,US S&P 500,USD,US Dollar,
 FDX,FedEx,US S&P 500,USD,US Dollar,
@@ -295,7 +296,6 @@ LKQ,LKQ Corporation,US S&P 500,USD,US Dollar,
 LMT,Lockheed Martin,US S&P 500,USD,US Dollar,
 L,Loews Corporation,US S&P 500,USD,US Dollar,
 LOW,Lowe's,US S&P 500,USD,US Dollar,
-LUMN,Lumen Technologies,US S&P 500,USD,US Dollar,
 LYB,LyondellBasell,US S&P 500,USD,US Dollar,
 MTB,M&T Bank,US S&P 500,USD,US Dollar,
 MRO,Marathon Oil,US S&P 500,USD,US Dollar,
