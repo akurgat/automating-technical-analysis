@@ -171,7 +171,7 @@ def update_market_data():
         df_futures = pd.read_html('https://finance.yahoo.com/commodities')[0]
         df_futures = df_futures[['Symbol', 'Name']]
         df_futures.columns = ['Ticker', 'Futures']
-        for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures']]:
+        for futures_ in [['BTC=F', 'Bitcoin Futures'], ['ETH=F', 'Ether Futures'],  ['DX=F', 'US Dollar Index']]:
             df_futures.loc[len(df_futures)] = futures_
         df_futures = df_futures.drop_duplicates(subset = ['Ticker', 'Futures'], keep = False)
         df_futures.loc[0, 'Last Update'] = dt.date.today()
