@@ -94,6 +94,6 @@ class Visualization(Prediction):
         self.fig_analysis.update_yaxes(title_text = "MACD", row = 1, col = 1)
         self.fig_analysis.update_yaxes(title_text = "Stochastic RSI", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 2, col = 1)
         self.fig_analysis.update_yaxes(title_text = "RSI", range = [0, 100], tickvals = [0, 30, 70, 100], row = 3, col = 1)
-        self.fig_analysis.update_yaxes(title_text = "%K & %D", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 4, col = 1)
+        self.fig_analysis.update_yaxes(title_text = "Slow Stochastic", range = [-1, 101], tickvals = [0, 20, 80, 100], row = 4, col = 1)
 
         return self.fig_analysis
