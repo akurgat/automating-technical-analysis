@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2023-03-23
+MMM,3M,US S&P 500,USD,US Dollar,2023-03-24
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -2112,7 +2112,6 @@ DPW.DE,Deutsche Post,German DAX,EUR,Euro,
 DTE.DE,Deutsche Telekom,German DAX,EUR,Euro,
 EOAN.DE,E.ON,German DAX,EUR,Euro,
 FRE.DE,Fresenius,German DAX,EUR,Euro,
-FME.DE,Fresenius Medical Care,German DAX,EUR,Euro,
 HNR1.DE,Hannover Re,German DAX,EUR,Euro,
 HEI.DE,Heidelberg Materials,German DAX,EUR,Euro,
 HEN3.DE,Henkel,German DAX,EUR,Euro,
@@ -2124,6 +2123,7 @@ MUV2.DE,Munich Re,German DAX,EUR,Euro,
 P911.DE,Porsche,German DAX,EUR,Euro,
 PAH3.DE,Porsche SE,German DAX,EUR,Euro,
 QIA.DE,Qiagen,German DAX,EUR,Euro,
+RHM.DE,Rheinmetall,German DAX,EUR,Euro,
 RWE.DE,RWE,German DAX,EUR,Euro,
 SAP.DE,SAP,German DAX,EUR,Euro,
 SRT3.DE,Sartorius,German DAX,EUR,Euro,
