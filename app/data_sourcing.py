@@ -119,5 +119,5 @@ class Data_Sourcing:
             self.df = self.df.iloc[-750:]
             
         self.df['Date'] = date_utc(self.df['Date'])
-        self.df.set_index('Date', inplace = True)
+        self.df = self.df.set_index('Date')
         self.df = self.df[['High', 'Low', 'Open', 'Volume', 'Adj Close']].apply(pd.to_numeric)

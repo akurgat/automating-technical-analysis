@@ -64,11 +64,12 @@ class Technical_Calculations(Data_Sourcing):
         self.df['S3'] = self.df['P'] - (1 * (self.df['High'] - self.df['Low']))
 
     def on_balance_volume(self):
-        self.df['OBV'] = 0
-        self.df.loc[((self.df['Volume'].shift(-1)) < (self.df['Volume'])), 'OBV'] = self.df['OBV'] + self.df['Volume'].shift(-1)
-        self.df.loc[((self.df['Volume'].shift(-1)) > (self.df['Volume'])), 'OBV'] = self.df['OBV'] - self.df['Volume'].shift(-1)
-        self.df.loc[((self.df['Volume'].shift(-1)) == (self.df['Volume'])), 'OBV'] = self.df['OBV'] + 0
-        self.df['OBV'].fillna(0, inplace = True)
+        self.df.loc[((self.df['Adj Close']) > (self.df['Adj Close'].shift(1))), 'OBV_Volume'] = self.df['Volume']  
+        self.df.loc[((self.df['Adj Close']) < (self.df['Adj Close'].shift(1))), 'OBV_Volume'] = self.df['Volume'] * (-1)  
+        self.df.loc[((self.df['Adj Close']) == (self.df['Adj Close'].shift(1))), 'OBV_Volume'] = 0  
+ 
+        self.df['OBV'] = self.df['OBV_Volume'].cumsum()  
+        self.df = self.df.drop(['OBV_Volume'], axis = 1)
     
     def average_true_range(self):
         self.df['TR0'] = abs(self.df['High'] - self.df['Low'])
@@ -76,7 +77,7 @@ class Technical_Calculations(Data_Sourcing):
         self.df['TR2'] = abs(self.df['Low'] - self.df['Adj Close'].shift())
         tr = self.df[['TR0', 'TR1', 'TR2']].max(axis = 1)
         self.df['ATR'] = tr.ewm(alpha = 1/self.rsi_period, adjust = False).mean()
-        self.df.drop(['TR0', 'TR1', 'TR2'], axis = 1, inplace = True)
+        self.df = self.df.drop(['TR0', 'TR1', 'TR2'], axis = 1)
 
     def price_analysis(self):
         self.df['HL_PCT'] = (self.df['High'] - self.df['Low']) / self.df['Adj Close'] * 100.0
