@@ -1,5 +1,5 @@
 Ticker,Company,Index Fund,Currency,Currency_Name,Last Update
-MMM,3M,US S&P 500,USD,US Dollar,2023-04-06
+MMM,3M,US S&P 500,USD,US Dollar,2023-04-19
 AOS,A. O. Smith,US S&P 500,USD,US Dollar,
 ABT,Abbott,US S&P 500,USD,US Dollar,
 ABBV,AbbVie,US S&P 500,USD,US Dollar,
@@ -883,6 +883,7 @@ CTRA,Coterra,US Russell 1000,USD,US Dollar,
 COTY,Coty,US Russell 1000,USD,US Dollar,
 CUZ,Cousins Properties,US Russell 1000,USD,US Dollar,
 CR,Crane,US Russell 1000,USD,US Dollar,
+CXT,Crane NXT,US Russell 1000,USD,US Dollar,
 CACC,Credit Acceptance,US Russell 1000,USD,US Dollar,
 CRWD,CrowdStrike,US Russell 1000,USD,US Dollar,
 CCI,Crown Castle,US Russell 1000,USD,US Dollar,
@@ -1580,7 +1581,7 @@ VICI,Vici Properties,US Russell 1000,USD,US Dollar,
 VSCO,Victoria's Secret,US Russell 1000,USD,US Dollar,
 VIRT,Virtu Financial,US Russell 1000,USD,US Dollar,
 V,Visa,US Russell 1000,USD,US Dollar,
-VST,Vistra,US Russell 1000,USD,US Dollar,
+VST,Vistra Corp.,US Russell 1000,USD,US Dollar,
 VTS,Vitesse Energy,US Russell 1000,USD,US Dollar,
 VMW,VMware,US Russell 1000,USD,US Dollar,
 VNT,Vontier,US Russell 1000,USD,US Dollar,
