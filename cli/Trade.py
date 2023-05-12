@@ -193,7 +193,8 @@ def predict_direction(stock,interval,risk,asset):
     import warnings
     warnings.filterwarnings("ignore")    
     gc.collect() # garbage collection to free up memory I think the system should handle this.
-
+    print("hello world")
+    return False 
     try:
         app_data = Data_Sourcing()
         main(
