@@ -16,6 +16,7 @@ CURRENT_WORKING_DIR = os.getcwd()
 if not os.path.exists(os.path.join(f'{project_root}/cli_config.ini')):
     print(f'error: cli_config.ini not found in {project_root}')
     sys.exit(1)
+print(f'cli_config.ini found in {project_root}')
 
 
 class cli:
@@ -79,7 +80,7 @@ parser.add_argument('-cd','--cddir', action='store_true', help='change directory
 parser.add_argument('-ta','--technical',help=f'generates ticker predictions', nargs='+', default=None)
 parser.add_argument('-r', help='risk level', nargs=1, default='Low')
 parser.add_argument('-i', help='interval', nargs=1, default='1 Day')
-parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=config['default_asset']['asset_type'])
+# parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=config['default_asset']['asset_type'])
 args = parser.parse_args()
 if args.path:
     if VERBOSE:

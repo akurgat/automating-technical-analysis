@@ -197,9 +197,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
 
 
 def predict_direction(stock,interval,risk,asset,verbose,cli_file):
-
     """Predicts the direction of the stock price movement
-
     Args:
         stock:  single ticker or list of tickers
         interval:  1 Minute', '3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week
