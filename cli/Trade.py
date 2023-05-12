@@ -9,26 +9,28 @@ keras.models import load_model due to Mac M1 chip issues:
 from app.data_sourcing import Data_Sourcing, data_update
 from app.indicator_analysis import Indications
 from app.graph import Visualization
+from keras.models import load_model
 # from tensorflow.keras.models import load_model
 # import streamlit as st 
 import gc
 
 gc.collect()
-data_update()
+# data_update()
 
-def main(app_data,symbol,session_interval,session_tolerance,asset_type):
+def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file):
     # st.set_page_config(layout = "wide")
+
     # print("------ main function ------")
     indication = 'Predicted'
     # st.sidebar.subheader('Asset:')
     # print(f"Asset: {asset_type}")
 
     asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures & Commodities', 'Stocks'])
+    # asset = st.sidebar.selectbox('', asset_options, index = 4)
     asset = [asset for asset in asset_options if asset_type in asset][0] if asset_type in asset_options else None
     if asset is None:
         print(f"Asset: {asset_type} not found in {asset_options}")
         return False
-    # asset = st.sidebar.selectbox('', asset_options, index = 4)
     print(f"Asset: {asset}")
     
     
@@ -42,9 +44,9 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type):
             print(f"Stock Index: {symbol[0]}")
             stock_indexes  = app_data.stock_indexes
             # market = st.sidebar.selectbox('', stock_indexes, index = 11)
-            market = stock_indexes.
+            market = stock_indexes[11]
             app_data.market_data(market)
-            assets = app_data.Akamai
+            assets = app_data.stocks
             asset = f'{market} Companies'
         elif asset == 'Index Fund':
             assets = app_data.indexes
@@ -52,29 +54,37 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type):
             assets = app_data.futures
         elif asset == 'Forex':
             assets = app_data.forex
-        print(assets)
-        quit()
-        st.sidebar.subheader(f'{asset}:')
-        equity = st.sidebar.selectbox('', assets)
 
-        if asset == 'Futures & Commodities':
-            currency = 'USD'
-            market = None
-        elif asset == 'Index Fund':
-            currency = 'Pts'
-            market = None
-        elif asset == 'Forex':
-            currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
-            market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
-        elif asset == f'{market} Companies':
-            currency = app_data.df_stocks[((app_data.df_stocks['Company'] == equity) & (app_data.df_stocks['Index Fund'] == market))]['Currency'].unique()[0]
-            asset = 'Stock'
+        # st.sidebar.subheader(f'{asset}:')
+        print(f"{asset}: {symbol[0]}")
+        # equity = st.sidebar.selectbox('', assets)
+        equity = symbol[0]
         
-        st.sidebar.subheader('Interval:')
-        interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)
+        try:    
+            if asset == 'Futures & Commodities':
+                currency = 'USD'
+                market = None
+            elif asset == 'Index Fund':
+                currency = 'Pts'
+                market = None
+            elif asset == 'Forex':
+                currency = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Currency'].unique()[0]
+                market = app_data.df_forex[(app_data.df_forex['Currencies'] == equity)]['Market'].unique()[0]
+            elif asset == f'{market} Companies':
+                currency = app_data.df_stocks[((app_data.df_stocks['Company'] == equity) & (app_data.df_stocks['Index Fund'] == market))]['Currency'].unique()[0]
+                asset = 'Stock'
+        except Exception as e:
+            print(f"Error: {e}")
+            
+        # st.sidebar.subheader('Interval:')
+        print(f"Interval: {session_interval}")
+        # interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)
+        interval = session_interval
         volitility_index = 0     
 
     elif asset in ['Cryptocurrency']:
+        print(f"cyrpto not implemented yet!")
+        raise NotImplementedError
         exchange = 'Binance'
         app_data.exchange_data(exchange)
         markets = app_data.markets
@@ -94,15 +104,22 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type):
         volitility_index = 2 
         
     label = asset
-        
-    st.sidebar.subheader('Trading Volatility:')
-    risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'), index = volitility_index)
-
-    st.title(f'Automated Technical Analysis.')
-    st.subheader(f'{label} Data Sourced from {exchange}.')
-    st.info(f'Predicting...')
-    
+    # st.sidebar.subheader('Trading Volatility:')
+    print(f"Trading Volatility: {session_tolerance}")
+    # risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'), index = volitility_index)
+    risk = session_tolerance
+    print(f"Risk: {session_tolerance}")
+    # st.title(f'Automated Technical Analysis.')
+    print(f"Automated Technical Analysis.")
+    # st.subheader(f'{label} Data Sourced from {exchange}.')
+    print(f"{label} Data Sourced from {exchange}.")
+    # st.info(f'Predicting...')
+    print(f"Predicting...")
+    action_model = load_model(ini_file['models_path']['action_prediction_model'])
+    price_model = load_model(ini_file['models_path']['price_prediction_model'])
     future_price = 1   
+    # we could do  a while loop here to keep the app running and updating the data:
+    
     analysis = Visualization(exchange, interval, equity, indication, action_model, price_model, market)
     analysis_day = Indications(exchange, '1 Day', equity, market)
     requested_date = analysis.df.index[-1]
@@ -157,6 +174,8 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type):
         forcast_suffix = str(interval.split()[1]).lower()
 
     asset_suffix = 'price'
+    return False
+    print(f"requested_prediction_action: {requested_prediction_action}")
 
     st.markdown(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
     st.markdown(f'**Current Price:** {currency} {current_price}.')
@@ -177,7 +196,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type):
 
 
 
-def predict_direction(stock,interval,risk,asset):
+def predict_direction(stock,interval,risk,asset,verbose,cli_file):
 
     """Predicts the direction of the stock price movement
 
@@ -189,12 +208,9 @@ def predict_direction(stock,interval,risk,asset):
         dict: dictionary with the following keys
     """
     
-    
     import warnings
     warnings.filterwarnings("ignore")    
     gc.collect() # garbage collection to free up memory I think the system should handle this.
-    print("hello world")
-    return False 
     try:
         app_data = Data_Sourcing()
         main(
@@ -202,7 +218,8 @@ def predict_direction(stock,interval,risk,asset):
             symbol=stock,
             session_interval=interval,
             session_tolerance=risk,
-            asset_type=asset
+            asset_type=asset,
+            ini_file=cli_file
 
             )
     except Exception as e:

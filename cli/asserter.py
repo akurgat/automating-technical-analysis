@@ -8,14 +8,14 @@ import subprocess
 VERBOSE = [True if '-d' in sys.argv else False][0]
 directory = os.path.abspath(os.path.dirname(__file__))
 directory_name = os.path.dirname(os.path.dirname(directory))
+project_root = os.path.dirname(directory)
 config = configparser.ConfigParser()
 config.read(os.path.join('cli_config.ini'))
 CURRENT_WORKING_DIR = os.getcwd()
-# check if the config file exists
-if not os.path.exists(os.path.join('cli_config.ini')):
-    print(f'error: {os.path.join("cli_config.ini")} does not exist')
+# # check if the config file exists
+if not os.path.exists(os.path.join(f'{project_root}/cli_config.ini')):
+    print(f'error: cli_config.ini not found in {project_root}')
     sys.exit(1)
-        
 
 
 class cli:
@@ -109,8 +109,8 @@ def predict():
         if VERBOSE:
             print(source.output(f'predicting: {asset_types}: {assest_ticker} interval: {loss_intervals} risk: {potential_risk}', color='yellow',bright=True))
         # everything from this point is handled by automated-technical-analysis.
+        predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
         
-        predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types)
         sys.exit(0)
 
 
