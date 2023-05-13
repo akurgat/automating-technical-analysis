@@ -30,6 +30,7 @@ gc.collect()
 
 
 results = []
+partial_results = []
 
 
 
@@ -97,7 +98,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         # st.sidebar.subheader('Interval:')
         print(f"Interval: {session_interval}")
         # interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)
-        interval = session_interval
+        interval = session_interval[0]
         volitility_index = 0     
 
     elif asset in ['Cryptocurrency']:
@@ -125,7 +126,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     # st.sidebar.subheader('Trading Volatility:')
     print(f"Trading Volatility: {session_tolerance}")
     # risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'), index = volitility_index)
-    risk = session_tolerance
+    risk = session_tolerance[0]
     print(f"Risk: {session_tolerance}")
     # st.title(f'Automated Technical Analysis.')
     print(f"Automated Technical Analysis.")
@@ -231,14 +232,21 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
             "forecast_score": str(confidence[analysis.score_price]).replace('*', '').replace('(', '').replace(')', ''),
             "date_used_for_analysis": str(requested_date),
             "interval": interval,
+            
             "date_generated": str(todays_date),
             "time_generated": str(time_generated)
         }
         # append the results due to the fact that we are not handling multiple stocks or a loop for results
         results.append(predicted_results)
     except Exception as e:
-        errro_notes = {"NOTE to developers: Do not waste your time fixing this error. "}
+        errro_notes = {"sucess": False, "note": f"Do not waste your time fixing this error. It is not worth it. "}
+        ticker_notes = {"sucess": False, "error": f"There was an error processing the results for this {equity}. "}
         print(e.__traceback__, errro_notes)
+        partial_results.append(predicted_results)   
+        partial_results.append(ticker_notes)
+        partial_results.append(errro_notes)
+        
+        # incase there is an error we simply return the work that was done:
 
     
 
