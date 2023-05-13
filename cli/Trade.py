@@ -1,10 +1,13 @@
-"""main function refactored for cli
-Note to human: this prompt is for a LLM or gtp prompt.
-1. replaced all st.sidebar.subheader with print statements
-2. if sidebar.selectbox use list comprehension to get the value
-3. change from tensorflow.keras.models import load_model  to 
+"""main function refactored for cli module:
+Note to humans: 
+This is for LLM : remove if not using GPT-3 or 4 via openAI
+1. removed all streamlit code
+2. replaced all st.sidebar.subheader with print statements
+3. if sidebar.selectbox use list comprehension to get the value
+4. change from tensorflow.keras.models import load_model  to 
 keras.models import load_model due to Mac M1 chip issues:
-4. TODO: testing  ubuntu 23 server
+5. TODO: testing  ubuntu 23 server
+6. create an api for this app
 """
 
 import sys
@@ -138,8 +141,11 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     price_model = load_model(ini_file['models_path']['price_prediction_model'])
     future_price = 1   
     # we could do  a while loop here to keep the app running and updating the data:
-    
-    analysis = Visualization(exchange, interval, equity, indication, action_model, price_model, market)
+    try:
+        
+        analysis = Visualization(exchange, interval, equity, indication, action_model, price_model, market)
+    except Exception as e:
+        print_tb(e.__traceback__)
     analysis_day = Indications(exchange, '1 Day', equity, market)
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
@@ -290,7 +296,8 @@ def predict_direction(stock,interval,risk,asset,verbose,cli_file):
 
             )
     except Exception as e:
-        print_tb(e.__traceback__)
+        print(e)
+        # print_tb(e.__traceback__)
         
         # print traceback error for debugging purposes:
         return {'error':str(e)}
