@@ -80,7 +80,7 @@ parser.add_argument('-cd','--cddir', action='store_true', help='change directory
 parser.add_argument('-ta','--technical',help=f'generates ticker predictions', nargs='+', default=None)
 parser.add_argument('-r', help='risk level', nargs=1, default='Low')
 parser.add_argument('-i', help='interval', nargs=1, default='1 Day')
-# parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=config['default_asset']['asset_type'])
+parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=config['default_asset']['asset_type'])
 args = parser.parse_args()
 if args.path:
     if VERBOSE:

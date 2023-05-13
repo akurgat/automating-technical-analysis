@@ -110,9 +110,14 @@ class Data_Sourcing:
                 except:
                     try:
                         self.ticker = self.df_futures[(self.df_futures['Futures'] == self.asset)]['Ticker'].values[0]
-                    except:
-                        self.ticker = self.df_forex[(self.df_forex['Currencies'] == self.asset)]['Ticker'].values[0]
-                    
+                    except Exception as e:
+                        # trying to fix this issue.
+                        try:
+                            self.ticker = self.df_forex[(self.df_forex['Currencies'] == self.asset)]['Ticker'].values[0]
+                        except Exception as e:
+                            
+                            self.ticker = self.asset
+                            
             self.df = yf.download(tickers = self.ticker, period = self.period, interval = self.exchange_interval, 
                                   auto_adjust = True, prepost = True, threads = True, proxy = None).reset_index()
             self.df = self.df.rename(columns = {'Datetime':'Date', 'Close': 'Adj Close'})
