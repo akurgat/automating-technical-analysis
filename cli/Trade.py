@@ -6,17 +6,30 @@ Note to human: this prompt is for a LLM or gtp prompt.
 keras.models import load_model due to Mac M1 chip issues:
 4. TODO: testing  ubuntu 23 server
 """
+
+import sys
+import os
 from traceback import print_tb
 from app.data_sourcing import Data_Sourcing, data_update
 from app.indicator_analysis import Indications
 from app.graph import Visualization
 from keras.models import load_model
-# from tensorflow.keras.models import load_model
+
+
+
+
 # import streamlit as st 
 import gc
+import datetime
+
 
 gc.collect()
+# TODO: fix this path data_update()
 # data_update()
+
+
+
+results = []
 
 
 
@@ -78,6 +91,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
                 currency = app_data.df_stocks[((app_data.df_stocks['Company'] == equity) & (app_data.df_stocks['Index Fund'] == market))]['Currency'].unique()[0]
                 asset = 'Stock'
         except Exception as e:
+            # This is a temp fix until I read the docs on how to handle this error
             if 'currency' not in locals():
                 currency = 'USD'            
         # st.sidebar.subheader('Interval:')
@@ -158,7 +172,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
 
     if analysis.requested_prediction_action == 'Hold':
         present_statement_prefix = 'off from taking any action with'
-        present_statement_suffix = ' at this time'
+        present_statement_suffix = 'at this time'
     else:
         present_statement_prefix = ''
         present_statement_suffix = ''
@@ -178,10 +192,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         forcast_suffix = str(interval.split()[1]).lower()
 
     asset_suffix = 'price'
-    
-    
     if (True): # TODO - pass a variable to determine if we should show the results or not            
-        
         print(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
         print(f'**Current Price:** {currency} {current_price}.')
         print(f'**{interval} Price Change:** {change_display}.')
@@ -189,6 +200,10 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         print(f'**Estimated Forecast Price:** The {label.lower()[:6]} {asset_suffix} for **{equity}** is estimated to be **{currency} {requested_prediction_price}** in the next **{forcast_prefix} {forcast_suffix}**. {str(confidence[analysis.score_price])}')
         if requested_prediction_action == 'Hold':
             print(f'**Recommended Trading Margins:** You should consider buying more **{equity}** {label.lower()[:6]} at **{currency} {buy_price}** and sell it at **{currency} {sell_price}**.')
+
+    todays_date = datetime.datetime.now().strftime("%m-%d-%Y")
+    time_generated = datetime.datetime.now().strftime("%I:%M:%S %p")
+
 
     prediction_fig = analysis.prediction_graph(asset)
     # TODO: use the output function to display the results: disable showing the graphs by default in tehe ini file
@@ -198,12 +213,41 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     # plot the historical price action using fig
     print(prediction_fig.show())
     
-    
     # st.plotly_chart(prediction_fig, use_container_width = True)
-
     technical_analysis_fig = analysis.technical_analysis_graph()
     # st.plotly_chart(technical_analysis_fig, use_container_width = True) 
     print(technical_analysis_fig.show())
+    # Finally we can save or return the results
+    
+    try:
+        predicted_results = {
+            "equity":equity,
+            "current_price": current_price,
+            'side': requested_prediction_action.lower(),
+            'confidence': str(confidence[analysis.score_action]).replace('*', '').replace('(', '').replace(')', ''),
+            "requested_prediction_price": requested_prediction_price,
+            "buy_price": buy_price,
+            "sell_price": sell_price,
+            "forecast_score": str(confidence[analysis.score_price]).replace('*', '').replace('(', '').replace(')', ''),
+            "date_used_for_analysis": str(requested_date),
+            "interval": interval,
+            "date_generated": str(todays_date),
+            "time_generated": str(time_generated)
+        }
+        # append the results due to the fact that we are not handling multiple stocks or a loop for results
+        results.append(predicted_results)
+    except Exception as e:
+        errro_notes = {"NOTE to developers: Do not waste your time fixing this error. "}
+        print(e.__traceback__, errro_notes)
+
+    
+
+
+            
+    
+    
+    
+    
     
     
 
@@ -211,12 +255,16 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
 
 def predict_direction(stock,interval,risk,asset,verbose,cli_file):
     """Predicts the direction of the stock price movement
-    Args:
-        stock:  single ticker or list of tickers
-        interval:  1 Minute', '3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week
-        risk: High, Medium, Low
+    
+    Args: 
+        stock (str): The stock symbol 
+        interval (str): The time interval to use for the prediction
+        risk (str): The risk level to use for the prediction
+        asset (str): The asset type to use for the prediction
+        verbose (bool): Whether to show the results or not
+        cli_file (str): The path to the cli file
     Returns:
-        dict: dictionary with the following keys
+        dict: The results of the prediction    
     """
     
     import warnings
@@ -238,7 +286,13 @@ def predict_direction(stock,interval,risk,asset,verbose,cli_file):
         
         # print traceback error for debugging purposes:
         return {'error':str(e)}
+    # note: we are not handling multiple stocks or a loop for results therefore; the results are appended to the results list and returned: python should handle the memory management and garbage collection:
+    completed = {'success':True}
+    results.append(completed)
+    print(results)
+    # print(results)
     return {'success':True}
+
 
 
 

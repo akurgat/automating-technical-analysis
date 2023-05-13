@@ -9,18 +9,23 @@ VERBOSE = [True if '-d' in sys.argv else False][0]
 directory = os.path.abspath(os.path.dirname(__file__))
 directory_name = os.path.dirname(os.path.dirname(directory))
 project_root = os.path.dirname(directory)
-config = configparser.ConfigParser()
-config.read(os.path.join('cli_config.ini'))
-CURRENT_WORKING_DIR = os.getcwd()
-# # check if the config file exists
 if not os.path.exists(os.path.join(f'{project_root}/cli_config.ini')):
+    # we need to find the config file else we can't run the program: using default values is too much of a headache.
     print(f'error: cli_config.ini not found in {project_root}')
     sys.exit(1)
-print(f'cli_config.ini found in {project_root}')
+else:
+    if VERBOSE:
+        print(f'cli_config.ini found in {project_root}')
+config = configparser.ConfigParser()
+config.read(os.path.join(f'{project_root}/cli_config.ini'))
+CURRENT_WORKING_DIR = os.getcwd()
+# # check if the config file exists
+    
 
 
 class cli:
     def __self__(self) -> None:
+        #TODO
         pass
 
     def output(self,st, color, background=False, bright=False): 
