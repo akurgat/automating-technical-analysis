@@ -32,8 +32,16 @@ data_update()
 
 
 results = []
-partial_results = []
 
+
+# try:
+#     action_model = load_model(file['models_path']['action_prediction_model'])
+#     price_model = load_model(file['models_path']['price_prediction_model'])
+# except Exception as e:
+#     # print(f"Error loading models trying root: {e}")
+root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+action_model = load_model(os.path.join(root_directory, 'models', 'action_prediction_model.h5'))
+price_model = load_model(os.path.join(root_directory, 'models', 'price_prediction_model.h5'))
 
 
 
@@ -45,10 +53,14 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     # print(f"Asset: {asset_type}")
     asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures & Commodities', 'Stocks'])
     # asset = st.sidebar.selectbox('', asset_options, index = 4)
-    asset = [asset for asset in asset_options if asset_type[0] in asset][0] if asset_type[0] in asset_options else None
-    if asset is None:
-        print(f"Asset: {asset_type} not found in {asset_options}")
-        return False
+    # asset = [asset for asset in asset_options if asset_type in asset][0] if asset_type in asset_options else None
+    asset = None if asset_type not in asset_options else asset_type
+    print(f"Asset: {asset}")
+    
+    # if asset is None:
+    #     print(f"Asset: {asset_type} not found in {asset_options}")
+    #     return False
+    
     # print(f"Asset: {asset}")
     
     
@@ -76,7 +88,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         # st.sidebar.subheader(f'{asset}:')
         # print(f"{asset}: {symbol[0]}")
         # equity = st.sidebar.selectbox('', assets)
-        equity = symbol[0]
+        equity = symbol
         
         try:    
             if asset == 'Futures & Commodities':
@@ -98,7 +110,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         # st.sidebar.subheader('Interval:')
         # print(f"Interval: {session_interval}")
         # interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)
-        interval = session_interval[0]
+        interval = session_interval
         volitility_index = 0     
 
     elif asset in ['Cryptocurrency']:
@@ -123,19 +135,10 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     
     
     label = asset
-    risk = session_tolerance[0]
+    risk = session_tolerance
     
     
 
-    try:
-        action_model = load_model(ini_file['models_path']['action_prediction_model'])
-        price_model = load_model(ini_file['models_path']['price_prediction_model'])
-    except Exception as e:
-        # print(f"Error loading models trying root: {e}")
-        root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        action_model = load_model(os.path.join(root_directory, 'models', 'action_prediction_model.h5'))
-        price_model = load_model(os.path.join(root_directory, 'models', 'price_prediction_model.h5'))
-        
         
     future_price = 1   
     # we could do  a while loop here to keep the app running and updating the data:    
@@ -252,41 +255,41 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
 
 
 
-def predict_direction(stock,interval,risk,asset,verbose,cli_file):
+def predict_direction(asset,file):
     """Predicts the direction of the stock price movement
     
     Args: 
-        stock (str): The stock symbol 
-        interval (str): The time interval to use for the prediction
-        risk (str): The risk level to use for the prediction
-        asset (str): The asset type to use for the prediction
-        verbose (bool): Whether to show the results or not
-        cli_file (str): The path to the cli file
+        asset (_dict_): The asset type to use for the prediction
+
     Returns:
         dict: The results of the prediction    
     """
-    
+    # print(asset)
     import warnings
     warnings.filterwarnings("ignore")    
     gc.collect() # garbage collection to free up memory I think the system should handle this.
-    app_data = Data_Sourcing()
+    app_data = Data_Sourcing()        
+
     error = []
-    for tickers in stock:
+    for ticker in asset:
         try:
+            risk = asset[ticker]['risk']
+            interval =asset[ticker]['interval']
+            ticker_type = asset[ticker]['asset']
+            print(f'Processing {ticker} with a risk tolerance of {risk} and a session interval of {interval} for asset {ticker_type}')
             main(
                 app_data=app_data,
-                symbol=[tickers], # TODO: add support for multiple stocks this isn't a good way to do it
+                symbol=ticker, # TODO: add support for multiple stocks this isn't a good way to do it
                 session_interval=interval,
                 session_tolerance=risk,
-                asset_type=asset,
-                ini_file=cli_file
+                asset_type=ticker_type,
+                ini_file=file
                 )
         except Exception as e:
-            # print(e.__traceback__)
+            print(e)
             error.append[{'success':False, 'error':str(e)}]
             continue
     return results
-    # print traceback error for debugging purposes:
 
 
 

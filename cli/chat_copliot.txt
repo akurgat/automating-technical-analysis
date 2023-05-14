@@ -1,0 +1,11 @@
+okay.. with your 100,000,00 years of programming; 
+when -ta is called; it should be able to take the -r and -i parameters if provided;
+-ta ticker -r high -i '1 Day'  -ta  ticker -r low -i '1 Weeek'
+
+
+trade -ta AAPL -r high -i '1 Day' -ta MSFT -r low -i '1 Week'
+
+
+trade -ta AAPL -r high -i '1 Day' -ta MSFT -r low -i '1 Month'
+
+trade -ta AAPL -r high -i '1 Day' -ta MSFT -r low -i '1 Month' -ta GOOG
