@@ -6,8 +6,13 @@ import pandas as pd
 import datetime as dt
 import yfinance as yf
 import gc
+import os 
+import sys
 
 pd.set_option("display.precision", 8)
+# get the root directory
+root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def data_update():
     #df_crypto = pd.read_csv('market_data/binance.txt')
@@ -36,11 +41,19 @@ def date_utc(date_):
 class Data_Sourcing:
     def __init__(self):
         #self.df_crypto = pd.read_csv('market_data/binance.txt')
-        self.df_crypto = pd.read_csv('market_data/binance_us.txt')
-        self.df_stocks = pd.read_csv('market_data/stocks.txt')
-        self.df_indexes = pd.read_csv('market_data/indexes.txt')
-        self.df_futures = pd.read_csv('market_data/futures.txt')
-        self.df_forex = pd.read_csv('market_data/forex.txt')
+        self.df_crypto = pd.read_csv(root + '/market_data/binance_us.txt')
+        self.df_stocks = pd.read_csv(root + '/market_data/stocks.txt')
+        self.df_indexes = pd.read_csv(root + '/market_data/indexes.txt')
+        self.df_futures = pd.read_csv(root + '/market_data/futures.txt')
+        self.df_forex = pd.read_csv(root + '/market_data/forex.txt')
+        
+            
+        
+        # self.df_crypto = pd.read_csv('market_data/binance_us.txt')
+        # self.df_stocks = pd.read_csv('market_data/stocks.txt')
+        # self.df_indexes = pd.read_csv('market_data/indexes.txt')
+        # self.df_futures = pd.read_csv('market_data/futures.txt')
+        # self.df_forex = pd.read_csv('market_data/forex.txt')
 
     def exchange_data(self, exchange):
         self.exchange = exchange
@@ -111,7 +124,11 @@ class Data_Sourcing:
                     try:
                         self.ticker = self.df_futures[(self.df_futures['Futures'] == self.asset)]['Ticker'].values[0]
                     except:
-                        self.ticker = self.df_forex[(self.df_forex['Currencies'] == self.asset)]['Ticker'].values[0]
+                        try:
+                            self.ticker = self.df_forex[(self.df_forex['Currencies'] == self.asset)]['Ticker'].values[0]
+                        except:
+                            self.ticker = self.asset
+                            
                     
             self.df = yf.download(tickers = self.ticker, period = self.period, interval = self.exchange_interval, 
                                   auto_adjust = True, prepost = True, threads = True, proxy = None).reset_index()

@@ -39,6 +39,7 @@ partial_results = []
 
 
 def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file):
+    print(symbol,session_interval,session_tolerance,asset_type,ini_file)
     # st.set_page_config(layout = "wide")
 
     # print("------ main function ------")
@@ -137,15 +138,19 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     print(f"{label} Data Sourced from {exchange}.")
     # st.info(f'Predicting...')
     print(f"Predicting...")
-    action_model = load_model(ini_file['models_path']['action_prediction_model'])
-    price_model = load_model(ini_file['models_path']['price_prediction_model'])
-    future_price = 1   
-    # we could do  a while loop here to keep the app running and updating the data:
     try:
-        
-        analysis = Visualization(exchange, interval, equity, indication, action_model, price_model, market)
+        action_model = load_model(ini_file['models_path']['action_prediction_model'])
+        price_model = load_model(ini_file['models_path']['price_prediction_model'])
     except Exception as e:
-        print_tb(e.__traceback__)
+        print(f"Error loading models trying root: {e}")
+        root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        action_model = load_model(os.path.join(root_directory, 'models', 'action_prediction_model.h5'))
+        price_model = load_model(os.path.join(root_directory, 'models', 'price_prediction_model.h5'))
+        
+        
+    future_price = 1   
+    # we could do  a while loop here to keep the app running and updating the data:    
+    analysis = Visualization(exchange, interval, equity, indication, action_model, price_model, market)
     analysis_day = Indications(exchange, '1 Day', equity, market)
     requested_date = analysis.df.index[-1]
     current_price = float(analysis.df['Adj Close'][-1])
@@ -293,19 +298,17 @@ def predict_direction(stock,interval,risk,asset,verbose,cli_file):
             session_tolerance=risk,
             asset_type=asset,
             ini_file=cli_file
-
             )
     except Exception as e:
         print(e)
+        return {'error':str(e)}
         # print_tb(e.__traceback__)
         
         # print traceback error for debugging purposes:
-        return {'error':str(e)}
     # note: we are not handling multiple stocks or a loop for results therefore; the results are appended to the results list and returned: python should handle the memory management and garbage collection:
     completed = {'success':True}
     results.append(completed)
-    print(results)
-    # print(results)
+    return results  
     return {'success':True}
 
 

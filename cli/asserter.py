@@ -1,6 +1,5 @@
 import os
 import configparser
-from  cli.Trade import predict_direction
 import sys
 import argparse
 import subprocess
@@ -13,9 +12,16 @@ if not os.path.exists(os.path.join(f'{project_root}/cli_config.ini')):
     # we need to find the config file else we can't run the program: using default values is too much of a headache.
     print(f'error: cli_config.ini not found in {project_root}')
     sys.exit(1)
+elif not os.path.exists(os.path.join(f'{project_root}/cli/.cli_root.txt')):
+    # we need to find the config file else we can't run the program: using default values is too much of a headache.
+    if VERBOSE: print(f'error: .cli_root.txt not found in {project_root}')
+    # create the file
+    with open(os.path.join(f'{project_root}/cli/.cli_root.txt'), 'w') as f:
+        f.write(f'{project_root}')
+    if VERBOSE: print(f'created .cli_root.txt in {project_root}')
 else:
-    if VERBOSE:
-        print(f'cli_config.ini found in {project_root}')
+    if VERBOSE: print(f'cli_config.ini and cli_root.txt found in {project_root}')
+        
 config = configparser.ConfigParser()
 config.read(os.path.join(f'{project_root}/cli_config.ini'))
 CURRENT_WORKING_DIR = os.getcwd()
@@ -83,8 +89,8 @@ parser.add_argument('-p','--path', action='store_true', help='show the path of t
 parser.add_argument('-d','--null', action='store_true', help='verbose mode')
 parser.add_argument('-cd','--cddir', action='store_true', help='change directory to the Automating Technical Analysis directory')
 parser.add_argument('-ta','--technical',help=f'generates ticker predictions', nargs='+', default=None)
-parser.add_argument('-r', help='risk level', nargs=1, default='Low')
-parser.add_argument('-i', help='interval', nargs=1, default='1 Day')
+parser.add_argument('-r', help='risk level', nargs=1, default=['Low'])
+parser.add_argument('-i', help='interval', nargs=1, default= ['1 Day'])
 parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=config['default_asset']['asset_type'])
 args = parser.parse_args()
 if args.path:
@@ -102,6 +108,8 @@ if args.cddir:
     
 
 def predict():
+    # it takes a while to load due to keras... so we only load it when we need it.
+    from  cli.Trade import predict_direction
     if args.technical:
         try:
             symbol = args.technical[0].split(',') if args.technical else []
@@ -115,11 +123,10 @@ def predict():
         if VERBOSE:
             print(source.output(f'predicting: {asset_types}: {assest_ticker} interval: {loss_intervals} risk: {potential_risk}', color='yellow',bright=True))
         # everything from this point is handled by automated-technical-analysis.
-        predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
+        requested = predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
+        print(requested)
         
         sys.exit(0)
-
-
 
 
 if not len(sys.argv) > 1:
