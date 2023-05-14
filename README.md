@@ -25,6 +25,4 @@ pip install -e .
 trade --help
 ```
 Notes:
-if the command "trade" is not working try the following
-you will have to manually link the project.
 

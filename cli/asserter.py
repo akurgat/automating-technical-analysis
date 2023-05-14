@@ -3,6 +3,9 @@ import configparser
 import sys
 import argparse
 import subprocess
+import robin_stocks.robinhood as r
+from traceback import print_tb
+from pprint import pprint
 
 VERBOSE = [True if '-d' in sys.argv else False][0]
 directory = os.path.abspath(os.path.dirname(__file__))
@@ -25,10 +28,7 @@ else:
 config = configparser.ConfigParser()
 config.read(os.path.join(f'{project_root}/cli_config.ini'))
 CURRENT_WORKING_DIR = os.getcwd()
-# # check if the config file exists
     
-
-
 class cli:
     def __self__(self) -> None:
         #TODO
@@ -78,26 +78,76 @@ class cli:
         return(symbols_list)
 
 
+    def include_additional_information(self,equity):
+        # assert equity is not None and type(equity) is dict # quick checks to handle the most common errors    
+        # get the equity information and do list comprehension to get the values
+        try:
+            symbols = self.inputs_to_set(equity['equity'])
+        except Exception as e:
+            return {'error':f'error: {e}'}
+        try:
+            instruments = r.get_instruments_by_symbols(inputSymbols=symbols)
+        except Exception as e:
+            pass
+        for i in range(len(instruments)):
+            if instruments[i]['symbol'] == equity['equity']:
+                equity['symbol'] = instruments[0]['symbol']
+                equity['simple_name'] = instruments[0]['simple_name']
+                equity['name'] = instruments[0]['name']
+                equity['tradeable'] = instruments[0]['tradeable']
+                equity['tradability'] = instruments[0]['tradability']
+                equity['success'] = True
+        return equity
+            
+        # equity['simple_name'] = instruments[0]['name']
+        # equity['tradeable'] = instruments[0]['tradeable']
+        # equity['tradability'] = instruments[0]['tradability']
+        # equity['success'] = True
+        # return equity
+        
+      
+
+    # def return_results(self,information,tickers,interval):
+    #     """Given a json object and it will assert that the information is correct and then return a list of dictionaries
+    #         that contain the information.
+    #     """
+    #     results = []
+    #     count = 0
+    #     total = len(tickers) 
+    #     for i in range(len(information)):
+    #         count += 1
+    #         # if VERBOSE:
+    #         #     print(self.output(f"\nStock: {information[i]['equity']} | Buy: {information[i]['buy_price']} | Sell: {information[i]['sell_price']} Side: {information[i]['side']}", color='white', bright=True))
+    #         dataList = self.include_additional_information(information[i])
+    #         results.append({dataList['ticker']:dataList})
+    #         if count == total:
+    #             if VERBOSE:
+    #                 print(self.output(f"added to list: {results}", color='white', bright=True))
+    #             # with open(f'{project_dir}/fractional.json', 'w') as outfile:
+    #             #     json.dump(dataLists, outfile)
+    #         else:
+    #             continue
+    #     return results
+
 
 
 
 
 source = cli()    
 parser = argparse.ArgumentParser(description='Automating Technical Analysis')
-parser.add_argument('-v','--version', action='store_true', help='show the version of Automating Technical Analysis')
+# parser.add_argument('-v','--version', action='store_true', help='show the version of Automating Technical Analysis')
 parser.add_argument('-p','--path', action='store_true', help='show the path of the Automating Technical Analysis directory')
 parser.add_argument('-d','--null', action='store_true', help='verbose mode')
 parser.add_argument('-cd','--cddir', action='store_true', help='change directory to the Automating Technical Analysis directory')
 parser.add_argument('-ta','--technical',help=f'generates ticker predictions', nargs='+', default=None)
 parser.add_argument('-r', help='risk level', nargs=1, default=['Low'])
 parser.add_argument('-i', help='interval', nargs=1, default= ['1 Day'])
-parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=config['default_asset']['asset_type'])
+parser.add_argument('-asset', help='provide an asset if none is given Default to cli_config.ini file', nargs=1, default=[config['default_asset']['asset_type']])
 args = parser.parse_args()
 if args.path:
     if VERBOSE:
         print(source.output(f'calling from current working directory: {CURRENT_WORKING_DIR}', color='yellow'))
     sys.exit(0)
-# print(args)
 if args.cddir:
     # matching = [s for s in os.listdir(directory_name) if "automating-technical-analysis" in s] bad idea.. what if its something else.
     if VERBOSE:
@@ -121,10 +171,18 @@ def predict():
             print(source.output(f'error: {e}', color='red',bright=True))
             sys.exit(1)
         if VERBOSE:
-            print(source.output(f'predicting: {asset_types}: {assest_ticker} interval: {loss_intervals} risk: {potential_risk}', color='yellow',bright=True))
+            print(source.output(f'\npredicting: {asset_types}: {assest_ticker} interval: {loss_intervals} risk: {potential_risk}', color='white',bright=True))
         # everything from this point is handled by automated-technical-analysis.
-        requested = predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
-        print(requested)
+        direction = predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
+        results = [source.include_additional_information(item) for item in direction]
+        pprint(results)
+            
+            
+            # print(source.output(f'\n{direction}', color='green',bright=True))
+            
+        # results = source.include_additional_information(direction,assest_ticker,loss_intervals)
+        # print(source.output(f'\n{results}', color='white',bright=True))
+        
         
         sys.exit(0)
 

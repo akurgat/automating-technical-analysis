@@ -16,11 +16,11 @@ root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def data_update():
     #df_crypto = pd.read_csv('market_data/binance.txt')
-    df_crypto = pd.read_csv('market_data/binance_us.txt')
-    df_stocks = pd.read_csv('market_data/stocks.txt')
-    df_indexes = pd.read_csv('market_data/indexes.txt')
-    df_futures = pd.read_csv('market_data/futures.txt')
-    df_forex = pd.read_csv('market_data/forex.txt')
+    df_crypto = pd.read_csv(f'{root}/market_data/binance_us.txt')
+    df_stocks = pd.read_csv(f'{root}/market_data/stocks.txt')
+    df_indexes = pd.read_csv(f'{root}/market_data/indexes.txt')
+    df_futures = pd.read_csv(f'{root}/market_data/futures.txt')
+    df_forex = pd.read_csv(f'{root}/market_data/forex.txt')
 
     day_limit = 15
 
@@ -41,19 +41,13 @@ def date_utc(date_):
 class Data_Sourcing:
     def __init__(self):
         #self.df_crypto = pd.read_csv('market_data/binance.txt')
-        self.df_crypto = pd.read_csv(root + '/market_data/binance_us.txt')
-        self.df_stocks = pd.read_csv(root + '/market_data/stocks.txt')
-        self.df_indexes = pd.read_csv(root + '/market_data/indexes.txt')
-        self.df_futures = pd.read_csv(root + '/market_data/futures.txt')
-        self.df_forex = pd.read_csv(root + '/market_data/forex.txt')
+        self.df_crypto = pd.read_csv(f'{root}/market_data/binance_us.txt')
+        self.df_stocks = pd.read_csv(f'{root}/market_data/stocks.txt')
+        self.df_indexes = pd.read_csv(f'{root}/market_data/indexes.txt')
+        self.df_futures = pd.read_csv(f'{root}/market_data/futures.txt')
+        self.df_forex = pd.read_csv(f'{root}/market_data/forex.txt')
         
-            
-        
-        # self.df_crypto = pd.read_csv('market_data/binance_us.txt')
-        # self.df_stocks = pd.read_csv('market_data/stocks.txt')
-        # self.df_indexes = pd.read_csv('market_data/indexes.txt')
-        # self.df_futures = pd.read_csv('market_data/futures.txt')
-        # self.df_forex = pd.read_csv('market_data/forex.txt')
+
 
     def exchange_data(self, exchange):
         self.exchange = exchange

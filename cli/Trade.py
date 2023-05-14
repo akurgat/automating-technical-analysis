@@ -10,7 +10,6 @@ keras.models import load_model due to Mac M1 chip issues:
 6. create an api for this app
 """
 
-import sys
 import os
 from traceback import print_tb
 from app.data_sourcing import Data_Sourcing, data_update
@@ -28,7 +27,7 @@ import datetime
 
 gc.collect()
 # TODO: fix this path data_update()
-# data_update()
+data_update()
 
 
 
@@ -39,33 +38,30 @@ partial_results = []
 
 
 def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file):
-    print(symbol,session_interval,session_tolerance,asset_type,ini_file)
     # st.set_page_config(layout = "wide")
-
     # print("------ main function ------")
     indication = 'Predicted'
     # st.sidebar.subheader('Asset:')
     # print(f"Asset: {asset_type}")
-
     asset_options = sorted(['Cryptocurrency', 'Index Fund', 'Forex', 'Futures & Commodities', 'Stocks'])
     # asset = st.sidebar.selectbox('', asset_options, index = 4)
-    asset = [asset for asset in asset_options if asset_type in asset][0] if asset_type in asset_options else None
+    asset = [asset for asset in asset_options if asset_type[0] in asset][0] if asset_type[0] in asset_options else None
     if asset is None:
         print(f"Asset: {asset_type} not found in {asset_options}")
         return False
-    print(f"Asset: {asset}")
+    # print(f"Asset: {asset}")
     
     
-
     if asset in ['Index Fund', 'Forex', 'Futures & Commodities', 'Stocks']:
         exchange = 'Yahoo! Finance'
         app_data.exchange_data(exchange)
 
         if asset == 'Stocks':
             # st.sidebar.subheader(f'Stock Index:')
-            print(f"Stock Index: {symbol[0]}")
+            # print(f"Stock Index: {symbol[0]}")
             stock_indexes  = app_data.stock_indexes
             # market = st.sidebar.selectbox('', stock_indexes, index = 11)
+            # TODO: scan the stock_indexes for the symbol and return the index by name
             market = stock_indexes[11]
             app_data.market_data(market)
             assets = app_data.stocks
@@ -78,7 +74,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
             assets = app_data.forex
 
         # st.sidebar.subheader(f'{asset}:')
-        print(f"{asset}: {symbol[0]}")
+        # print(f"{asset}: {symbol[0]}")
         # equity = st.sidebar.selectbox('', assets)
         equity = symbol[0]
         
@@ -96,18 +92,17 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
                 currency = app_data.df_stocks[((app_data.df_stocks['Company'] == equity) & (app_data.df_stocks['Index Fund'] == market))]['Currency'].unique()[0]
                 asset = 'Stock'
         except Exception as e:
-            # This is a temp fix until I read the docs on how to handle this error
+            # This is a temp fix until I read the code traceback and fix the issue!
             if 'currency' not in locals():
                 currency = 'USD'            
         # st.sidebar.subheader('Interval:')
-        print(f"Interval: {session_interval}")
+        # print(f"Interval: {session_interval}")
         # interval = st.sidebar.selectbox('', ('5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week'), index = 4)
         interval = session_interval[0]
         volitility_index = 0     
 
     elif asset in ['Cryptocurrency']:
-        print(f"cyrpto not implemented yet!")
-        raise NotImplementedError
+        raise NotImplementedError("cyrpto not implemented yet, if you want to use it, please implement it and remove this error and do a pull request")
         exchange = 'Binance'
         app_data.exchange_data(exchange)
         markets = app_data.markets
@@ -125,24 +120,18 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         interval = st.sidebar.selectbox('', ('1 Minute', '3 Minute', '5 Minute', '15 Minute', '30 Minute', '1 Hour', '6 Hour', '12 Hour', '1 Day', '1 Week'), index = 8)
 
         volitility_index = 2 
-        
+    
+    
     label = asset
-    # st.sidebar.subheader('Trading Volatility:')
-    print(f"Trading Volatility: {session_tolerance}")
-    # risk = st.sidebar.selectbox('', ('Low', 'Medium', 'High'), index = volitility_index)
     risk = session_tolerance[0]
-    print(f"Risk: {session_tolerance}")
-    # st.title(f'Automated Technical Analysis.')
-    print(f"Automated Technical Analysis.")
-    # st.subheader(f'{label} Data Sourced from {exchange}.')
-    print(f"{label} Data Sourced from {exchange}.")
-    # st.info(f'Predicting...')
-    print(f"Predicting...")
+    
+    
+
     try:
         action_model = load_model(ini_file['models_path']['action_prediction_model'])
         price_model = load_model(ini_file['models_path']['price_prediction_model'])
     except Exception as e:
-        print(f"Error loading models trying root: {e}")
+        # print(f"Error loading models trying root: {e}")
         root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         action_model = load_model(os.path.join(root_directory, 'models', 'action_prediction_model.h5'))
         price_model = load_model(os.path.join(root_directory, 'models', 'price_prediction_model.h5'))
@@ -204,7 +193,8 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         forcast_suffix = str(interval.split()[1]).lower()
 
     asset_suffix = 'price'
-    if (True): # TODO - pass a variable to determine if we should show the results or not            
+    show_results = True if ini_file['settings']['results_verbose'] == 'True' else False
+    if (show_results): # TODO - pass a variable to determine if we should show the results or not            
         print(f'**Prediction Date & Time (UTC):** {str(requested_date)}.')
         print(f'**Current Price:** {currency} {current_price}.')
         print(f'**{interval} Price Change:** {change_display}.')
@@ -216,21 +206,19 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
     todays_date = datetime.datetime.now().strftime("%m-%d-%Y")
     time_generated = datetime.datetime.now().strftime("%I:%M:%S %p")
 
-
-    prediction_fig = analysis.prediction_graph(asset)
-    # TODO: use the output function to display the results: disable showing the graphs by default in tehe ini file
-    # st.success(f'Historical {label[:6]} Price Action.')
-
-    print(f'Historical {label[:6]} Price Action.')
-    # plot the historical price action using fig
-    print(prediction_fig.show())
-    
-    # st.plotly_chart(prediction_fig, use_container_width = True)
-    technical_analysis_fig = analysis.technical_analysis_graph()
-    # st.plotly_chart(technical_analysis_fig, use_container_width = True) 
-    print(technical_analysis_fig.show())
-    # Finally we can save or return the results
-    
+    display_results = True if ini_file['settings']['display_graphs'] == 'True' else False
+    if (display_results):
+        prediction_fig = analysis.prediction_graph(asset)
+        # TODO: use the output function to display the results: disable showing the graphs by default in tehe ini file
+        # st.success(f'Historical {label[:6]} Price Action.')
+        print(f'Historical {label[:6]} Price Action.')
+        # plot the historical price action using fig
+        print(prediction_fig.show())
+        # st.plotly_chart(prediction_fig, use_container_width = True)
+        technical_analysis_fig = analysis.technical_analysis_graph()
+        # st.plotly_chart(technical_analysis_fig, use_container_width = True) 
+        print(technical_analysis_fig.show())
+        # Finally we can save or return the results
     try:
         predicted_results = {
             "equity":equity,
@@ -250,12 +238,11 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         # append the results due to the fact that we are not handling multiple stocks or a loop for results
         results.append(predicted_results)
     except Exception as e:
-        errro_notes = {"sucess": False, "note": f"Do not waste your time fixing this error. It is not worth it. "}
-        ticker_notes = {"sucess": False, "error": f"There was an error processing the results for this {equity}. "}
-        print(e.__traceback__, errro_notes)
-        partial_results.append(predicted_results)   
-        partial_results.append(ticker_notes)
-        partial_results.append(errro_notes)
+        print(e.__traceback__)
+        # ticker_notes = {"sucess": False, "error": f"There was an error processing the results for this {equity}. "}
+        # partial_results.append(predicted_results)   
+        # partial_results.append(ticker_notes)
+        
         
         # incase there is an error we simply return the work that was done:
 
@@ -289,6 +276,7 @@ def predict_direction(stock,interval,risk,asset,verbose,cli_file):
     import warnings
     warnings.filterwarnings("ignore")    
     gc.collect() # garbage collection to free up memory I think the system should handle this.
+    error = None
     try:
         app_data = Data_Sourcing()
         main(
@@ -300,16 +288,17 @@ def predict_direction(stock,interval,risk,asset,verbose,cli_file):
             ini_file=cli_file
             )
     except Exception as e:
-        print(e)
-        return {'error':str(e)}
-        # print_tb(e.__traceback__)
+        error = {'success':False, 'error':str(e)}
+    if error:
+        completed = error
+        results.append(completed)
+        return results
         
         # print traceback error for debugging purposes:
     # note: we are not handling multiple stocks or a loop for results therefore; the results are appended to the results list and returned: python should handle the memory management and garbage collection:
     completed = {'success':True}
     results.append(completed)
     return results  
-    return {'success':True}
 
 
 
