@@ -260,6 +260,7 @@ def predict_direction(asset,file):
     
     Args: 
         asset (_dict_): The asset type to use for the prediction
+        file (_str_): The ini file to use for the prediction
 
     Returns:
         dict: The results of the prediction    

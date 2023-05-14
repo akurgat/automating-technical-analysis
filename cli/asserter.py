@@ -84,7 +84,6 @@ class cli:
         for equity in asset:
             ticker = equity['equity']
             instruments = r.get_instruments_by_symbols(inputSymbols=ticker)
-            print(instruments)    
             if not instruments:
                 instruments = [{
                     
@@ -118,9 +117,11 @@ parser = argparse.ArgumentParser(description='Automating Technical Analysis')
 parser.add_argument('-p', '--path', action='store_true', help='show the path of the Automating Technical Analysis directory')
 parser.add_argument('-d', '--null', action='store_true', help='verbose mode')
 parser.add_argument('-cd', '--cddir', action='store_true', help='change directory to the Automating Technical Analysis directory')
+
+
 parser.add_argument('-ta', '--tickers', nargs='+', type=str, action='append', help='Ticker symbols')
 parser.add_argument('-f', '--quick', type=str, action='append', help='just provide the ticker symbols and the program will do the rest using default values')
-parser.add_argument('-r', '--range', type=str, action='append', help='Range')
+parser.add_argument('-r', '--risk', type=str, action='append', help='Risk level')
 parser.add_argument('-i', '--interval', type=str, action='append', help='Interval')
 parser.add_argument('-asset', '--asset', type=str, action='append', help='Asset type')
 args = parser.parse_args()
@@ -145,18 +146,15 @@ def return_paramenter(symbols):
     defualt_risks = 'High'
     defualt_interval = '1 Day'
     defualt_asset = 'Stocks'
-    # print(symbols)
     if args.tickers:
         equity = args.tickers
     else:
-        # [['AAPL'], ['UCO']]
         equity = list(map(lambda x: [x], symbols))
     
-    # print(equity)
     for ticker_index, ticker in enumerate(equity):
         ticker_data = {}
-        if args.range and len(args.range) > ticker_index:
-            ticker_data['risk'] = args.range[ticker_index].capitalize()
+        if args.risk and len(args.risk) > ticker_index:
+            ticker_data['risk'] = args.risk[ticker_index].capitalize()
         else:
             ticker_data['risk'] = defualt_risks
             
@@ -173,8 +171,8 @@ def return_paramenter(symbols):
 
     # Convert the JSON output to a string
     output_json = json.dumps(output, indent=4)
-    # Print the JSON output
-    # print(output_json)
+    if VERBOSE:
+        print(source.output(f'REQUESTED prediction:\n{output_json}', color='yellow'))
     return output
 
     
@@ -192,15 +190,19 @@ def predict():
         asset = return_paramenter(assest_ticker)
     elif args.tickers:
         asset = return_paramenter(args.tickers)
-        
     try:
         from  cli.Trade import predict_direction
         returned_assets = predict_direction(asset,file=config)
         results = source.additional_information(returned_assets)
-        print(source.output(f'\n{results}', color='white',bright=True))
+        # pprint(results)
+        
+        # print(source.output(f'\n{results}', color='white',bright=True))
     except Exception as e:
         print(source.output(f'error: {e}', color='red',bright=True))
         sys.exit(1)
+    # don't really need to return anything, but for the future, this may be useful for api calls.
+    pprint(results)
+    # return results
         
         
         # results = source.additional_information(asset)
