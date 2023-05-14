@@ -139,6 +139,21 @@ if args.cddir:
     
 
 def return_paramenter(symbols):
+    """returns the required parameters for the technical analysis from the command line
+
+    Args:
+        symbols : list(map(lambda x: [x], symbols))
+
+    Returns:
+        dict:
+         
+        "AAPL": {
+            "risk": "High",
+            "interval": "1 Day",
+            "asset": "Stocks"
+        }
+        
+    """
     output = {}
     analysis_risk = ['Low', 'Medium', 'High']
     analysis_interval = ['5 Minute', '15 Minute', '30 Minute', '1 Hour', '1 Day', '1 Week']
@@ -194,33 +209,13 @@ def predict():
         from  cli.Trade import predict_direction
         returned_assets = predict_direction(asset,file=config)
         results = source.additional_information(returned_assets)
-        # pprint(results)
-        
-        # print(source.output(f'\n{results}', color='white',bright=True))
     except Exception as e:
         print(source.output(f'error: {e}', color='red',bright=True))
         sys.exit(1)
-    # don't really need to return anything, but for the future, this may be useful for api calls.
     pprint(results)
+    # don't really need to return anything, but for the future, this may be useful for api calls.
     # return results
-        
-        
-        # results = source.additional_information(asset)
-        # print(results)
-        
-        # results = [source.include_additional_information(item) for item in direction]
-        # pprint(results)
-            
-            
-            # print(source.output(f'\n{direction}', color='green',bright=True))
-            
-        # results = source.include_additional_information(direction,assest_ticker,loss_intervals)
-        # print(source.output(f'\n{results}', color='white',bright=True))
-        
-        
-        # sys.exit(0)
-
-
+    
 if not len(sys.argv) > 1:
     parser.print_help()
     print('\n-v for verbose mode')    
