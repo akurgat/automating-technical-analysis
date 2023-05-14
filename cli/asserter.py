@@ -78,26 +78,32 @@ class cli:
         return(symbols_list)
 
 
-    def include_additional_information(self,equity):
-        # assert equity is not None and type(equity) is dict # quick checks to handle the most common errors    
-        # get the equity information and do list comprehension to get the values
-        try:
-            symbols = self.inputs_to_set(equity['equity'])
-        except Exception as e:
-            return {'error':f'error: {e}'}
-        try:
-            instruments = r.get_instruments_by_symbols(inputSymbols=symbols)
-        except Exception as e:
-            pass
-        for i in range(len(instruments)):
-            if instruments[i]['symbol'] == equity['equity']:
-                equity['symbol'] = instruments[0]['symbol']
-                equity['simple_name'] = instruments[0]['simple_name']
-                equity['name'] = instruments[0]['name']
-                equity['tradeable'] = instruments[0]['tradeable']
-                equity['tradability'] = instruments[0]['tradability']
+    def additional_information(self,asset):
+        for equity in asset:
+            ticker = equity['equity']
+            instruments = r.get_instruments_by_symbols(inputSymbols=ticker)    
+            if not instruments:
+                instruments = [{
+                    
+                    'simple_name': {'error': 'either robinhood is down,ticker is invalid, or the ticker is not supported, or robinhood went out of business.'},
+                    'tradeable':  {'error': 'either robinhood is down,ticker is invalid, or the ticker is not supported, or robinhood went out of business.'},
+                     'tradability': {'error': 'either robinhood is down,ticker is invalid, or the ticker is not supported, or robinhood went out of business.'}
+                }]            
+            for instrument in instruments:
+                equity['simple_name'] = instrument['simple_name']
+                equity['tradeable'] = instrument['tradeable']
+                equity['tradability'] = instrument['tradability']
                 equity['success'] = True
-        return equity
+            
+        
+        
+        print(asset)
+        # return asset
+        
+        
+        
+        
+
             
         # equity['simple_name'] = instruments[0]['name']
         # equity['tradeable'] = instruments[0]['tradeable']
@@ -159,7 +165,7 @@ if args.cddir:
 
 def predict():
     # it takes a while to load due to keras... so we only load it when we need it.
-    from  cli.Trade import predict_direction
+    # from  cli.Trade import predict_direction
     if args.technical:
         try:
             symbol = args.technical[0].split(',') if args.technical else []
@@ -173,9 +179,11 @@ def predict():
         if VERBOSE:
             print(source.output(f'\npredicting: {asset_types}: {assest_ticker} interval: {loss_intervals} risk: {potential_risk}', color='white',bright=True))
         # everything from this point is handled by automated-technical-analysis.
-        direction = predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
-        results = [source.include_additional_information(item) for item in direction]
-        pprint(results)
+        # direction = predict_direction(stock=assest_ticker, interval=loss_intervals, risk=potential_risk,asset=asset_types, verbose=VERBOSE,cli_file=config)
+        assest = [{'equity': 'UCO', 'current_price': '22.75', 'side': 'buy', 'confidence': '80.1% confident', 'requested_prediction_price': '23.28', 'buy_price': '22.66', 'sell_price': '23.51', 'forecast_score': '98.2% confident', 'date_used_for_analysis': '2023-05-12 00:00:00', 'interval': '1 Day', 'date_generated': '05-13-2023', 'time_generated': '11:42:40 PM'}, {'equity': 'AAPL', 'current_price': '172.57', 'side': 'hold', 'confidence': '80.8% confident', 'requested_prediction_price': '170.67', 'buy_price': '171.37', 'sell_price': '173.71', 'forecast_score': '96.3% confident', 'date_used_for_analysis': '2023-05-12 00:00:00', 'interval': '1 Day', 'date_generated': '05-13-2023', 'time_generated': '11:42:47 PM'}]
+        results = source.include_additional_information(assest)
+        # results = [source.include_additional_information(item) for item in direction]
+        # pprint(results)
             
             
             # print(source.output(f'\n{direction}', color='green',bright=True))

@@ -239,14 +239,7 @@ def main(app_data,symbol,session_interval,session_tolerance,asset_type,ini_file)
         results.append(predicted_results)
     except Exception as e:
         print(e.__traceback__)
-        # ticker_notes = {"sucess": False, "error": f"There was an error processing the results for this {equity}. "}
-        # partial_results.append(predicted_results)   
-        # partial_results.append(ticker_notes)
         
-        
-        # incase there is an error we simply return the work that was done:
-
-    
 
 
             
@@ -276,30 +269,24 @@ def predict_direction(stock,interval,risk,asset,verbose,cli_file):
     import warnings
     warnings.filterwarnings("ignore")    
     gc.collect() # garbage collection to free up memory I think the system should handle this.
-    error = None
-    try:
-        app_data = Data_Sourcing()
-        main(
-            app_data=app_data,
-            symbol=stock,
-            session_interval=interval,
-            session_tolerance=risk,
-            asset_type=asset,
-            ini_file=cli_file
-            )
-    except Exception as e:
-        error = {'success':False, 'error':str(e)}
-    if error:
-        completed = error
-        results.append(completed)
-        return results
-        
-        # print traceback error for debugging purposes:
-    # note: we are not handling multiple stocks or a loop for results therefore; the results are appended to the results list and returned: python should handle the memory management and garbage collection:
-    completed = {'success':True}
-    results.append(completed)
-    return results  
-
+    app_data = Data_Sourcing()
+    error = []
+    for tickers in stock:
+        try:
+            main(
+                app_data=app_data,
+                symbol=[tickers], # TODO: add support for multiple stocks this isn't a good way to do it
+                session_interval=interval,
+                session_tolerance=risk,
+                asset_type=asset,
+                ini_file=cli_file
+                )
+        except Exception as e:
+            # print(e.__traceback__)
+            error.append[{'success':False, 'error':str(e)}]
+            continue
+    return results
+    # print traceback error for debugging purposes:
 
 
 

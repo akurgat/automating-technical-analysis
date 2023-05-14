@@ -1,25 +1,38 @@
 [
     {
-        "buy_price": "22.66",
-        "confidence": "80.1% confident",
-        "current_price": "22.75",
-        "date_generated": "05-13-2023",
-        "date_used_for_analysis": "2023-05-12 00:00:00",
         "equity": "UCO",
-        "forecast_score": "98.2% confident",
-        "interval": "1 Day",
-        "name": "ProShares Ultra Bloomberg Crude Oil",
-        "requested_prediction_price": "23.28",
-        "sell_price": "23.51",
+        "current_price": "22.75",
         "side": "buy",
+        "confidence": "80.1% confident",
+        "requested_prediction_price": "23.28",
+        "buy_price": "22.66",
+        "sell_price": "23.51",
+        "forecast_score": "98.2% confident",
+        "date_used_for_analysis": "2023-05-12 00:00:00",
+        "interval": "1 Day",
+        "date_generated": "05-13-2023",
+        "time_generated": "11:42:40 PM",
         "simple_name": "ProShares Ultra Bloomberg Crude Oil ETF",
-        "success": "True",
-        "symbol": "UCO",
-        "time_generated": "11:14:13 PM",
+        "tradeable": "True",
         "tradability": "tradable",
-        "tradeable": "True"
+        "success": "True"
     },
     {
-        "error": "error: 'equity'"
+        "equity": "AAPL",
+        "current_price": "172.57",
+        "side": "hold",
+        "confidence": "80.8% confident",
+        "requested_prediction_price": "170.67",
+        "buy_price": "171.37",
+        "sell_price": "173.71",
+        "forecast_score": "96.3% confident",
+        "date_used_for_analysis": "2023-05-12 00:00:00",
+        "interval": "1 Day",
+        "date_generated": "05-13-2023",
+        "time_generated": "11:42:47 PM",
+        "simple_name": "Apple",
+        "tradeable": "True",
+        "tradability": "tradable",
+        "success": "True"
     }
 ]
