@@ -83,7 +83,8 @@ class cli:
     def additional_information(self,asset):
         for equity in asset:
             ticker = equity['equity']
-            instruments = r.get_instruments_by_symbols(inputSymbols=ticker)    
+            instruments = r.get_instruments_by_symbols(inputSymbols=ticker)
+            print(instruments)    
             if not instruments:
                 instruments = [{
                     
@@ -95,7 +96,13 @@ class cli:
                 equity['simple_name'] = instrument['simple_name']
                 equity['tradeable'] = instrument['tradeable']
                 equity['tradability'] = instrument['tradability']
-                equity['success'] = True
+                
+        # check of no errors
+        found_error = [True if 'error' in erorr else None for erorr in instruments].pop()
+        if found_error == True:
+            equity['success'] = False
+        else:
+            equity['success'] = True
             
         return asset
         
@@ -189,7 +196,8 @@ def predict():
     try:
         from  cli.Trade import predict_direction
         returned_assets = predict_direction(asset,file=config)
-        print(returned_assets)
+        results = source.additional_information(returned_assets)
+        print(source.output(f'\n{results}', color='white',bright=True))
     except Exception as e:
         print(source.output(f'error: {e}', color='red',bright=True))
         sys.exit(1)

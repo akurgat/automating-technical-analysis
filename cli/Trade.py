@@ -269,7 +269,6 @@ def predict_direction(asset,file):
     warnings.filterwarnings("ignore")    
     gc.collect() # garbage collection to free up memory I think the system should handle this.
     app_data = Data_Sourcing()        
-
     error = []
     for ticker in asset:
         try:
