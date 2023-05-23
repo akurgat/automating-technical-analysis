@@ -4,7 +4,7 @@ Keras
 numpy==1.22.0
 pandas==1.2.4
 plotly==5.7.0
-requests==2.27.1
+requests==2.31.0
 scikit-learn==0.24.2
 streamlit
 tensorflow-cpu
