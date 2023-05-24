@@ -32,7 +32,7 @@ class Visualization(Prediction):
         self.fig_action.add_trace(go.Scatter(x = self.df_visualization.index, y = self.df_visualization['Adj Close'], name = f"Price ({price_tag})", connectgaps = False,  
         marker = dict(color = '#000000'), fill = 'tozeroy', fillcolor = trace_color), secondary_y = False)
 
-        self.fig_action.add_trace(go.Scatter(x = self.df_visualization.index, y = self.df_visualization['Price_Predictions'], name = f"Predicted Price", connectgaps = False,  
+        self.fig_action.add_trace(go.Scatter(x = self.df_visualization.index, y = self.df_visualization['Price_Predictions'], name = "Predicted Price", connectgaps = False,  
         marker = dict(color = '#A9A9A9'), visible = "legendonly"), secondary_y = False)
 
         self.fig_action.add_trace(go.Scatter(x = self.df_visualization.index, y = self.df_visualization['Price_Buy'], mode = 'markers', name = "Buy",  
