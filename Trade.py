@@ -6,7 +6,7 @@ import streamlit as st
 import gc
 
 gc.collect()
-data_update()
+#data_update()
 
 def main(app_data):
     st.set_page_config(layout = "wide")
