@@ -8,4 +8,5 @@ requests==2.31.0
 scikit-learn==1.0.1
 streamlit
 tensorflow-cpu
+typing_extensions==4.5.0
 yfinance==0.2.54
