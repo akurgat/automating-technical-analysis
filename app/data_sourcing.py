@@ -115,6 +115,7 @@ class Data_Sourcing:
                     
             self.df = yf.download(tickers = self.ticker, period = self.period, interval = self.exchange_interval, 
                                   auto_adjust = True, prepost = True, threads = True, proxy = None).reset_index()
+            self.df.columns = self.df.columns.map(''.join)
             self.df = self.df.rename(columns = {f'Close{self.ticker}': 'Adj Close', f'High{self.ticker}': 'High', f'Low{self.ticker}': 'Low', 
                                                 f'Open{self.ticker}': 'Open', f'Volume{self.ticker}': 'Volume'})
             self.df = self.df.iloc[-750:]
